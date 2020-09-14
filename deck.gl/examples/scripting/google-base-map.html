@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <!-- deck.gl standalone bundle -->
+    <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
+    <!-- TODO: remove when package is published -->
+    <script src="http://127.0.0.1:8080/modules/carto/dist.min.js"></script>
+
+    <!-- Google dependencies -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<your_google_maps_apikey>"></script>
+
+    <style type="text/css">
+      body {margin: 0; padding: 0;}
+      #map {width: 100vw; height: 100vh;}
+    </style>
+  </head>
+
+  <body>
+    <div id="map"></div>
+  </body>
+
+  <script type="text/javascript">
+
+    deck.carto.setDefaultCredentials({
+      username: 'public',
+      apiKey: 'default_public'
+    });
+
+    const map = new google.maps.Map(document.getElementById("map"), {
+      center: {
+        lat: 0,
+        lng: 0
+      },
+      zoom: 2
+    });
+
+    // Add the CARTO layer as an Overlay to Google Maps
+    const deckOverlay = new deck.GoogleMapsOverlay({
+      layers: [
+        new deck.carto.CartoSQLLayer({
+          data: `SELECT * FROM populated_places`,
+          getLineColor: [255, 255, 255],
+          getFillColor: [238, 77, 90],
+          pointRadiusMinPixels: 6,
+          lineWidthMinPixels: 1
+        })
+      ]
+    });
+    deckOverlay.setMap(map);
+
+  </script>
+</html>

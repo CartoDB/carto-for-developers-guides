@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <!-- deck.gl standalone bundle -->
+    <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
+    <!-- TODO: remove when package is published -->
+    <script src="http://127.0.0.1:8080/modules/carto/dist.min.js"></script>
+
+    <!-- Mapbox dependencies -->
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css" rel="stylesheet" />
+
+    <style type="text/css">
+      body {margin: 0; padding: 0;}
+      #map {width: 100vw; height: 100vh;}
+      .basemap-selector { position: absolute; z-index: 1; top: 0; right: 0; background-color: #FFF; padding: 8px;}
+    </style>
+  </head>
+
+  <body>
+    <div id="map"></div>
+    <div class="basemap-selector">
+      <h3>Basemap selector</h3>
+      <input type="radio" id="voyager" name="base-map" value="voyager" checked onclick="setBaseMap(this.value)">
+      <label for="voyager">Voyager</label><br>
+      <input type="radio" id="positron" name="base-map" value="positron" onclick="setBaseMap(this.value)">
+      <label for="positron">Positron</label><br>
+      <input type="radio" id="dark-matter" name="base-map" value="dark-matter" onclick="setBaseMap(this.value)">
+      <label for="dark-matter">Dark matter</label>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+
+    function setBaseMap(basemap) {
+      deckgl.getMapboxMap().setStyle(getBasemapUrl(basemap))
+    }
+
+    function getBasemapUrl(basemap) {
+      return `https://basemaps.cartocdn.com/gl/${basemap}-gl-style/style.json`
+    }
+
+    deck.carto.setDefaultCredentials({
+      username: 'public',
+      apiKey: 'default_public'
+    })
+
+    const deckgl = new deck.DeckGL({
+      container: 'map',
+      // CARTO's provides three basemaps voyager, positron, dark-matter
+      mapStyle: getBasemapUrl('voyager'),
+
+      initialViewState: {
+        latitude: 0,
+        longitude: 0,
+        zoom: 1
+      },
+      controller: true,
+
+      layers: [
+        new deck.carto.CartoSQLLayer({
+          data: `SELECT * FROM populated_places`,
+          getLineColor: [255, 255, 255],
+          getFillColor: [238, 77, 90],
+          pointRadiusMinPixels: 6,
+          lineWidthMinPixels: 1
+        })
+      ]
+    });
+
+  </script>
+</html>
