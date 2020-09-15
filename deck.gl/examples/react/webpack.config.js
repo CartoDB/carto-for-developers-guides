@@ -19,18 +19,39 @@ const CONFIG = {
         // Remove if your app does not use JSX or you don't need to support old browsers
         test: /\.js$/,
         loader: "babel-loader",
-        exclude: [/node_modules/],
+        // exclude: [/node_modules/],
         options: {
           presets: ["@babel/preset-react"],
         },
       },
+      // {
+      //   // Unfortunately, webpack doesn't import library sourcemaps on its own...
+      //   test: /\.js$/,
+      //   use: ['source-map-loader'],
+      //   enforce: 'pre'
+      // },
+      {
+        // Compile source using babel. This is not necessary for src to run in the browser
+        // However class inheritance cannot happen between transpiled/non-transpiled code
+        // Which affects some examples
+        test: /\.js$/,
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/env']
+        },
+        //include: [resolve(ROOT_DIR, 'modules'), resolve(ROOT_DIR, '../luma.gl/modules')]
+      }
     ],
+
   },
+
+  devtool: 'source-map',
 
   resolve: {
     alias: {
       // From mapbox-gl-js README. Required for non-browserify bundlers (e.g. webpack):
-      "mapbox-gl$": resolve("./node_modules/mapbox-gl/dist/mapbox-gl.js"),
+      "@deck.gl/carto": resolve("../../../../deck.gl/modules/carto"),
+      "mapbox-gl$": resolve("./node_modules/mapbox-gl/dist/mapbox-gl.js")
     },
   },
 
