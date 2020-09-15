@@ -4,4 +4,4 @@ CARTO platform can be used from different mapping libraries. This repo contains 
 
 - [Deck.gl](deck.gl/examples)
 - [Google Maps](deck.gl/examples/scripting/google-base-map.html)
-- [Mapbox](mapbox/index.html)
+- [Mapbox](mapbox/examples/index.html)
