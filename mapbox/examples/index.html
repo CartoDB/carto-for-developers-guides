@@ -15,21 +15,12 @@
     <div id="map"></div>
     <script>
 
-      const mapConfigOptions = {
-        sql: 'SELECT * FROM populated_places',
-        vector_extent: 2048,
-        vector_simplify_extent: 2048,
-        bufferSize: 1,
-        version: '1.3.1'
-      };
-
+      const layerSQL = 'SELECT * FROM populated_places';
       const credentials = {
         username: 'public',
         apiKey: 'default_public',
         serverUrlTemplate: 'https://{user}.carto.com'
       };
-
-      const DEFAULT_USER_COMPONENT_IN_URL = '{user}';
 
       const map = new mapboxgl.Map({
         container: 'map',
@@ -68,7 +59,12 @@
           layers: [
             {
               type: 'mapnik',
-              options: mapConfigOptions
+              options: {
+                sql: layerSQL,
+                vector_extent: 4096,
+                bufferSize: 1,
+                version: '1.3.1'
+              }
             }
           ]
         };
@@ -85,7 +81,7 @@
 
       function serverURL(credentials) {
         let url = credentials.serverUrlTemplate.replace(
-          DEFAULT_USER_COMPONENT_IN_URL,
+          '{user}',
           credentials.username
         );
 
