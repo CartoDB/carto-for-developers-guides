@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+    <style>
+    	body { margin: 0; padding: 0; }
+    	#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+
+      const mapConfigOptions = {
+        sql: 'SELECT * FROM populated_places',
+        vector_extent: 2048,
+        vector_simplify_extent: 2048,
+        bufferSize: 1,
+        version: '1.3.1'
+      };
+
+      const credentials = {
+        username: 'public',
+        apiKey: 'default_public',
+        serverUrlTemplate: 'https://{user}.carto.com'
+      };
+
+      const DEFAULT_USER_COMPONENT_IN_URL = '{user}';
+
+      const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+        center: [0, 0],
+        zoom: 1
+      });
+
+      addCartoLayer();
+
+      async function addCartoLayer() {
+        const tiles = await getTiles();
+        map.addLayer(
+          {
+            id: 'populated_places',
+            type: 'circle',
+            source: {
+              type: 'vector',
+              tiles: tiles
+            },
+            'source-layer': 'layer0',
+            paint: {
+              'circle-color': '#EE4D5A',
+              'circle-stroke-color': '#FFF',
+              'circle-stroke-width': 1
+            }
+          },
+          'watername_ocean'
+        );
+      }
+
+      async function getTiles() {
+        const mapConfig = {
+          version: '1.3.1',
+          buffersize: {mvt: 1},
+          layers: [
+            {
+              type: 'mapnik',
+              options: mapConfigOptions
+            }
+          ]
+        };
+        const url = `${serverURL(credentials)}api/v1/map?${encodeParameter('api_key', credentials.apiKey)}`;
+        const opts = {
+          method: 'POST',
+          headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
+          body: JSON.stringify(mapConfig)
+        };
+
+        const response = await fetch(url, opts);
+        return (await response.json()).metadata.tilejson.vector.tiles
+      }
+
+      function serverURL(credentials) {
+        let url = credentials.serverUrlTemplate.replace(
+          DEFAULT_USER_COMPONENT_IN_URL,
+          credentials.username
+        );
+
+        if (!url.endsWith('/')) {
+          url += '/';
+        }
+
+        return url;
+      }
+
+      function encodeParameter(name, value) {
+        return `${name}=${encodeURIComponent(value)}`;
+      }
+
+
+    </script>
+  </body>
+</html>
