@@ -33,7 +33,7 @@ const CONFIG = {
 
   // Optional: Enables reading mapbox token from environment variable
   plugins: [
-    new HtmlWebpackPlugin({title: 'deck.gl example'})
+    new HtmlWebpackPlugin({title: 'CARTO for deck.gl example'})
   ]
 };
 
