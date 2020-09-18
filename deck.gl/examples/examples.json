@@ -1,0 +1,38 @@
+{
+  "categories": [
+    {
+      "title": "Scripting",
+      "samples": [
+        {
+          "title": "BQ Tile Layer",
+          "file": "scripting/bq-tiler-layer.html"
+        },
+        {
+          "title": "CARTO basemap",
+          "file": "scripting/carto-base-map.html"
+        },
+        {
+          "title": "Google basemap",
+          "file": "scripting/google-base-map.html"
+        },
+        {
+          "title": "Interactivity",
+          "file": "scripting/interactivity.html"
+        },
+        {
+          "title": "Style",
+          "file": "scripting/style.html"
+        }
+      ]
+    },
+    {
+      "title": "Pure JS",
+      "samples": [
+        {
+          "title": "Pure JS",
+          "file": "pure-js/index.html"
+        }
+      ]
+    }
+  ]
+}
