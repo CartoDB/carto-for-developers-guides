@@ -24,15 +24,6 @@
           "file": "scripting/style.html"
         }
       ]
-    },
-    {
-      "title": "Pure JS",
-      "samples": [
-        {
-          "title": "Pure JS",
-          "file": "pure-js/index.html"
-        }
-      ]
     }
   ]
 }
