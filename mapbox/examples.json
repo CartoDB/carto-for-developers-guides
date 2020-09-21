@@ -1,0 +1,13 @@
+{
+  "categories": [
+    {
+      "title": "Mapbox",
+      "samples": [
+        {
+          "title": "Basic",
+          "file": "basic.html"
+        }
+      ]
+    }
+  ]
+}
