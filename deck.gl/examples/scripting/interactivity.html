@@ -2,16 +2,28 @@
   <head>
     <!-- deck.gl standalone bundle -->
     <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
-    <!-- TODO: remove when package is published -->
+
+    <!-- TEMPORARY -->
+    <script src="https://libs.cartocdn.com/deck-gl-carto/develop/dist.min.js"></script>
+
+    <!--    
+      LOCAL 
     <script src="../../../../deck.gl/modules/carto/dist.min.js"></script>
+    -->
 
     <!-- Mapbox dependencies -->
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js"></script>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css" rel="stylesheet" />
 
     <style type="text/css">
-      body {margin: 0; padding: 0;}
-      #map {width: 100vw; height: 100vh;}
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        width: 100vw;
+        height: 100vh;
+      }
     </style>
   </head>
 
@@ -20,20 +32,19 @@
   </body>
 
   <script type="text/javascript">
-
     deck.carto.setDefaultCredentials({
-      username: 'public',
-      apiKey: 'default_public'
+      username: "public",
+      apiKey: "default_public",
     });
 
     const deckgl = new deck.DeckGL({
-      container: 'map',
-      mapStyle: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+      container: "map",
+      mapStyle: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json",
 
       initialViewState: {
         latitude: 51.507,
         longitude: -0.127,
-        zoom: 10
+        zoom: 10,
       },
       controller: true,
 
@@ -44,11 +55,10 @@
           getFillColor: [130, 109, 186],
           pointRadiusMinPixels: 6,
           lineWidthMinPixels: 1,
-          pickable: true
-        })
+          pickable: true,
+        }),
       ],
-      getTooltip: ({object}) => object && object.properties.neighbourh
+      getTooltip: ({ object }) => object && object.properties.neighbourh,
     });
-
   </script>
 </html>

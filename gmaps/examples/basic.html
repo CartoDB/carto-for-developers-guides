@@ -2,16 +2,28 @@
   <head>
     <!-- deck.gl standalone bundle -->
     <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
-    <!-- TODO: remove when package is published -->
+
+    <!-- TEMPORARY -->
+    <script src="https://libs.cartocdn.com/deck-gl-carto/develop/dist.min.js"></script>
+
+    <!--    
+      LOCAL 
     <script src="../../../../deck.gl/modules/carto/dist.min.js"></script>
+    -->
 
     <!-- Google dependencies -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIwzALxUPNbatRBj3Xi1Uhp0fFzwWNBkE"></script>
 
     <style type="text/css">
-      body {margin: 0; padding: 0;}
-      #map {width: 100vw; height: 100vh;}
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        width: 100vw;
+        height: 100vh;
+      }
     </style>
   </head>
 
@@ -20,18 +32,17 @@
   </body>
 
   <script type="text/javascript">
-
     deck.carto.setDefaultCredentials({
-      username: 'public',
-      apiKey: 'default_public'
+      username: "public",
+      apiKey: "default_public",
     });
 
     const map = new google.maps.Map(document.getElementById("map"), {
       center: {
         lat: 0,
-        lng: 0
+        lng: 0,
       },
-      zoom: 2
+      zoom: 2,
     });
 
     // Add the CARTO layer as an Overlay to Google Maps
@@ -42,11 +53,10 @@
           getLineColor: [255, 255, 255],
           getFillColor: [238, 77, 90],
           pointRadiusMinPixels: 6,
-          lineWidthMinPixels: 1
-        })
-      ]
+          lineWidthMinPixels: 1,
+        }),
+      ],
     });
     deckOverlay.setMap(map);
-
   </script>
 </html>
