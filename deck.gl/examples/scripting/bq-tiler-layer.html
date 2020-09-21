@@ -2,16 +2,28 @@
   <head>
     <!-- deck.gl standalone bundle -->
     <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
-    <!-- TODO: remove when package is published -->
+
+    <!-- TEMPORARY -->
+    <script src="https://libs.cartocdn.com/deck-gl-carto/develop/dist.min.js"></script>
+
+    <!--    
+      LOCAL 
     <script src="../../../../deck.gl/modules/carto/dist.min.js"></script>
+    -->
 
     <!-- Mapbox dependencies -->
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js"></script>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css" rel="stylesheet" />
 
     <style type="text/css">
-      body {margin: 0; padding: 0;}
-      #map {width: 100vw; height: 100vh;}
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        width: 100vw;
+        height: 100vh;
+      }
     </style>
   </head>
 
@@ -20,33 +32,32 @@
   </body>
 
   <script type="text/javascript">
-
     // Define color breaks
     const COLORS = {
       ONE_MILLION: [207, 89, 126],
       HUNDRED_THOUSAND: [232, 133, 113],
-      TEN_THOUSAND: [238, 180, 121],
+      TEN_THOUSAND: [238, 180, 121],
       THOUSAND: [233, 226, 156],
       HUNDRED: [156, 203, 134],
       TEN: [57, 177, 133],
-      OTHER: [0, 147, 146]
+      OTHER: [0, 147, 146],
     };
 
     const deckgl = new deck.DeckGL({
-      container: 'map',
-      mapStyle: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+      container: "map",
+      mapStyle: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json",
 
       initialViewState: {
         latitude: 40.7368521,
         longitude: -73.9936065,
-        zoom: 8
+        zoom: 8,
       },
       controller: true,
 
       layers: [
         new deck.carto.CartoBQTilerLayer({
-          data: 'cartobq.maps.nyc_taxi_points_demo_id',
-          getFillColor: object => {
+          data: "cartobq.maps.nyc_taxi_points_demo_id",
+          getFillColor: (object) => {
             // Apply color based on an attribute
             if (object.properties.aggregated_total > 1000000) {
               return COLORS.ONE_MILLION;
@@ -65,10 +76,9 @@
             }
           },
           pointRadiusMinPixels: 2,
-          stroked: false
-        })
-      ]
+          stroked: false,
+        }),
+      ],
     });
-
   </script>
 </html>
