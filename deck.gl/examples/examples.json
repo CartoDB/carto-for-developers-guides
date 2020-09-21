@@ -12,10 +12,6 @@
           "file": "scripting/carto-base-map.html"
         },
         {
-          "title": "Google basemap",
-          "file": "scripting/google-base-map.html"
-        },
-        {
           "title": "Interactivity",
           "file": "scripting/interactivity.html"
         },
