@@ -49,8 +49,9 @@
           minZoom: 12,
           maxZoom: 16,
 
-          // Allow underzooming by setting the bounding box of the layer
-          extent: [-1.16, 51.12, 0.85, 51.81]
+          // Allow underzooming by setting the bounding box of the layer.
+          // You can do it automatically by setting `autoExtent` to `true`, or set it manually using `extend`.
+          autoExtent: true
         })
       ]
     });
