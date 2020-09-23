@@ -2,8 +2,14 @@
   <head>
     <!-- deck.gl standalone bundle -->
     <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
-    <!-- TODO: remove when package is published -->
+
+    <!-- TEMPORARY -->
+    <script src="https://libs.cartocdn.com/deck-gl-carto/develop/dist.min.js"></script>
+
+    <!--    
+      LOCAL 
     <script src="../../../../deck.gl/modules/carto/dist.min.js"></script>
+    -->
 
     <!-- Mapbox dependencies -->
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js"></script>
@@ -45,12 +51,18 @@
           pointRadiusMinPixels: 6,
           lineWidthMinPixels: 1,
 
-          // Define the zoom range of the layer
+          // Define the zoom range of the layer, in this case we are forcing using tiles from z=12 to z=16.
           minZoom: 12,
           maxZoom: 16,
 
-          // Allow underzooming by setting the bounding box of the layer.
-          // You can do it automatically by setting `autoExtent` to `true`, or set it manually using `extend`.
+          /*
+           * Allow underzooming by setting the bounding box of the layer.
+           * You can do it automatically by setting `autoExtent` to `true`, or set it manually using `extend`.
+           * 
+           * By setting `minZoom`, `maxZoom` and `autoExtent`, the layer will be visible when using zoom levels
+           * higher than 16 but it will always show z=16 tiles for this cases, as well for zoom levels lower
+           * than 12 but showing z=12 tiles instead.
+           */
           autoExtent: true
         })
       ]

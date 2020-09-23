@@ -18,6 +18,10 @@
         {
           "title": "Style",
           "file": "scripting/style.html"
+        },
+        {
+          "title": "Overzoom and underzoom",
+          "file": "scripting/over_under_zoom.html"
         }
       ]
     }
