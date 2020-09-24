@@ -1,5 +1,8 @@
 <html>
   <head>
+    <!-- FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
     <!-- deck.gl standalone bundle -->
     <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
 
@@ -19,7 +22,7 @@
       body {
         margin: 0;
         padding: 0;
-        font-family: UberMove, Helvetica, Arial, sans-serif;
+        font-family: 'Open Sans', Helvetica, sans-serif;
       }
       #map {
         width: 100vw;
@@ -34,6 +37,7 @@
         margin: 24px;
         padding: 10 24px;
         box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        border-radius: 4px;
       }
       .layer-selector h3 {
         font-size: 16px;
@@ -45,6 +49,8 @@
         margin-top: 16px;
       }
       .layer-selector .input input {
+        width: 16px;
+        height: 16px;
         margin: 0 4px 0 0;
       }
       .layer-selector label,
@@ -59,6 +65,9 @@
       .layer-selector .layout > * {
         display: table-cell;
         height: 12px;
+      }
+      .right-align {
+        text-align: right;
       }
     </style>
   </head>
@@ -92,7 +101,7 @@
       </div>
       <p class="layout">
         <span>Fewer</span>
-        <span>More</span>
+        <span class="right-align">More</span>
       </p>
       <div class="input">
         <input
@@ -115,7 +124,7 @@
       </div>
       <p class="layout">
         <span>Fewer</span>
-        <span>More</span>
+        <span class="right-align">More</span>
       </p>
     </div>
   </body>
@@ -165,8 +174,17 @@
         zoom: 3,
       },
       controller: true,
-      getTooltip: ({ object }) =>
-        object && (object.properties.value || object.properties.pct_higher_ed).toString(10),
+      getTooltip: ({ object }) => {
+        if (!object)
+          return false;
+        let tooltipString;
+        const temperature = object.properties.value;
+        const higherEducation = object.properties.pct_higher_ed;
+        tooltipString = temperature != undefined ? `${temperature.toFixed(2)}ºF` : `${higherEducation.toFixed(2)}%`
+        return {
+          html: tooltipString
+        }
+      },
     });
 
     render();
