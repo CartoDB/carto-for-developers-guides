@@ -1,5 +1,8 @@
 <html>
   <head>
+    <!-- FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
     <!-- deck.gl standalone bundle -->
     <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
 
@@ -23,6 +26,18 @@
       #map {
         width: 100vw;
         height: 100vh;
+      }
+      .deck-tooltip::after{
+        content: '';
+        position: absolute;
+        right: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: 0 0 0 2px;
+        background-color: #fff;
+        left: -8px;
+        transform: translateY(-50%) rotate(45deg);
+        top: 50%;
       }
     </style>
   </head>
@@ -58,7 +73,20 @@
           pickable: true,
         }),
       ],
-      getTooltip: ({ object }) => object && object.properties.neighbourh,
+      getTooltip: ({ object }) => object && {
+        html: `<strong>Neighbourhood name</strong>: ${object.properties.neighbourh}`,
+        style: {
+          backgroundColor: '#fff',
+          fontFamily: 'Open Sans',
+          fontSize: '14px',
+          color: '#000',
+          boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px',
+          borderRadius: '4px',
+          top: '-18px',
+          left: '20px',
+          padding: '12px'
+        }
+      },
     });
   </script>
 </html>
