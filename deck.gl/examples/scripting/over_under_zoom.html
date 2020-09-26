@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <!-- deck.gl standalone bundle -->
+    <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
+
+    <!-- TEMPORARY -->
+    <script src="https://libs.cartocdn.com/deck-gl-carto/develop/dist.min.js"></script>
+
+    <!--    
+      LOCAL 
+    <script src="../../../../deck.gl/modules/carto/dist.min.js"></script>
+    -->
+
+    <!-- Mapbox dependencies -->
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css" rel="stylesheet" />
+
+    <style type="text/css">
+      body {margin: 0; padding: 0;}
+      #map {width: 100vw; height: 100vh;}
+    </style>
+  </head>
+
+  <body>
+    <div id="map"></div>
+  </body>
+
+  <script type="text/javascript">
+
+    deck.carto.setDefaultCredentials({
+      username: 'public',
+      apiKey: 'default_public'
+    });
+
+    const deckgl = new deck.DeckGL({
+      container: 'map',
+      mapStyle: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+
+      initialViewState: {
+        latitude: 51.507,
+        longitude: -0.127,
+        zoom: 10
+      },
+      controller: true,
+
+      layers: [
+        new deck.carto.CartoSQLLayer({
+          data: `SELECT * FROM london_neighbourhoods`,
+          getLineColor: [255, 255, 255],
+          getFillColor: [130, 109, 186],
+          pointRadiusMinPixels: 6,
+          lineWidthMinPixels: 1,
+
+          // Define the zoom range of the layer, in this case we are forcing using tiles from z=12 to z=16.
+          minZoom: 12,
+          maxZoom: 16,
+
+          /*
+           * Overzooming is enabled by default, but for enabling underzooming it is needed to set set the bounding
+           * box of the layer.
+           * You can do it automatically by setting `autoExtent` to `true`, or set it manually using `extend`.
+           * 
+           * By setting `minZoom`, `maxZoom` and `autoExtent`, the layer will be visible when using zoom levels
+           * higher than 16 but it will always show z=16 tiles for this cases, as well for zoom levels lower
+           * than 12 but showing z=12 tiles instead.
+           */
+          autoExtent: true
+        })
+      ]
+    });
+
+  </script>
+</html>
