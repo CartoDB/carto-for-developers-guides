@@ -1,18 +1,16 @@
 <html>
   <head>
     <!-- FONT -->
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- deck.gl standalone bundle -->
     <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
 
-    <!-- TEMPORARY -->
-    <script src="https://libs.cartocdn.com/deck-gl-carto/develop/dist.min.js"></script>
-
-    <!--    
-      LOCAL 
-    <script src="../../../../deck.gl/modules/carto/dist.min.js"></script>
-    -->
+    <!-- @deck.gl/carto module -->
+    <script src="https://unpkg.com/@deck.gl/carto@^8.3.0-alpha.1/dist.min.js"></script>
 
     <!-- Mapbox dependencies -->
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js"></script>
@@ -27,8 +25,8 @@
         width: 100vw;
         height: 100vh;
       }
-      .deck-tooltip::after{
-        content: '';
+      .deck-tooltip::after {
+        content: "";
         position: absolute;
         right: 0;
         width: 16px;
@@ -73,20 +71,21 @@
           pickable: true,
         }),
       ],
-      getTooltip: ({ object }) => object && {
-        html: `<strong>Neighbourhood name</strong>: ${object.properties.neighbourh}`,
-        style: {
-          backgroundColor: '#fff',
-          fontFamily: 'Open Sans',
-          fontSize: '14px',
-          color: '#000',
-          boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px',
-          borderRadius: '4px',
-          top: '-18px',
-          left: '20px',
-          padding: '12px'
-        }
-      },
+      getTooltip: ({ object }) =>
+        object && {
+          html: `<strong>Neighbourhood name</strong>: ${object.properties.neighbourh}`,
+          style: {
+            backgroundColor: "#fff",
+            fontFamily: "Open Sans",
+            fontSize: "14px",
+            color: "#000",
+            boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+            borderRadius: "4px",
+            top: "-18px",
+            left: "20px",
+            padding: "12px",
+          },
+        },
     });
   </script>
 </html>
