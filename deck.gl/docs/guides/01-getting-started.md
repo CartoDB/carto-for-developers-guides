@@ -1,205 +1,49 @@
 ## Getting started
 
-In this guide, you will learn the basics of visualizing data with the Web SDK on top of a world [basemap](https://carto.com/help/glossary/#basemap). There are no previous requirements to complete this guide, but a basic knowledge of HTML, CSS and JavaScript would be helpful.
+In this guide, you will learn how to install CARTO for deck.gl in your computer and run the examples.
 
-After completing this guide, you will have your first Web SDK map!
+### Installation
 
-<div class="example-map">
-    <iframe
-        id="getting-started-final-result"
-        src="/developers/web-sdk/examples/maps/guides/getting-started/step-3.html"
-        width="100%"
-        height="500"
-        frameBorder="0">
-    </iframe>
-</div>
+You can work with CARTO for deck.gl with the NPM module for React or Pure JS applications:
 
-### Basic setup
+`npm install @deck.gl`
 
-The most straight-forward way to use the Web SDK is to include the required files from our CDN as seen in the code below. The Web SDK is based on the powerful deck.gl library. In addition to the Web SDK JavaScript file, you need to add:
+`npm install @deck.gl/carto`
 
-* deck.gl JavaScript file
-* Mapbox GL JavaScript and CSS files
+Or you can use the scripting API:
 
-```html
-    <!-- Include deck.gl from unpkg CDN -->
-    <script src="https://unpkg.com/deck.gl@8.2.0/dist.min.js"></script>
+`<script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script>`
 
-    <!-- Include Mapbox GL from the Mabpox CDN -->
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css' rel='stylesheet' />
+`<script src="https://unpkg.com/deck.gl@latest/carto/dist.min.js"></script>`
 
-    <!-- Include Web SDK from the CARTO CDN -->
-    <script src="https://libs.cartocdn.com/web-sdk/%VERSION%/index.min.js"></script>
-```
+You can learn more about deck.gl on the official [website](https://deck.gl), where you can find a dedicated section on the @deck.gl/carto [submodule](https://deck.gl/docs/api-reference/carto/overview).
 
-**Note:**
-**deck.gl and Mapbox GL**: The Web SDK is compatible with specific deck.gl and Mapbox GL versions. We recommend using the same versions that we use in the [examples](/developers/web-sdk/examples/). 
+### Examples
 
-**Note:**
-**Developers**: if you have experience with `npm` and a build system (_webpack_, _rollup_...), you can install the Web SDK in your project with `npm install @carto/web-sdk` and import it with `import carto from '@carto/web-sdk'`.
+In the [Examples]({{site.baseurl}}/deck-gl/examples) section you can find interactive examples using the scripting API. Here we show how you can download and run the React and PureJS examples. These are small, standalone examples that could be a good starting point for your application showing how to add different CARTO layers, how to integrate in a React application or how to use it with webpack and PureJS.
 
+You should be able to copy these folders to your preferred locations, and get them running simply as follows:
 
-#### Add map container
+1. Clone the CARTO viz-doc [repo](https://github.com/CartoDB/viz-doc), if you haven't already.
 
-Next, you need to create a `div` where the map will be drawn:
+  `git clone git@github.com:CartoDB/viz-doc.git`
 
-```html
-<div id="map"></div>
-```
+2. Change directory to the example you are interested in, e.g.
 
-Style the map `div` and `body` to ensure the map displays at full width:
+  `cd viz-doc/deck.gl/examples/pure-js`
 
-```css
-body {
-  margin: 0;
-  padding: 0;
-}
-#map {
-  width: 100vw;
-  height: 100vh;
-}
-```
+3. Then install dependencies using the installer of your choice:
 
-#### Add basemap and set properties
+   `npm install`
 
-Once you have a `div` for your map, you can use the `carto.viz.createMap` (ToDO Add link to reference) helper. If no parameters are specified, it will create a map with the following defaults:
+or
 
-* Placed within a container with id="map"
-* Using CARTO Positron basemap
-* Centered on (0,0) coordinates
-* Using zoom level 1 (whole world)
- 
-Please go to the API reference to see the full list of parameters that you can specify.
+   `yarn`
 
-```js
-const deckMap = carto.viz.createMap();
-```
+4. Finally run the example using:
 
-At this point you will have a basic map with _Positron_ as the basemap, that opens at zoom level 1 and centered on (0,0):
+   `npm start`
 
-<div class="example-map">
-    <iframe
-        id="getting-started-step-1"
-        src="/developers/web-sdk/examples/maps/guides/getting-started/step-1.html"
-        width="100%"
-        height="500"
-        style="margin: 20px auto !important"
-        frameBorder="0">
-    </iframe>
-</div>
-> View this step [here](/developers/web-sdk/examples/maps/guides/getting-started/step-1.html)
+or
 
-### Define credentials
-
-In order to render data from CARTO you need to have a CARTO account and then get the necessary [credentials](/developers/fundamentals/authorization/).
-
-The first thing you need to do is authenticate the client with [`carto.auth.setDefaultCredentials`](ToDo: add link to API reference), using your own `username` and `apiKey`. For guides and examples, we use the `public` CARTO account so you can try out the library:
-
-```js
-carto.auth.setDefaultCredentials({ username: 'public' });
-```
-
-### Create map layer
-
-Now you can add a map layer from the public account. In the example below, we are adding a countries layer from [Natural Earth](https://www.naturalearthdata.com/), using the [`carto.viz.Layer`](ToDo: add link to API reference) object.
-
-```js
-const countriesLayer = new carto.viz.Layer('ne_50m_admin_0_countries');
-```
-
-### Add map layer
-
-Finally you need to use the [`carto.viz.Layer.addTo`](ToDO: add link to API reference) method to add the layer to the map.
-
-```js
-countriesLayer.addTo(deckMap);
-```
-<div class="example-map">
-    <iframe
-        id="getting-started-step-1"
-        src="/developers/web-sdk/examples/maps/guides/getting-started/step-2.html"
-        width="100%"
-        height="500"
-        style="margin: 20px auto !important"
-        frameBorder="0">
-    </iframe>
-</div>
-> View this step [here](/developers/web-sdk/examples/maps/guides/getting-started/step-2.html)
-
-### Defining a custom style for the layer
-
-In the previous step we have not specified any styling properties and the layer has been added to the map with a default style. When creating the `Layer` object, we have the option of specifying a `style` parameter. We can take advantage of predefined style helpers to specify the styling properties in a very simple way. In this guide we are going to use the `colorCategories` style helper that accepts a property name and assigns a different color to each value of the property:
-
-```js
-const countriesLayer = new carto.viz.Layer('ne_50m_admin_0_countries',
-                                           carto.viz.style.colorCategories('continent'));
-```
-
-For more information about styling, check out the guide [Using style helpers](/developers/web-sdk/guides/using-style-helpers/).
-
-### All together
-
-<div class="example-map">
-    <iframe
-        id="getting-started-step-3"
-        src="/developers/web-sdk/examples/maps/guides/getting-started/step-3.html"
-        width="100%"
-        height="500"
-        style="margin: 20px auto !important"
-        frameBorder="0">
-    </iframe>
-</div>
-
-> You can explore the final step [here](/developers/web-sdk/examples/maps/guides/getting-started/step-3.html)
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Getting Started Guide - Step 3</title>
-
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css' rel='stylesheet' />
-  
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-      }
-
-      #map {
-        width: 100vw;
-        height: 100vh;
-      }
-    </style>
-
-  </head>
-
-  <body>
-
-    <div id="map"></div>
-
-    <!-- Include deck.gl from unpkg CDN -->
-    <script src="https://unpkg.com/deck.gl@8.2.0/dist.min.js"></script>
-
-    <!-- Include Mapbox GL from the Mabpox CDN -->
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js'></script>
-
-    <!-- Include Web SDK from the CARTO CDN -->
-    <script src="https://libs.cartocdn.com/web-sdk/%VERSION%/index.min.js"></script>
-
-    <script>
-        carto.auth.setDefaultCredentials({ username: 'public' });
-        const deckMap = carto.viz.createMap();
-        const countriesLayer = new carto.viz.Layer('ne_50m_admin_0_countries',
-                                                   carto.viz.style.colorCategories('continent'));
-        countriesLayer.addTo(deckMap);
-    </script>
-  
-  </body>
-
-</html>
-```
+   `yarn start`
