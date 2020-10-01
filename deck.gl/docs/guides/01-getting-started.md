@@ -6,15 +6,17 @@ In this guide, you will learn how to install CARTO for deck.gl in your computer 
 
 You can work with CARTO for deck.gl with the NPM module for React or Pure JS applications:
 
-`npm install @deck.gl`
-
-`npm install @deck.gl/carto`
+```console
+foo@bar:~$ npm install @deck.gl
+foo@bar:~$ npm install @deck.gl/carto
+```   
 
 Or you can use the scripting API:
 
-`<script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script>`
-
-`<script src="https://unpkg.com/@deck.gl/carto@latest/dist.min.js"></script>`
+```html
+<script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script>
+<script src="https://unpkg.com/@deck.gl/carto@latest/dist.min.js"></script>
+```   
 
 You can learn more about deck.gl on the official [website](https://deck.gl), where you can find a dedicated section on the @deck.gl/carto [submodule](https://deck.gl/docs/api-reference/carto/overview).
 
