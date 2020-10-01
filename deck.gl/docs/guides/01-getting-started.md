@@ -24,26 +24,39 @@ In the [Examples]({{site.baseurl}}/deck-gl/examples) section you can find intera
 
 You should be able to copy these folders to your preferred locations, and get them running simply as follows:
 
-1. Clone the CARTO viz-doc [repo](https://github.com/CartoDB/viz-doc), if you haven't already.
+Clone the CARTO viz-doc [repo](https://github.com/CartoDB/viz-doc), if you haven't already.
 
-  `git clone git@github.com:CartoDB/viz-doc.git`
+```console
+foo@bar:~$ git clone git@github.com:CartoDB/viz-doc.git
+```   
 
-2. Change directory to the example you are interested in, e.g.
+Change directory to the example you are interested in, e.g.
 
-  `cd viz-doc/deck.gl/examples/pure-js`
+```console
+foo@bar:pure-js$ cd viz-doc/deck.gl/examples/pure-js
+```   
 
-3. Then install dependencies using the installer of your choice:
+Then install the dependencies using the installer of your choice:
 
-   `npm install`
-
-or
-
-   `yarn`
-
-4. Finally run the example using:
-
-   `npm start`
+```console
+foo@bar:pure-js$ npm install
+```   
 
 or
 
-   `yarn start`
+```console
+foo@bar:pure-js$ yarn
+```   
+
+Finally run the example using:
+
+```console
+foo@bar:pure-js$ npm start
+```   
+
+or
+
+```console
+foo@bar:pure-js$ yarn start
+```   
+   
