@@ -18,6 +18,10 @@
         {
           "title": "Style",
           "file": "scripting/style.html"
+        },
+        {
+          "title": "Icon layer",
+          "file": "scripting/icon-layer.html"
         }
       ]
     }
