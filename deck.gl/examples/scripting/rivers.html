@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
+    <script src="https://unpkg.com/@deck.gl/carto@latest/dist.min.js"></script>
+    
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css" rel="stylesheet" />
+
+    <style type="text/css">
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="map"></div>
+  </body>
+
+  <script type="text/javascript">
+
+    deck.carto.setDefaultCredentials({
+      username: "mamataakella",
+      apiKey: "default_public",
+    });
+
+    const POINT_COLORS = {
+      COLOR_1: [76, 41, 145],
+      COLOR_2: [135, 44, 162],
+      COLOR_3: [192, 54, 158],
+      COLOR_4: [234, 79, 136],
+      COLOR_5: [250, 120, 118],
+      COLOR_6: [246, 169, 122],
+      COLOR_7: [237, 217, 163],
+      OTHER: [237, 217, 163],
+    };
+
+    const deckgl = new deck.DeckGL({
+      container: "map",
+      mapStyle: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+
+      initialViewState: {
+        longitude: -109.09006557529761,
+        latitude: 38.851788545949745,
+        zoom: 8,
+      },
+      controller: true,
+
+      layers: [
+        new deck.carto.CartoSQLLayer({
+          data: `SELECT * FROM river_directions_upper_co`,
+          lineWidthMinPixels: 0,
+          lineWidthUnits: 'pixels',
+          getLineColor: (object) => {
+            if (object.properties.strahler == 1) {
+              return POINT_COLORS.COLOR_1;
+            } else if (object.properties.strahler == 2) {
+              return POINT_COLORS.COLOR_2;
+            } else if (object.properties.strahler == 3) {
+              return POINT_COLORS.COLOR_3;
+            } else if (object.properties.strahler == 4) {
+              return POINT_COLORS.COLOR_4;
+            } else if (object.properties.strahler == 5) {
+              return POINT_COLORS.COLOR_5;
+            } else if (object.properties.strahler == 6) {
+              return POINT_COLORS.COLOR_6;
+            } else if (object.properties.strahler == 7) {
+              return POINT_COLORS.COLOR_7;
+            } else {
+              return POINT_COLORS.OTHER;
+            }
+          },
+          getLineWidth: (object) => {
+            return (object.properties.strahler / 2)
+          }
+        }),
+      ]
+    });
+
+  </script>
+</html>
