@@ -6,15 +6,16 @@ In this guide, you will learn how to install CARTO for deck.gl in your computer 
 
 You can work with CARTO for deck.gl with the NPM module for React or Pure JS applications:
 
-`npm install @deck.gl`
-
-`npm install @deck.gl/carto`
+```console
+npm install deck.gl
+```   
 
 Or you can use the scripting API:
 
-`<script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script>`
-
-`<script src="https://unpkg.com/@deck.gl/carto@latest/dist.min.js"></script>`
+```html
+<script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script>
+<script src="https://unpkg.com/@deck.gl/carto@latest/dist.min.js"></script>
+```   
 
 You can learn more about deck.gl on the official [website](https://deck.gl), where you can find a dedicated section on the @deck.gl/carto [submodule](https://deck.gl/docs/api-reference/carto/overview).
 
@@ -24,26 +25,39 @@ In the [Examples]({{site.baseurl}}/deck-gl/examples) section you can find intera
 
 You should be able to copy these folders to your preferred locations, and get them running simply as follows:
 
-1. Clone the CARTO viz-doc [repo](https://github.com/CartoDB/viz-doc), if you haven't already.
+Clone the CARTO viz-doc [repo](https://github.com/CartoDB/viz-doc), if you haven't already.
 
-  `git clone git@github.com:CartoDB/viz-doc.git`
+```console
+git clone git@github.com:CartoDB/viz-doc.git
+```   
 
-2. Change directory to the example you are interested in, e.g.
+Change directory to the example you are interested in, e.g.
 
-  `cd viz-doc/deck.gl/examples/pure-js`
+```console
+cd viz-doc/deck.gl/examples/pure-js
+```   
 
-3. Then install dependencies using the installer of your choice:
+Then install the dependencies using the installer of your choice:
 
-   `npm install`
-
-or
-
-   `yarn`
-
-4. Finally run the example using:
-
-   `npm start`
+```console
+npm install
+```   
 
 or
 
-   `yarn start`
+```console
+yarn
+```   
+
+Finally run the example using:
+
+```console
+npm start
+```   
+
+or
+
+```console
+yarn start
+```   
+   
