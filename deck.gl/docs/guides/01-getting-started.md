@@ -7,8 +7,7 @@ In this guide, you will learn how to install CARTO for deck.gl in your computer 
 You can work with CARTO for deck.gl with the NPM module for React or Pure JS applications:
 
 ```console
-foo@bar:~$ npm install @deck.gl
-foo@bar:~$ npm install @deck.gl/carto
+npm install deck.gl
 ```   
 
 Or you can use the scripting API:
@@ -29,36 +28,36 @@ You should be able to copy these folders to your preferred locations, and get th
 Clone the CARTO viz-doc [repo](https://github.com/CartoDB/viz-doc), if you haven't already.
 
 ```console
-foo@bar:~$ git clone git@github.com:CartoDB/viz-doc.git
+git clone git@github.com:CartoDB/viz-doc.git
 ```   
 
 Change directory to the example you are interested in, e.g.
 
 ```console
-foo@bar:pure-js$ cd viz-doc/deck.gl/examples/pure-js
+cd viz-doc/deck.gl/examples/pure-js
 ```   
 
 Then install the dependencies using the installer of your choice:
 
 ```console
-foo@bar:pure-js$ npm install
+npm install
 ```   
 
 or
 
 ```console
-foo@bar:pure-js$ yarn
+yarn
 ```   
 
 Finally run the example using:
 
 ```console
-foo@bar:pure-js$ npm start
+npm start
 ```   
 
 or
 
 ```console
-foo@bar:pure-js$ yarn start
+yarn start
 ```   
    
