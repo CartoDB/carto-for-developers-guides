@@ -1,6 +1,7 @@
 // NOTE: To use this example standalone (e.g. outside of deck.gl repo)
 // delete the local development overrides at the bottom of this file
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const {resolve} = require('path');
 
 const CONFIG = (env) => {
 
@@ -9,29 +10,23 @@ const CONFIG = (env) => {
     mode: 'development',
 
     entry: {
-      app: "./app.js",
+      app: "./src/app.js",
     },
 
     plugins: [
       // Generates an `index.html` file with the <script> injected.
-      new HtmlWebpackPlugin(
-        Object.assign(
-          {},
-          {
-            inject: true,
-            template: '/Users/alasarr/dev/viz-doc/deck.gl/examples/experimental/globe/index.html',
-          }
-        )
-      ),
-    
-    ].filter(Boolean)
+      new HtmlWebpackPlugin({
+        inject: true,
+        template: resolve(__dirname, 'src/index.html'),
+      })
+    ]
   }
   
   if (env && env.production) {
     config.mode = 'production';
     config.output =  {
       // The build folder.
-      path: '/Users/alasarr/dev/viz-doc/deck.gl/examples/experimental/globe/dist',
+      path: resolve(__dirname, 'dist'),
       filename: 'js/[name].[contenthash:8].js',
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: 'js/[name].[contenthash:8].chunk.js'
