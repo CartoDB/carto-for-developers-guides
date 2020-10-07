@@ -29,7 +29,7 @@
       apiKey: "default_public",
     });
 
-    const POINT_COLORS = {
+    const LINE_COLORS = {
       COLOR_1: [76, 41, 145],
       COLOR_2: [135, 44, 162],
       COLOR_3: [192, 54, 158],
@@ -58,21 +58,21 @@
           lineWidthUnits: 'pixels',
           getLineColor: (object) => {
             if (object.properties.strahler == 1) {
-              return POINT_COLORS.COLOR_1;
+              return LINE_COLORS.COLOR_1;
             } else if (object.properties.strahler == 2) {
-              return POINT_COLORS.COLOR_2;
+              return LINE_COLORS.COLOR_2;
             } else if (object.properties.strahler == 3) {
-              return POINT_COLORS.COLOR_3;
+              return LINE_COLORS.COLOR_3;
             } else if (object.properties.strahler == 4) {
-              return POINT_COLORS.COLOR_4;
+              return LINE_COLORS.COLOR_4;
             } else if (object.properties.strahler == 5) {
-              return POINT_COLORS.COLOR_5;
+              return LINE_COLORS.COLOR_5;
             } else if (object.properties.strahler == 6) {
-              return POINT_COLORS.COLOR_6;
+              return LINE_COLORS.COLOR_6;
             } else if (object.properties.strahler == 7) {
-              return POINT_COLORS.COLOR_7;
+              return LINE_COLORS.COLOR_7;
             } else {
-              return POINT_COLORS.OTHER;
+              return LINE_COLORS.OTHER;
             }
           },
           getLineWidth: (object) => {
