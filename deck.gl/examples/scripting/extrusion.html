@@ -1,7 +1,7 @@
 <html>
   <head>
     <!-- FONT -->
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 
     <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
     <script src="https://unpkg.com/@deck.gl/carto@latest/dist.min.js"></script>
@@ -12,76 +12,218 @@
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css" rel="stylesheet" />
 
     <style type="text/css">
+      * {
+        box-sizing: border-box;
+      }
       body {
         margin: 0;
         padding: 0;
-        font-family: 'Open Sans', Helvetica, sans-serif;
+        font-family: 'Montserrat', Helvetica, sans-serif;
+        color: #C9CBD1;
       }
       #map {
         width: 100vw;
         height: 100vh;
+        color: black;
       }
-      .layer-selector {
+
+      .navbar {
         position: absolute;
-        z-index: 1;
-        top: 0;
-        right: 0;
-        background-color: #fff;
-        margin: 24px;
-        padding: 10 24px;
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-        border-radius: 4px;
-      }
-      .layer-selector h3 {
-        font-size: 16px;
-        margin: 8px 0;
-      }
-      .layer-selector .input {
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        margin-top: 16px;
-      }
-      .layer-selector .input input {
-        width: 16px;
-        height: 16px;
-        margin: 0 4px 0 0;
-      }
-      .layer-selector label,
-      span {
-        font-size: 14px;
-      }
-      .layer-selector .layout {
-        display: table;
+        top: 0;
+        left: 0;
         width: 100%;
-        margin-top: 8px;
+        padding: 32px 48px 0;
+        pointer-events: none;
+        z-index: 1;
       }
-      .layer-selector .layout > * {
-        display: table-cell;
-        height: 12px;
+      
+      .category-list {
+        position: relative;
+        padding-left: 20px;
+        margin-top: 48px;
+        list-style: none;
+        font-size: 12px;
+        line-height: 16px;
+        border-left: 2px solid rgba(201, 203, 209, 0.4);
       }
-      .right-align {
-        text-align: right;
+
+      .category-list > li {
+        width: fit-content;
+        background-color: rgba(9, 9, 9, 0.8);
+        padding: 6px 16px;
+        margin-bottom: 4px;
+        border-radius: 14px;
+        pointer-events: all;
       }
+
+      .category-list > li:hover {
+        background-color: 090909;
+        color: white;
+        cursor: pointer;
+      }
+
+      .category-list > li.selected {
+        position: relative;
+        background-color: #E4E5E8;
+        color: #0E0E0E;
+        padding-right: 66px;
+      }
+
+      .category-list > li.selected::after {
+        content: '';
+        position: absolute;
+        background-color: #0C0C0C;
+        width: 8px;
+        height: 8px;
+        right: 10px;
+        top: 10px;
+        border-radius: 50%;
+      }
+
+      .data-source {
+        margin: 24px 0 0 40px;
+      }
+
+      .data-source > p {
+        font-size: 10px;
+        line-height: 12px;
+        margin-bottom: 12px;
+      }
+
       .ctrl_select{
         position: absolute;
-        top: 20px;
+        font-weight: 600;
+        top: 120px;
         left: 20px;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .legend {
+        display: flex;
+        position: absolute;
+        font-weight: 600;
+        height: 408px;
+        bottom: 32px;
+        right: 0px;
         z-index: 1;
       }
 
-      select {
-        padding: 10px;
-        font-size: 16px;
-        color: #222;
-        margin-right: 10px;
+      .legend-colors {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 24px;
+        padding: 4px 0 4px 4px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 4px 0 0 4px;
+      }
+
+      .legend-colors > div {
+        flex-shrink: 0;
+        flex-grow: 1;
+      }
+
+      .legend-meaning {
+        display: flex;
+        flex-direction: column;
+        margin-right: 8px;
+        height: 100%;
+        font-size: 10px;
+        line-height: 16px;
+      }
+
+      .legend-meaning > div{
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        border-bottom: 1px solid rgba(201, 203, 209, 0.4);
+        text-align: right;
+        width: 80px;
+        flex-shrink: 0;
+        flex-grow: 1;
+        opacity: 0;
+        transition: opacity 0.2s linear;
+      }
+
+      .legend:hover .legend-meaning > div {
+        opacity: 1;
+      }
+
+      .toggle {
+        cursor: pointer;
+        pointer-events: all;
       }
     </style>
   </head>
 
   <body>
+    <div class="navbar">
+      <svg width="294" height="40" viewBox="0 0 294 40" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" fill-rule="evenodd">
+          <g fill="#FFF">
+            <circle opacity=".2" cx="83.3333" cy="20" r="20"/>
+            <path d="M6.66 26.6462c2.8417 0 4.4838-1.2209 5.7015-2.879L9.6678 21.872c-.7749.9289-1.5682 1.5489-2.9151 1.5489-1.8081 0-3.0812-1.4942-3.0812-3.4076v-.0364c0-1.8587 1.2726-3.3893 3.0808-3.3893 1.2361 0 2.0848.6013 2.8228 1.4942l2.6932-2.0591c-1.1439-1.5485-2.8413-2.6418-5.4796-2.6418C2.8782 13.3804 0 16.296 0 20.0133v.0365c0 3.8089 2.97 6.5964 6.66 6.5964zm11.7954-.255h3.7453l.9225-2.296h4.9995l.9226 2.296h3.8384l-5.499-12.8468h-3.4492l-5.481 12.8467h.0009zm5.7195-5.0476l1.458-3.608 1.4386 3.608H24.174h.0009zm15.678 5.0475h3.5793V22.528h1.5867l2.601 3.8631h4.1148l-3.0811-4.4462c1.6046-.6742 2.6563-1.968 2.6563-3.936v-.0365c0-1.2577-.387-2.223-1.1439-2.9702-.8667-.8564-2.232-1.3666-4.2061-1.3666h-6.1065V26.391h-.0005zm3.5793-6.6329v-3.08h2.3616c1.1808 0 1.9373.5111 1.9373 1.5311v.037c0 .9288-.72 1.5124-1.9193 1.5124h-2.3805l.0009-.0005zm18.5562 6.633v-9.6579h-3.8565v-3.0977h11.3103v3.0977h-3.8745v9.6578h-3.5793zm21.2616.2755c-3.7278 0-6.75-2.985-6.75-6.6667 0-3.6818 3.0222-6.6667 6.75-6.6667S90 16.3183 90 20c0 3.6818-3.0222 6.6667-6.75 6.6667z"/>
+          </g>
+          <path d="M144 0h150v40H144z"/>
+          <path d="M150.624 28.136c1.512 0 2.904-.552 4.008-1.488V27.8h3.12V11h-3.144v5.544c-1.104-.912-2.472-1.464-3.984-1.464-3.696 0-6.624 2.928-6.624 6.528 0 3.576 2.928 6.528 6.624 6.528zm.264-2.736c-2.064 0-3.768-1.704-3.768-3.792 0-2.112 1.704-3.768 3.768-3.768 2.088 0 3.768 1.656 3.768 3.768 0 2.088-1.68 3.792-3.768 3.792zm15.512 2.712c2.304 0 4.176-.984 5.424-2.688l-2.184-1.632c-.912 1.176-1.944 1.632-3.264 1.632-1.728 0-3.072-1.176-3.48-2.784h9.576v-.912c0-3.864-2.64-6.624-6.36-6.624-3.672 0-6.432 3.024-6.432 6.48 0 3.792 2.928 6.528 6.72 6.528zm2.904-7.872h-6.36c.432-1.512 1.632-2.448 3.096-2.448 1.512 0 2.808.912 3.264 2.448zm11.504 7.872c2.424 0 4.104-1.104 5.352-2.736l-2.232-1.632c-.72.984-1.8 1.608-3.12 1.608-2.04 0-3.696-1.68-3.696-3.768s1.656-3.744 3.696-3.744c1.32 0 2.4.624 3.12 1.608l2.232-1.632c-1.248-1.632-2.928-2.736-5.352-2.736-3.84 0-6.816 2.904-6.816 6.504 0 3.6 2.976 6.528 6.816 6.528zm9.992-.312v-5.544l4.44 5.544h3.84l-5.376-6.432 5.016-5.976h-3.6l-4.32 5.352V11h-3.144v16.8h3.144zm10.856.24c1.008 0 1.824-.792 1.824-1.8s-.816-1.8-1.824-1.8-1.824.792-1.824 1.8.816 1.8 1.824 1.8zm11.432 4.8c2.832 0 4.68-1.824 4.68-4.56V15.392h-3.12v1.08c-1.08-.888-2.448-1.416-3.912-1.416-3.6 0-6.528 2.856-6.528 6.432 0 3.576 2.904 6.432 6.528 6.432 1.464 0 2.808-.528 3.888-1.392v1.512c0 1.392-.768 2.16-2.256 2.16h-2.76v2.64h3.48zM211 25.16c-2.04 0-3.672-1.632-3.672-3.672s1.656-3.696 3.672-3.696c2.04 0 3.672 1.632 3.672 3.696 0 2.04-1.608 3.672-3.672 3.672zm12.272 2.64V11h-3.144v16.8h3.144z" fill="#FFF" fill-rule="nonzero"/>
+          <path d="M243.472 11v16.8h-2.4v-1.536c-1.104 1.128-2.64 1.824-4.344 1.824-3.624 0-6.456-2.856-6.456-6.384 0-3.552 2.856-6.408 6.456-6.408 1.5812 0 3.0348.5953 4.1208 1.6057l.1992.1943V11h2.424zm43.728 4.296c3.648 0 6.576 2.856 6.576 6.384 0 3.528-2.928 6.408-6.576 6.408-3.648 0-6.576-2.88-6.576-6.408 0-3.528 2.928-6.384 6.576-6.384zm-35.344.024c3.4496 0 6.0043 2.5928 6.1162 6.1182l.0038.2418v.792h-9.96c.336 1.992 1.992 3.48 4.056 3.48 1.3327 0 2.474-.5102 3.364-1.5907l.164-.2093 1.752 1.296c-1.224 1.632-3.048 2.616-5.28 2.616-3.672 0-6.504-2.736-6.504-6.384 0-3.456 2.712-6.36 6.288-6.36zm22.112-.024c2.712 0 4.56 2.04 4.56 4.608V27.8h-2.424v-7.392c0-1.728-1.104-2.928-2.736-2.928-1.68 0-2.856 1.224-2.856 3v7.32h-2.424v-7.392c0-1.728-1.104-2.928-2.736-2.928-1.68 0-2.856 1.224-2.856 3v7.32h-2.424V15.56h2.424v1.296c.84-.984 2.064-1.56 3.456-1.56 1.848 0 3.288.912 4.008 2.304.792-1.416 2.256-2.304 4.008-2.304zm-37.072 2.16c-2.328 0-4.2 1.872-4.2 4.248 0 2.352 1.872 4.248 4.2 4.248 2.328 0 4.2-1.896 4.2-4.248 0-2.376-1.872-4.248-4.2-4.248zm50.304 0c-2.304 0-4.152 1.872-4.152 4.224 0 2.376 1.848 4.248 4.152 4.248 2.304 0 4.152-1.872 4.152-4.248 0-2.352-1.848-4.224-4.152-4.224zm-35.392-.024c-1.7333 0-3.1996 1.1573-3.6916 2.9146l-.0524.2054h7.464c-.408-1.872-1.92-3.12-3.72-3.12z" fill="#9397A2"/>
+          <path d="M127 14v5h5v2h-5v5h-2v-5h-5v-2h5v-5h2z" fill="#FFF"/>
+        </g>
+      </svg>
+
+      <div id="toggle" class="toggle">
+        <svg width="44" height="24" viewBox="0 0 44 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><rect fill="#E4E5E8" width="44" height="24" rx="12"/><circle fill="#0C0C0C" cx="32" cy="12" r="8"/></g></svg>
+      </div>
+    </div>
     <div class='ctrl_select'>
-      <select id='industries'></select>
-      <select id='indexes'></select>
+      <ul id="indexes" class="category-list">
+      </ul>
+      <ul id="industries" class="category-list">
+      </ul>
+      <div class="data-source">
+        <p>Index based on MRLI</p>
+        <div class="logo">
+          <svg width="92" height="16" viewBox="0 0 92 16" xmlns="http://www.w3.org/2000/svg">
+            <g fill="none" fill-rule="evenodd">
+              <path fill="#FF5F00" d="M9.444 14.2905h6.999V1.7095H9.444z"/>
+              <path d="M9.8882 8c0-2.552 1.1955-4.8245 3.055-6.289C11.5837.639 9.8657 0 8.0002 0c-4.4185 0-8 3.582-8 8s3.5815 8 8 8c1.8655 0 3.5835-.639 4.943-1.7095-1.8595-1.466-3.055-3.7385-3.055-6.2905" fill="#EB001B"/>
+              <path d="M25.9632 13.267v-.62h-.1194l-.1388.428-.1387-.428h-.1209v.62h.086v-.466l.1306.403h.0876l.129-.405v.468h.0846zm-.7619 0v-.515h.155v-.104h-.3931v.104h.155v.515h.0831zM25.8872 8c0 4.418-3.581 8-8 8-1.8655 0-3.5825-.639-4.944-1.7095 1.8615-1.466 3.056-3.7385 3.056-6.2905 0-2.552-1.1945-4.8245-3.056-6.289C14.3047.639 16.0217 0 17.8872 0c4.419 0 8 3.582 8 8" fill="#F79E1B"/>
+              <path d="M41.6523 7.8384c0-.9345.6116-1.7025 1.614-1.7025.957 0 1.603.7345 1.603 1.7025 0 .969-.646 1.7035-1.603 1.7035-1.0025 0-1.614-.768-1.614-1.7035zm4.3076 0V5.1789h-1.158v.646c-.3676-.4795-.9236-.78-1.6806-.78-1.4904 0-2.66 1.1675-2.66 2.7935 0 1.6255 1.1696 2.7945 2.66 2.7945.757 0 1.313-.3015 1.6806-.78v.647h1.158V7.8384zm39.091 0c0-.9345.6115-1.7025 1.6135-1.7025.957 0 1.603.7345 1.603 1.7025 0 .969-.646 1.7035-1.603 1.7035-1.002 0-1.6136-.768-1.6136-1.7035zm5.602 2.407v.084h.077c.018 0 .0324-.003.0425-.01.0104-.007.016-.0175.016-.033a.0356.0356 0 00-.016-.0305.083.083 0 00-.0426-.0105h-.077zm.0774-.058c.04 0 .0726.009.094.027.0216.017.032.0435.032.072 0 .027-.008.0495-.026.065-.0174.0175-.042.028-.073.0315l.1016.118h-.081l-.094-.117h-.031v.117h-.067v-.3135h.1445zm-.0195.421c.036 0 .0705-.007.1015-.02a.266.266 0 00.0826-.0565.286.286 0 00.0574-.0835.2745.2745 0 00.02-.102c0-.037-.007-.072-.02-.103a.2696.2696 0 00-.0574-.084.2842.2842 0 00-.0826-.0565.2536.2536 0 00-.1014-.02.272.272 0 00-.1045.02.3034.3034 0 00-.0835.0565.2404.2404 0 00-.055.084.2494.2494 0 00-.0206.103c0 .0355.0066.069.0206.102a.2528.2528 0 00.055.0835.283.283 0 00.0834.0565c.0326.013.068.02.1045.02zm0-.5995c.0485 0 .092.007.1335.0255.042.018.079.0415.11.072a.349.349 0 01.073.108.3183.3183 0 01.027.132.3157.3157 0 01-.027.13.3468.3468 0 01-.073.1075.3629.3629 0 01-.11.0725c-.0414.0185-.085.026-.1335.026a.3363.3363 0 01-.136-.026.3487.3487 0 01-.1094-.0725.3384.3384 0 01-.1-.2375.3406.3406 0 01.1-.24.3391.3391 0 01.1095-.072c.0425-.0185.088-.0255.136-.0255zm-1.352-2.1705v-4.797h-1.1574v2.7835c-.3686-.4795-.9256-.78-1.6816-.78-1.492 0-2.661 1.1675-2.661 2.7935 0 1.6255 1.169 2.7945 2.661 2.7945.756 0 1.313-.3015 1.6816-.78v.647h1.1574V7.8384zm-29.0404-1.758c.746 0 1.223.467 1.347 1.291h-2.76c.1215-.7685.5894-1.291 1.413-1.291zm.0215-1.0355c-1.558 0-2.6486 1.135-2.6486 2.7935 0 1.692 1.136 2.7945 2.727 2.7945.802 0 1.5356-.201 2.182-.7455l-.5674-.8585c-.4455.357-1.0135.5575-1.547.5575-.747 0-1.4256-.346-1.593-1.302h3.9525c.0104-.1455.022-.29.022-.446-.0116-1.6585-1.0356-2.7935-2.5276-2.7935zm13.969 2.7935c0-.9345.613-1.7025 1.615-1.7025.957 0 1.603.7345 1.603 1.7025 0 .969-.646 1.7035-1.603 1.7035-1.002 0-1.615-.768-1.615-1.7035zm4.3085 0V5.1789h-1.1586v.646c-.366-.4795-.923-.78-1.6804-.78-1.492 0-2.6596 1.1675-2.6596 2.7935 0 1.6255 1.1676 2.7945 2.6596 2.7945.7574 0 1.3144-.3015 1.6804-.78v.647h1.1586V7.8384zm-10.842 0c0 1.614 1.1234 2.7945 2.839 2.7945.8 0 1.3354-.1785 1.914-.6355l-.556-.934c-.434.3115-.891.4785-1.392.4785-.9235-.0115-1.602-.6795-1.602-1.7035 0-1.0245.6785-1.6925 1.602-1.7025.501 0 .958.1665 1.392.4785l.556-.9355c-.5786-.4555-1.114-.634-1.914-.634-1.7156 0-2.839 1.179-2.839 2.7935zm14.916-2.7935c-.668 0-1.1035.3115-1.403.78v-.646h-1.1465v5.321h1.1574V7.5154c0-.879.3786-1.3695 1.135-1.3695.234 0 .479.034.724.1345l.357-1.0915c-.257-.0985-.591-.144-.824-.144zm-31.01.5565c-.5575-.367-1.325-.5565-2.1715-.5565-1.346 0-2.214.645-2.214 1.7025 0 .869.645 1.4025 1.8364 1.5695l.5446.078c.635.09.936.2565.936.5565 0 .4125-.4236.646-1.214.646-.801 0-1.38-.256-1.7695-.557l-.5455.902c.635.4675 1.4355.6905 2.304.6905 1.536 0 2.427-.7235 2.427-1.737 0-.9345-.701-1.4255-1.8586-1.592l-.5454-.0785c-.502-.0655-.9025-.1665-.9025-.5215 0-.3905.3785-.6235 1.013-.6235.68 0 1.336.256 1.659.456l.501-.935zm14.926-.5565c-.668 0-1.1025.3115-1.4026.78v-.646h-1.1465v5.321h1.157V7.5154c0-.879.379-1.3695 1.136-1.3695.2336 0 .478.034.7236.1345l.3564-1.0915c-.256-.0985-.5904-.144-.824-.144zm-9.873.134h-1.8935v-1.614h-1.167v1.614h-1.08v1.057h1.08v2.4255c0 1.237.4784 1.9715 1.8464 1.9715.502 0 1.0806-.1565 1.448-.4125l-.334-.991c-.3455.201-.7245.301-1.025.301-.578 0-.7684-.356-.7684-.8905v-2.404h1.8935v-1.057zm-17.297 5.321v-3.34c0-1.2585-.802-2.1035-2.093-2.115-.6786-.011-1.3796.2-1.869.9465-.367-.59-.9475-.9465-1.7595-.9465-.5675 0-1.124.167-1.5575.791v-.657h-1.1586v5.321h1.169V7.5484c0-.923.5126-1.4125 1.3026-1.4125.768 0 1.1574.5005 1.1574 1.401v2.963h1.1686V7.5484c0-.923.534-1.4125 1.3025-1.4125.7904 0 1.168.5005 1.168 1.401v2.963h1.1695z" fill="#FFF"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-meaning">
+        <div>
+          Top<br/>200-10000
+        </div>
+        <div>
+          High<br/>150-200
+        </div>
+        <div>
+          Medium<br/>100-150
+        </div>
+        <div>
+          Medium-low<br/>50-100
+        </div>
+        <div>
+          Low<br/>0-50
+        </div>
+      </div>
+      <div class="legend-colors">
+        <div style="background: rgb(255, 221, 154)"></div>
+        <div style="background: rgb(255, 194, 133)"></div>
+        <div style="background: rgb(250, 138, 118)"></div>
+        <div style="background: rgb(241, 109, 122)"></div>
+        <div style="background: rgb(225, 83, 131)"></div>
+      </div>
     </div>
 
     <div id="map"></div>
@@ -103,16 +245,44 @@
     };
 
     let selectIndustries = document.getElementById('industries');
+    let industry = 'ret';
     for(index in industries) {
-      selectIndustries.options[selectIndustries.options.length] = new Option(industries[index], index);
+      const elem = addCategory(selectIndustries, industries[index], index, changeIndustry);
+      if(index == industry)
+        elem.classList.add("selected");
     }
 
-    let industry = 'ret';
+    const toggle = document.getElementById("toggle");
+    toggle.addEventListener("click", toggleBasemap);
 
-    selectIndustries.addEventListener('change', () => {
-      industry = selectIndustries.value;
-      render();
-    });
+    function addCategory(parent, categoryName, index, clickCallback) {
+      const elem = document.createElement('li');
+      elem.innerText = categoryName;
+      elem.dataset.category = index;
+      elem.addEventListener("click", clickCallback);
+      parent.appendChild(elem);
+      return elem;
+    }
+
+    function changeIndustry() {
+      if(this.dataset.category != industry){
+        const previousIndustry = this.parentElement.querySelector(".selected");
+        previousIndustry.classList.remove("selected");
+        this.classList.add("selected");
+        industry = this.dataset.category;
+        render();
+      }
+    }
+
+    function changeIndex() {
+      if(this.dataset.category != currentIndex){
+        const previousIndex = this.parentElement.querySelector(".selected");
+        previousIndex.classList.remove("selected");
+        this.classList.add("selected");
+        currentIndex = this.dataset.category;
+        render();
+      }
+    }
 
     const indexes = {
       txn_amt: 'Total Spend',
@@ -122,11 +292,12 @@
     };
 
     var selectIndexes = document.getElementById('indexes');
-    for(index in indexes) {
-      selectIndexes.options[selectIndexes.options.length] = new Option(indexes[index], index);
-    }
-
     let currentIndex = 'txn_amt';
+    for(index in indexes) {
+      const elem = addCategory(selectIndexes, indexes[index], index, changeIndex);
+      if(index == currentIndex)
+        elem.classList.add("selected");
+    }
 
     selectIndexes.addEventListener('change', () => {
       currentIndex = selectIndexes.value;
@@ -179,6 +350,9 @@
     // Function to render the layers. Will be invoked any time visibility changes.
     function render() {
 
+      // const sql = `SELECT geoid, the_geom_webmercator, avg(txn_amt) as expend, avg(txn_cnt) as transactions
+      //       FROM aasuero.mrli_ny_jan WHERE industry ='${industry}'
+      //       group by geoid, the_geom_webmercator`;
       const sql = `SELECT geoid, the_geom_webmercator, avg(${currentIndex}) as index
             FROM aasuero.mrli_ny_jan WHERE industry ='${industry}'
             group by geoid, the_geom_webmercator`;
@@ -213,7 +387,15 @@
           filled: true,
           extruded: true,
           wireframe: true,
-          getElevation: f => f.properties.index,
+          getElevation: (f) => {
+            return f.properties.index ? f.properties.index : 0
+          },
+          transitions: {
+            getElevation: {
+              duration: 300,
+              enter: value => [0]
+            }
+          }
         }),
       ];
 
@@ -226,6 +408,21 @@
       viewState.bearing += 0.03;
       deckgl.setProps({ viewState: {...viewState} });
       window.requestAnimationFrame(animate)
+    }
+
+    let basemap = 'dark';
+
+    function toggleBasemap() {
+      let basemapUrl = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json';
+      if (basemap === 'dark') {
+        basemapUrl = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+        basemap = 'positron';
+      } else {
+        basemap = 'dark';
+      }
+      deckgl.setProps({
+          mapStyle: basemapUrl,
+      })
     }
   </script>
 </html>
