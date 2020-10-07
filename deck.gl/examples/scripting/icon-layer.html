@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <!-- deck.gl standalone bundle -->
+    <script src="https://unpkg.com/deck.gl@^8.1.0/dist.min.js"></script>
+    <script src="https://unpkg.com/@deck.gl/carto@latest/dist.min.js"></script>
+
+    <!-- Mapbox dependencies -->
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css" rel="stylesheet" />
+
+    <style type="text/css">
+      body {margin: 0; padding: 0;}
+      #map {width: 100vw; height: 100vh;}
+    </style>
+  </head>
+
+  <body>
+    <div id="map"></div>
+  </body>
+
+  <script type="text/javascript">
+
+    const ICON_MAPPING = {
+      marker: {x: 0, y: 0, width: 24, height: 24, mask: true}
+      // ... you can set different mappings and use them by key at getIcon function
+    };
+
+    deck.carto.setDefaultCredentials({
+      username: 'public',
+      apiKey: 'default_public'
+    });
+
+    const deckgl = new deck.DeckGL({
+      container: 'map',
+      mapStyle: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+
+      initialViewState: {
+        latitude: 0,
+        longitude: 0,
+        zoom: 1
+      },
+      controller: true,
+
+      layers: [
+        new deck.carto.CartoSQLLayer({
+          data: 'world_population_2015',
+
+          /* Substitute default GeoJSONLayer with an IconLayer, but you can use different layers here */
+          renderSubLayers: props => new deck.IconLayer({...props}),
+
+          /* Set IconLayer related props */
+          pickable: true,
+          getSize: d => 24,
+          getColor: d => [255, 140, 0], // Remember to set mask to true in your icon mapping to enable colouring
+          getIcon: d => 'marker',
+          iconMapping: ICON_MAPPING,
+          
+          // You can use different image formats including PNG or SVG
+          iconAtlas: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/maki-icons/marker-stroked-24.svg?req=markup',
+
+          // Get coordinates from GeoJSON geometry
+          getPosition: d => d.geometry.coordinates
+        })
+      ]
+    });
+
+  </script>
+</html>
