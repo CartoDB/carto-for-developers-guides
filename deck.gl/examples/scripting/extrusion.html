@@ -28,7 +28,8 @@
         align-items: flex-start;
       }
 
-      #header h1 {
+      #header h1,
+      .footer-content h1 {
         display: inline;
         margin-left: 22px;
         font-size: 16px;
@@ -36,7 +37,8 @@
         color: #FFF;
       }
 
-      #header h1 span {
+      #header h1 span,
+      .footer-content h1 span {
         font-size: 12px;
         line-height: 16px;
         color: #C9CBD1;
@@ -150,6 +152,7 @@
         font-size: 10px;
         line-height: 12px;
         margin-bottom: 12px;
+        max-width: 200px;
       }
 
       .ctrl_select{
@@ -279,10 +282,61 @@
       .info-icon:hover~.info-tooltip {
         display: block;
       }
+
+      .side-gradient {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 400px;
+        height: 100%;
+        background: linear-gradient(90deg, rgba(14,14,14,0.88) 0%, rgba(0,212,255,0) 100%);
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .show-tablet {
+        display: none;
+      }
+
+      .footer-content {
+        position: absolute;
+        bottom: 0;
+        z-index: 1;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .footer-content h1 {
+        margin: 0;
+      }
+
+      .footer-content h1,
+      .footer-content h1 span {
+        margin: 0;
+      }
+
+      @media (max-width: 600px) {
+        .hide-mobile {
+          display: none;
+        }
+      }
+
+      @media (max-width: 800px) {
+        .hide-tablet {
+          display: none !important;
+        }
+
+        .show-tablet {
+          display: block;
+        }
+      }
     </style>
   </head>
 
   <body>
+    <div class="side-gradient hide-mobile">
+    </div>
     <div class="navbar">
       <div id="header">
         <svg width="238" height="40" viewBox="0 0 238 40" xmlns="http://www.w3.org/2000/svg">
@@ -305,13 +359,13 @@
           </g>
         </g>
         </svg>
-        <h1>Mastercard Geographic Insights <span>January 2020 index using a z18 QuadGrid</span></h1>
-        <div class="extra-info">
+        <h1 class="hide-tablet">Mastercard Geographic Insights <span>January 2020 index using a z18 QuadGrid</span></h1>
+        <div class="extra-info hide-tablet">
           <div class="info-icon">
             <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><rect fill="#E4E5E8" width="28" height="28" rx="14"/><path d="M15 12v6h2v2h-6v-2h2v-4h-2v-2h4zm-1.2505-5c.967 0 1.75.783 1.75 1.75s-.783 1.75-1.75 1.75-1.75-.783-1.75-1.75.783-1.75 1.75-1.75z" fill="#1A1E29"/></g></svg>
           </div>
           <div class="info-tooltip">
-            <h2>MRLI Index</h2>
+            <h2>About Index</h2>
             <p>A locations’s index shows how it ranks against all the other locations in the area. The number represents the percentile, for example, a 900 spend index means a location has higher spend than 90% of locations.</p>
           </div>
         </div>
@@ -321,23 +375,23 @@
         <svg width="44" height="24" viewBox="0 0 44 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><rect fill="#E4E5E8" width="44" height="24" rx="12"/><circle fill="#0C0C0C" cx="32" cy="12" r="8"/></g></svg>
       </div> -->
     </div>
-    <div class='ctrl_select'>
+    <div class='ctrl_select hide-mobile'>
       <div class="selector-wrapper">
         <div class="selector-title">
-          <h3 class="vertical-title">Indicators</h3>
+          <h3 class="vertical-title">Index</h3>
         </div>
         <ul id="indexes" class="category-list">
         </ul>
       </div>
       <div class="selector-wrapper">
         <div class="selector-title">
-          <h3 class="vertical-title">Categories</h3>
+          <h3 class="vertical-title">Industry</h3>
         </div>
         <ul id="industries" class="category-list">
         </ul>
       </div>
       <div class="data-source">
-        <p>Index based on MRLI</p>
+        <p>Index based on Mastercard Geographic Insights</p>
         <div class="logo">
           <svg width="92" height="16" viewBox="0 0 92 16" xmlns="http://www.w3.org/2000/svg">
             <g fill="none" fill-rule="evenodd">
@@ -351,38 +405,41 @@
       </div>
     </div>
 
-    <div class="legend">
+    <div class="footer-content show-tablet">
+      <h1>Mastercard Geographic Insights<br/><span>January 2020 index using a z18 QuadGrid</span></h1>
+    </div>
+    <div class="legend hide-mobile">
       <div class="legend-meaning">
         <div>
-          Top<br/>&gt; 1000
+          Top<br/>&gt; 2000
         </div>
         <div>
-          High<br/>500-1000
+          High<br/>1000-2000
         </div>
         <div>
-          Medium-high<br/>300-500
+          Medium-high<br/>600-1000
         </div>
         <div>
-          Medium<br/>100-300
+          Medium<br/>300-600
         </div>
         <div>
-          Medium-low<br/>50-100
+          Medium-low<br/>150-300
         </div>
         <div>
-          Low<br/>25-50
+          Low<br/>50-150
         </div>
         <div>
-          Minimum<br/>0-25
+          Minimum<br/>0-50
         </div>
       </div>
       <div class="legend-colors">
-        <div style="background: rgb(254, 246, 181)"></div>
-        <div style="background: rgb(255, 221, 154)"></div>
-        <div style="background: rgb(255, 194, 133)"></div>
-        <div style="background: rgb(255, 166, 121)"></div>
-        <div style="background: rgb(250, 138, 118)"></div>
-        <div style="background: rgb(241, 109, 122)"></div>
-        <div style="background: rgb(225, 83, 131)"></div>
+        <div style="background: rgb(253, 255, 208)"></div>
+        <div style="background: rgb(254, 239, 157)"></div>
+        <div style="background: rgb(255, 179, 66)"></div>
+        <div style="background: rgb(255, 142, 54)"></div>
+        <div style="background: rgb(255, 77, 32)"></div>
+        <div style="background: rgb(190, 1, 31)"></div>
+        <div style="background: rgb(128, 0, 32)"></div>
       </div>
     </div>
 
@@ -464,14 +521,24 @@
       render();
     });
 
+    // const POLYGON_COLORS = {
+    //   OTHER: [225, 83, 131],
+    //   COLOR_6: [241, 109, 122],
+    //   COLOR_5: [250, 138, 118],
+    //   COLOR_4: [255, 166, 121],
+    //   COLOR_3: [255, 194, 133],
+    //   COLOR_2: [255, 221, 154],
+    //   COLOR_1: [254, 246, 181],
+    // };
+
     const POLYGON_COLORS = {
-      OTHER: [225, 83, 131],
-      COLOR_6: [241, 109, 122],
-      COLOR_5: [250, 138, 118],
-      COLOR_4: [255, 166, 121],
-      COLOR_3: [255, 194, 133],
-      COLOR_2: [255, 221, 154],
-      COLOR_1: [254, 246, 181],
+      COLOR_1: [253, 255, 208],
+      COLOR_2: [254, 239, 157],
+      COLOR_3: [255, 179, 66],
+      COLOR_4: [255, 142, 54],
+      COLOR_5: [255, 77, 32],
+      COLOR_6: [190, 1, 31],
+      OTHER: [128, 0, 32],
     };
 
     const viewState = {
@@ -488,7 +555,9 @@
       container: "map",
       mapStyle: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
       viewState,
-      controller: true,
+      controller: {
+        scrollZoom: false
+      },
       getTooltip: ({ object }) => {
         if (!object)
           return false;
@@ -496,9 +565,8 @@
 
         return {
           html: `
-            <h4 class="tooltip-subtitle">MRLI Index</h4>
+            <h4 class="tooltip-subtitle">Index value</h4>
             <h2 class="tooltip-index">${index.toFixed(2)}</h2>
-            <h3 class="tooltip-geoid">Geo ID ${geoid}</h3>
           `,
           style: {
             "backgroundColor": "rgba(255, 255, 255, 0.92)",
@@ -530,17 +598,17 @@
           id: "mrli",
           data: sql,
           getFillColor: (object) => {
-            if (object.properties.index > 1000) {
+            if (object.properties.index > 2000) {
               return POLYGON_COLORS.COLOR_1;
-            } else if (object.properties.index > 500) {
+            } else if (object.properties.index > 1000) {
               return POLYGON_COLORS.COLOR_2;
-            } else if (object.properties.index > 300) {
+            } else if (object.properties.index > 600) {
               return POLYGON_COLORS.COLOR_3;
-            } else if (object.properties.index > 100) {
+            } else if (object.properties.index > 300) {
               return POLYGON_COLORS.COLOR_4;
-            } else if (object.properties.index > 50) {
+            } else if (object.properties.index > 150) {
               return POLYGON_COLORS.COLOR_5;
-            } else if (object.properties.index > 25) {
+            } else if (object.properties.index > 50) {
               return POLYGON_COLORS.COLOR_6;
             } else {
               return POLYGON_COLORS.OTHER;
