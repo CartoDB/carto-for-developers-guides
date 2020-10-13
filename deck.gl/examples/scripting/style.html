@@ -171,7 +171,9 @@
         longitude: -103.0078125,
         zoom: 3,
       },
-      controller: true,
+      controller: {
+        scrollZoom: false
+      },
       getTooltip: ({ object }) => {
         if (!object) return false;
         const temperature = object.properties.value;
