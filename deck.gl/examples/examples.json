@@ -1,26 +1,35 @@
 {
   "categories": [
     {
-      "title": "Scripting",
+      "title": "Basic Examples",
       "samples": [
+        {
+          "title": "Hello World",
+          "file": "scripting/hello-world.html"
+        },
         {
           "title": "BQ Tile Layer",
           "file": "scripting/bq-tiler-layer.html"
         },
         {
-          "title": "CARTO basemap",
+          "title": "Basemap Selector",
           "file": "scripting/carto-base-map.html"
         },
         {
           "title": "Interactivity",
           "file": "scripting/interactivity.html"
-        },
+        }
+      ]
+    },
+    {
+      "title": "Styling",
+      "samples": [
         {
-          "title": "Style",
+          "title": "Choropleths",
           "file": "scripting/style.html"
         },
         {
-          "title": "Icon layer",
+          "title": "Icon Layer",
           "file": "scripting/icon-layer.html"
         }
       ]
