@@ -8,7 +8,7 @@
           "file": "scripting/hello-world.html"
         },
         {
-          "title": "BQ Tile Layer (Points)",
+          "title": "BQ Tile Layer",
           "file": "scripting/bq-tiler-layer.html"
         },
         {
@@ -25,7 +25,7 @@
       "title": "Styling",
       "samples": [
         {
-          "title": "Choropleths (Points & Polygons)",
+          "title": "Choropleths",
           "file": "scripting/style.html"
         },
         {
