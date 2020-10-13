@@ -63,42 +63,50 @@
       }
 
       .selector-wrapper {
+        position: relative;
         display: flex;
         flex-direction: row;
+        margin-top: 48px;
       }
 
-      .selector-wrapper .title {
-        flex: 0 0 auto;
-        overflow: hidden;
+      .selector-title {
+        position: absolute;
         display: flex;
+        align-items: center;
         flex-direction: column;
+        height: 100%;
       }
 
-      .selector-wrapper .title:after {
+      .selector-title .vertical-title{
+        transform: rotate(180deg);
+        margin: 0;
+        writing-mode: vertical-lr;
+        text-transform: uppercase;
+        font-size: 10px;
+        line-height: 16px;
+        color: #C9CBD1;
+        letter-spacing: 0.83;
+        flex-grow: 0;
+        flex-shrink: 0;
+      }
+
+      .selector-title::after {
         content: '';
-        display: block;
-        border: .5px solid rgba(201, 203, 209, 0.4);
-        flex: 1 1 auto;
-        width: 0;
-      }
-
-      .selector-wrapper h3 {
-        flex: 0 0 auto;
-        font-size: 1em;
-        font-weight: inherit;
-        transform-origin: left top 0;
-        transform: rotate(-90deg);
+        flex-grow: 1;
+        margin-top: 8px;
+        margin-bottom: 4px;
+        width: 2px;
+        background-color: rgba(201, 203, 209, 0.4);
       }
       
       .category-list {
         position: relative;
         flex: 0 0 auto;
-        padding-left: 20px;
-        margin-top: 48px;
+        padding-left: 28px;
+        margin: 0;
         list-style: none;
         font-size: 12px;
         line-height: 16px;
-        border-left: 2px solid rgba(201, 203, 209, 0.4);
       }
 
       .category-list > li {
@@ -208,6 +216,69 @@
         cursor: pointer;
         pointer-events: all;
       }
+
+      .tooltip-subtitle {
+        margin: 0;
+        font-size: 10px;
+        line-height: 16px;
+        letter-spacing: 0.83px;
+        text-transform: uppercase;
+        color: #9397A2;
+      }
+
+      .tooltip-index {
+        margin: 0;
+        font-size: 24px;
+        line-height: 28px;
+        color: #0A0A0A;
+      }
+
+      .tooltip-geoid {
+        margin: 0;
+        font-size: 12px;
+        line-height: 16px;
+        color: #383D4D;
+      }
+
+      .extra-info {
+        position: relative;
+        margin-left: 12px;
+        transform: translateY(8px);
+      }
+
+      .info-tooltip {
+        display: none;
+        position: absolute;
+        width: 240px;
+        line-height: 16px;
+        background-color: rgba(255, 255, 255, 0.92);
+        border-radius: 2px 12px 12px 12px;
+        padding: 12px 16px 24px;
+        font-weight: 600;
+        margin-left: 28px;
+      }
+
+      .info-tooltip h2 {
+        font-size: 10px;
+        letter-spacing: 0.83;
+        color: #9397A2;
+        text-transform: uppercase;
+        margin: 0;
+      }
+
+      .info-tooltip p {
+        font-size: 12px;
+        color: #383D4D;
+        margin: 4px 0 0;
+      }
+
+      .info-icon {
+        pointer-events: all;
+      }
+
+      .info-icon:hover~.info-tooltip {
+        display: block;
+      }
     </style>
   </head>
 
@@ -234,7 +305,16 @@
           </g>
         </g>
         </svg>
-        <h1>Mastercard Index <span>January 2020 using a z18 QuadGrid</span></h1>
+        <h1>Mastercard Geographic Insights <span>January 2020 index using a z18 QuadGrid</span></h1>
+        <div class="extra-info">
+          <div class="info-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><rect fill="#E4E5E8" width="28" height="28" rx="14"/><path d="M15 12v6h2v2h-6v-2h2v-4h-2v-2h4zm-1.2505-5c.967 0 1.75.783 1.75 1.75s-.783 1.75-1.75 1.75-1.75-.783-1.75-1.75.783-1.75 1.75-1.75z" fill="#1A1E29"/></g></svg>
+          </div>
+          <div class="info-tooltip">
+            <h2>MRLI Index</h2>
+            <p>A locations’s index shows how it ranks against all the other locations in the area. The number represents the percentile, for example, a 900 spend index means a location has higher spend than 90% of locations.</p>
+          </div>
+        </div>
       </div>
 
       <!-- <div id="toggle" class="toggle">
@@ -243,16 +323,16 @@
     </div>
     <div class='ctrl_select'>
       <div class="selector-wrapper">
-        <!-- <div class="title">
-          <h3>Index</h3>
-        </div> -->
+        <div class="selector-title">
+          <h3 class="vertical-title">Indicators</h3>
+        </div>
         <ul id="indexes" class="category-list">
         </ul>
       </div>
       <div class="selector-wrapper">
-        <!-- <div class="title">
-          <h3>Industry</h3>
-        </div> -->
+        <div class="selector-title">
+          <h3 class="vertical-title">Categories</h3>
+        </div>
         <ul id="industries" class="category-list">
         </ul>
       </div>
@@ -274,27 +354,35 @@
     <div class="legend">
       <div class="legend-meaning">
         <div>
-          Top<br/>200-10000
+          Top<br/>&gt; 1000
         </div>
         <div>
-          High<br/>150-200
+          High<br/>500-1000
         </div>
         <div>
-          Medium<br/>100-150
+          Medium-high<br/>300-500
+        </div>
+        <div>
+          Medium<br/>100-300
         </div>
         <div>
           Medium-low<br/>50-100
         </div>
         <div>
-          Low<br/>0-50
+          Low<br/>25-50
+        </div>
+        <div>
+          Minimum<br/>0-25
         </div>
       </div>
       <div class="legend-colors">
-        <div style="background: rgb(225, 83, 131)"></div>
-        <div style="background: rgb(241, 109, 122)"></div>
-        <div style="background: rgb(250, 138, 118)"></div>
-        <div style="background: rgb(255, 194, 133)"></div>
+        <div style="background: rgb(254, 246, 181)"></div>
         <div style="background: rgb(255, 221, 154)"></div>
+        <div style="background: rgb(255, 194, 133)"></div>
+        <div style="background: rgb(255, 166, 121)"></div>
+        <div style="background: rgb(250, 138, 118)"></div>
+        <div style="background: rgb(241, 109, 122)"></div>
+        <div style="background: rgb(225, 83, 131)"></div>
       </div>
     </div>
 
@@ -303,8 +391,8 @@
 
   <script type="text/javascript">
     deck.carto.setDefaultCredentials({
-      username: "aasuero",
-      apiKey: "Mdz_4y_BYrgocnBNnEhvEQ",
+      username: "public",
+      apiKey: "8l-WraD-0s4A5FJj9W7uIg",
     });
 
     const industries = {
@@ -376,15 +464,14 @@
       render();
     });
 
-    // Colors for the breaks of the polygon layer
     const POLYGON_COLORS = {
-      COLOR_1: [225, 83, 131],
-      COLOR_2: [241, 109, 122],
-      COLOR_3: [250, 138, 118],
+      OTHER: [225, 83, 131],
+      COLOR_6: [241, 109, 122],
+      COLOR_5: [250, 138, 118],
       COLOR_4: [255, 166, 121],
-      COLOR_5: [255, 194, 133],
-      COLOR_6: [255, 221, 154],
-      OTHER: [254, 246, 181],
+      COLOR_3: [255, 194, 133],
+      COLOR_2: [255, 221, 154],
+      COLOR_1: [254, 246, 181],
     };
 
     const viewState = {
@@ -409,9 +496,17 @@
 
         return {
           html: `
-            Geo ID: ${geoid} <br/>
-            Index: ${index.toFixed(2)}
-          `
+            <h4 class="tooltip-subtitle">MRLI Index</h4>
+            <h2 class="tooltip-index">${index.toFixed(2)}</h2>
+            <h3 class="tooltip-geoid">Geo ID ${geoid}</h3>
+          `,
+          style: {
+            "backgroundColor": "rgba(255, 255, 255, 0.92)",
+            "borderRadius": "2px 12px 12px 12px",
+            "transform": "translateY(-100%)",
+            "padding": "12px 24px 16px 16px",
+            "top": "4px",
+          }
         }
       },
       layers: []
@@ -423,11 +518,8 @@
     // Function to render the layers. Will be invoked any time visibility changes.
     function render() {
 
-      // const sql = `SELECT geoid, the_geom_webmercator, avg(txn_amt) as expend, avg(txn_cnt) as transactions
-      //       FROM aasuero.mrli_ny_jan WHERE industry ='${industry}'
-      //       group by geoid, the_geom_webmercator`;
       const sql = `SELECT geoid, the_geom_webmercator, avg(${currentIndex}) as index
-            FROM aasuero.mrli_ny_jan WHERE industry ='${industry}'
+            FROM public.mrli_ny_jan WHERE industry ='${industry}'
             group by geoid, the_geom_webmercator`;
 
       console.log(sql);
