@@ -8,7 +8,7 @@
           "file": "scripting/hello-world.html"
         },
         {
-          "title": "BQ Tile Layer",
+          "title": "CartoBQTilerLayer",
           "file": "scripting/bq-tiler-layer.html"
         },
         {
