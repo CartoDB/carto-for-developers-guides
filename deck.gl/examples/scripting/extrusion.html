@@ -1,7 +1,7 @@
 <html>
   <head>
     <!-- FONT -->
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 
     <script src="https://unpkg.com/deck.gl@^8.3.0/dist.min.js"></script>
     <script src="https://unpkg.com/@deck.gl/carto@^8.3.0/dist.min.js"></script>
@@ -10,67 +10,435 @@
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
 
     <style type="text/css">
-      .layer-selector {
-        position: absolute;
-        z-index: 1;
-        top: 0;
-        right: 0;
-        background-color: #fff;
-        margin: 24px;
-        padding: 10 24px;
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-        border-radius: 4px;
+      * {
+        box-sizing: border-box;
       }
-      .layer-selector h3 {
-        font-size: 16px;
-        margin: 8px 0;
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Montserrat', Helvetica, sans-serif;
+        color: #C9CBD1;
       }
-      .layer-selector .input {
+
+      #header {
         display: flex;
-        align-items: center;
-        margin-top: 16px;
+        flex-direction: row;
+        align-items: flex-start;
       }
-      .layer-selector .input input {
-        width: 16px;
-        height: 16px;
-        margin: 0 4px 0 0;
+
+      #header h1,
+      .footer-content h1 {
+        display: inline;
+        margin-left: 22px;
+        font-size: 16px;
+        line-height: 24px;
+        color: #FFF;
       }
-      .layer-selector label,
-      span {
-        font-size: 14px;
+
+      #header h1 span,
+      .footer-content h1 span {
+        font-size: 12px;
+        line-height: 16px;
+        color: #C9CBD1;
+        margin-left: 8px;
       }
-      .layer-selector .layout {
-        display: table;
-        width: 100%;
-        margin-top: 8px;
+
+      #map {
+        width: 100vw;
+        height: 100vh;
+        color: black;
       }
-      .layer-selector .layout > * {
-        display: table-cell;
-        height: 12px;
-      }
-      .right-align {
-        text-align: right;
-      }
-      .ctrl_select{
+
+      .navbar {
         position: absolute;
-        top: 20px;
-        left: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 32px 48px 0;
+        pointer-events: none;
         z-index: 1;
       }
 
-      select {
-        padding: 10px;
-        font-size: 16px;
-        color: #222;
-        margin-right: 10px;
+      .selector-wrapper {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        margin-top: 48px;
+      }
+
+      .selector-title {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .selector-title .vertical-title{
+        transform: rotate(180deg);
+        margin: 0;
+        writing-mode: vertical-lr;
+        text-transform: uppercase;
+        font-size: 10px;
+        line-height: 16px;
+        color: #C9CBD1;
+        letter-spacing: 0.83;
+        flex-grow: 0;
+        flex-shrink: 0;
+      }
+
+      .selector-title::after {
+        content: '';
+        flex-grow: 1;
+        margin-top: 8px;
+        margin-bottom: 4px;
+        width: 2px;
+        background-color: rgba(201, 203, 209, 0.4);
+      }
+      
+      .category-list {
+        position: relative;
+        flex: 0 0 auto;
+        padding-left: 28px;
+        margin: 0;
+        list-style: none;
+        font-size: 12px;
+        line-height: 16px;
+      }
+
+      .category-list > li {
+        width: fit-content;
+        background-color: rgba(9, 9, 9, 0.8);
+        padding: 6px 16px;
+        margin-bottom: 4px;
+        border-radius: 14px;
+        pointer-events: all;
+      }
+
+      .category-list > li:hover {
+        background-color: 090909;
+        color: white;
+        cursor: pointer;
+      }
+
+      .category-list > li.selected {
+        position: relative;
+        background-color: #E4E5E8;
+        color: #0E0E0E;
+        padding-right: 66px;
+      }
+
+      .category-list > li.selected::after {
+        content: '';
+        position: absolute;
+        background-color: #0C0C0C;
+        width: 8px;
+        height: 8px;
+        right: 10px;
+        top: 10px;
+        border-radius: 50%;
+      }
+
+      .data-source {
+        margin: 24px 0 0 40px;
+      }
+
+      .data-source > p {
+        font-size: 10px;
+        line-height: 12px;
+        margin-bottom: 12px;
+        max-width: 200px;
+      }
+
+      .ctrl_select{
+        position: absolute;
+        font-weight: 600;
+        top: 120px;
+        left: 20px;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .legend {
+        display: flex;
+        position: absolute;
+        font-weight: 600;
+        height: 408px;
+        bottom: 32px;
+        right: 0px;
+        z-index: 1;
+      }
+
+      .legend-colors {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 24px;
+        padding: 4px 0 4px 4px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 4px 0 0 4px;
+      }
+
+      .legend-colors > div {
+        flex-shrink: 0;
+        flex-grow: 1;
+      }
+
+      .legend-meaning {
+        display: flex;
+        flex-direction: column;
+        margin-right: 8px;
+        height: 100%;
+        font-size: 10px;
+        line-height: 16px;
+      }
+
+      .legend-meaning > div{
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        border-bottom: 1px solid rgba(201, 203, 209, 0.4);
+        text-align: right;
+        width: 80px;
+        flex-shrink: 0;
+        flex-grow: 1;
+        opacity: 0;
+        transition: opacity 0.2s linear;
+      }
+
+      .legend:hover .legend-meaning > div {
+        opacity: 1;
+      }
+
+      .toggle {
+        cursor: pointer;
+        pointer-events: all;
+      }
+
+      .tooltip-subtitle {
+        margin: 0;
+        font-size: 10px;
+        line-height: 16px;
+        letter-spacing: 0.83px;
+        text-transform: uppercase;
+        color: #9397A2;
+      }
+
+      .tooltip-index {
+        margin: 0;
+        font-size: 24px;
+        line-height: 28px;
+        color: #0A0A0A;
+      }
+
+      .tooltip-geoid {
+        margin: 0;
+        font-size: 12px;
+        line-height: 16px;
+        color: #383D4D;
+      }
+
+      .extra-info {
+        position: relative;
+        margin-left: 12px;
+        transform: translateY(8px);
+      }
+
+      .info-tooltip {
+        display: none;
+        position: absolute;
+        width: 240px;
+        line-height: 16px;
+        background-color: rgba(255, 255, 255, 0.92);
+        border-radius: 2px 12px 12px 12px;
+        padding: 12px 16px 24px;
+        font-weight: 600;
+        margin-left: 28px;
+      }
+
+      .info-tooltip h2 {
+        font-size: 10px;
+        letter-spacing: 0.83;
+        color: #9397A2;
+        text-transform: uppercase;
+        margin: 0;
+      }
+
+      .info-tooltip p {
+        font-size: 12px;
+        color: #383D4D;
+        margin: 4px 0 0;
+      }
+
+      .info-icon {
+        pointer-events: all;
+      }
+
+      .info-icon:hover~.info-tooltip {
+        display: block;
+      }
+
+      .side-gradient {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 400px;
+        height: 100%;
+        background: linear-gradient(90deg, rgba(14,14,14,0.88) 0%, rgba(0,212,255,0) 100%);
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .show-tablet {
+        display: none;
+      }
+
+      .footer-content {
+        position: absolute;
+        bottom: 0;
+        z-index: 1;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .footer-content h1 {
+        margin: 0;
+      }
+
+      .footer-content h1,
+      .footer-content h1 span {
+        margin: 0;
+      }
+
+      @media (max-width: 600px) {
+        .hide-mobile {
+          display: none;
+        }
+      }
+
+      @media (max-width: 800px) {
+        .hide-tablet {
+          display: none !important;
+        }
+
+        .show-tablet {
+          display: block;
+        }
       }
     </style>
   </head>
 
-  <body style="margin: 0; padding: 0; font-family: 'Open Sans', Helvetica, sans-serif;">
-    <div class='ctrl_select'>
-      <select id='industries'></select>
-      <select id='indexes'></select>
+  <body>
+    <div class="side-gradient hide-mobile">
+    </div>
+    <div class="navbar">
+      <div id="header">
+        <svg width="238" height="40" viewBox="0 0 238 40" xmlns="http://www.w3.org/2000/svg">
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="01_demo_dark" transform="translate(-48.000000, -32.000000)">
+              <g id="brands-demo" transform="translate(48.000000, 32.000000)">
+                  <g id="CARTO-logo-negative" fill="#FFFFFF">
+                      <circle id="Oval" opacity="0.2" cx="83.3333333" cy="20" r="20"></circle>
+                      <path d="M6.66,26.6462222 C9.50175,26.6462222 11.1438,25.4253333 12.3615,23.7671111 L9.6678,21.872 C8.8929,22.8008889 8.09955,23.4208889 6.7527,23.4208889 C4.9446,23.4208889 3.67155,21.9266667 3.67155,20.0133333 L3.67155,19.9768889 C3.67155,18.1182222 4.94415,16.5875556 6.75225,16.5875556 C7.9884,16.5875556 8.8371,17.1888889 9.5751,18.0817778 L12.26835,16.0226667 C11.12445,14.4742222 9.42705,13.3808889 6.7887,13.3808889 C2.8782,13.3804444 0,16.296 0,20.0133333 L0,20.0497778 C0,23.8586667 2.97,26.6462222 6.66,26.6462222 Z M18.4554,26.3911111 L22.20075,26.3911111 L23.12325,24.0951111 L28.12275,24.0951111 L29.04525,26.3911111 L32.88375,26.3911111 L27.38475,13.5444444 L23.9355,13.5444444 L18.4545,26.3911111 L18.4554,26.3911111 Z M24.1749,21.3435556 L25.6329,17.7355556 L27.07155,21.3435556 L24.174,21.3435556 L24.1749,21.3435556 Z M39.8529,26.3911111 L43.4322,26.3911111 L43.4322,22.528 L45.0189,22.528 L47.6199,26.3911111 L51.7347,26.3911111 L48.65355,21.9448889 C50.25825,21.2706667 51.3099,19.9768889 51.3099,18.0088889 L51.3099,17.9724444 C51.3099,16.7146667 50.9229,15.7493333 50.166,15.0022222 C49.2993,14.1457778 47.934,13.6355556 45.95985,13.6355556 L39.85335,13.6355556 L39.85335,26.3911111 L39.8529,26.3911111 Z M43.4322,19.7582222 L43.4322,16.6782222 L45.7938,16.6782222 C46.9746,16.6782222 47.73105,17.1893333 47.73105,18.2093333 L47.73105,18.2462222 C47.73105,19.1751111 47.01105,19.7586667 45.8118,19.7586667 L43.4313,19.7586667 L43.4322,19.7582222 Z M61.9884,26.3911111 L61.9884,16.7333333 L58.1319,16.7333333 L58.1319,13.6355556 L69.4422,13.6355556 L69.4422,16.7333333 L65.5677,16.7333333 L65.5677,26.3911111 L61.9884,26.3911111 L61.9884,26.3911111 Z M83.25,26.6666667 C79.5222,26.6666667 76.5,23.6817778 76.5,20 C76.5,16.3182222 79.5222,13.3333333 83.25,13.3333333 C86.9778,13.3333333 90,16.3182222 90,20 C90,23.6817778 86.9778,26.6666667 83.25,26.6666667 Z" id="Shape"></path>
+                  </g>
+                  <g id="Group-2" transform="translate(140.000000, 0.000000)">
+                      <rect id="Rectangle" x="0" y="0" width="150" height="40"></rect>
+                      <g id="Group" transform="translate(0.000000, 4.000000)">
+                          <path d="M6.624,24.136 C8.136,24.136 9.528,23.584 10.632,22.648 L10.632,23.8 L13.752,23.8 L13.752,7 L10.608,7 L10.608,12.544 C9.504,11.632 8.136,11.08 6.624,11.08 C2.928,11.08 0,14.008 0,17.608 C0,21.184 2.928,24.136 6.624,24.136 Z M6.888,21.4 C4.824,21.4 3.12,19.696 3.12,17.608 C3.12,15.496 4.824,13.84 6.888,13.84 C8.976,13.84 10.656,15.496 10.656,17.608 C10.656,19.696 8.976,21.4 6.888,21.4 Z M22.4,24.112 C24.704,24.112 26.576,23.128 27.824,21.424 L25.64,19.792 C24.728,20.968 23.696,21.424 22.376,21.424 C20.648,21.424 19.304,20.248 18.896,18.64 L28.472,18.64 L28.472,17.728 C28.472,13.864 25.832,11.104 22.112,11.104 C18.44,11.104 15.68,14.128 15.68,17.584 C15.68,21.376 18.608,24.112 22.4,24.112 Z M25.304,16.24 L18.944,16.24 C19.376,14.728 20.576,13.792 22.04,13.792 C23.552,13.792 24.848,14.704 25.304,16.24 Z M36.808,24.112 C39.232,24.112 40.912,23.008 42.16,21.376 L39.928,19.744 C39.208,20.728 38.128,21.352 36.808,21.352 C34.768,21.352 33.112,19.672 33.112,17.584 C33.112,15.496 34.768,13.84 36.808,13.84 C38.128,13.84 39.208,14.464 39.928,15.448 L42.16,13.816 C40.912,12.184 39.232,11.08 36.808,11.08 C32.968,11.08 29.992,13.984 29.992,17.584 C29.992,21.184 32.968,24.112 36.808,24.112 Z M46.8,23.8 L46.8,18.256 L51.24,23.8 L55.08,23.8 L49.704,17.368 L54.72,11.392 L51.12,11.392 L46.8,16.744 L46.8,7 L43.656,7 L43.656,23.8 L46.8,23.8 Z M57.656,24.04 C58.664,24.04 59.48,23.248 59.48,22.24 C59.48,21.232 58.664,20.44 57.656,20.44 C56.648,20.44 55.832,21.232 55.832,22.24 C55.832,23.248 56.648,24.04 57.656,24.04 Z M69.088,28.84 C71.92,28.84 73.768,27.016 73.768,24.28 L73.768,11.392 L70.648,11.392 L70.648,12.472 C69.568,11.584 68.2,11.056 66.736,11.056 C63.136,11.056 60.208,13.912 60.208,17.488 C60.208,21.064 63.112,23.92 66.736,23.92 C68.2,23.92 69.544,23.392 70.624,22.528 L70.624,24.04 C70.624,25.432 69.856,26.2 68.368,26.2 L65.608,26.2 L65.608,28.84 L69.088,28.84 Z M67,21.16 C64.96,21.16 63.328,19.528 63.328,17.488 C63.328,15.448 64.984,13.792 67,13.792 C69.04,13.792 70.672,15.424 70.672,17.488 C70.672,19.528 69.064,21.16 67,21.16 Z M79.272,23.8 L79.272,7 L76.128,7 L76.128,23.8 L79.272,23.8 Z" id="deck.gldemo" fill="#FFFFFF" fill-rule="nonzero"></path>
+                          <rect id="Rectangle" fill="#9397A2" x="96" y="0" width="2" height="32"></rect>
+                      </g>
+                  </g>
+                  <path d="M123,14 L123,19 L128,19 L128,21 L123,21 L123,26 L121,26 L121,21 L116,21 L116,19 L121,19 L121,14 L123,14 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+              </g>
+          </g>
+        </g>
+        </svg>
+        <h1 class="hide-tablet">Mastercard Geographic Insights <span>January 2020 index using a z18 QuadGrid</span></h1>
+        <div class="extra-info hide-tablet">
+          <div class="info-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><rect fill="#E4E5E8" width="28" height="28" rx="14"/><path d="M15 12v6h2v2h-6v-2h2v-4h-2v-2h4zm-1.2505-5c.967 0 1.75.783 1.75 1.75s-.783 1.75-1.75 1.75-1.75-.783-1.75-1.75.783-1.75 1.75-1.75z" fill="#1A1E29"/></g></svg>
+          </div>
+          <div class="info-tooltip">
+            <h2>About Index</h2>
+            <p>A locations’s index shows how it ranks against all the other locations in the area. The number represents the percentile, for example, a 900 spend index means a location has higher spend than 90% of locations.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div id="toggle" class="toggle">
+        <svg width="44" height="24" viewBox="0 0 44 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><rect fill="#E4E5E8" width="44" height="24" rx="12"/><circle fill="#0C0C0C" cx="32" cy="12" r="8"/></g></svg>
+      </div> -->
+    </div>
+    <div class='ctrl_select hide-mobile'>
+      <div class="selector-wrapper">
+        <div class="selector-title">
+          <h3 class="vertical-title">Index</h3>
+        </div>
+        <ul id="indexes" class="category-list">
+        </ul>
+      </div>
+      <div class="selector-wrapper">
+        <div class="selector-title">
+          <h3 class="vertical-title">Industry</h3>
+        </div>
+        <ul id="industries" class="category-list">
+        </ul>
+      </div>
+      <div class="data-source">
+        <p>Index based on Mastercard Geographic Insights</p>
+        <div class="logo">
+          <svg width="92" height="16" viewBox="0 0 92 16" xmlns="http://www.w3.org/2000/svg">
+            <g fill="none" fill-rule="evenodd">
+              <path fill="#FF5F00" d="M9.444 14.2905h6.999V1.7095H9.444z"/>
+              <path d="M9.8882 8c0-2.552 1.1955-4.8245 3.055-6.289C11.5837.639 9.8657 0 8.0002 0c-4.4185 0-8 3.582-8 8s3.5815 8 8 8c1.8655 0 3.5835-.639 4.943-1.7095-1.8595-1.466-3.055-3.7385-3.055-6.2905" fill="#EB001B"/>
+              <path d="M25.9632 13.267v-.62h-.1194l-.1388.428-.1387-.428h-.1209v.62h.086v-.466l.1306.403h.0876l.129-.405v.468h.0846zm-.7619 0v-.515h.155v-.104h-.3931v.104h.155v.515h.0831zM25.8872 8c0 4.418-3.581 8-8 8-1.8655 0-3.5825-.639-4.944-1.7095 1.8615-1.466 3.056-3.7385 3.056-6.2905 0-2.552-1.1945-4.8245-3.056-6.289C14.3047.639 16.0217 0 17.8872 0c4.419 0 8 3.582 8 8" fill="#F79E1B"/>
+              <path d="M41.6523 7.8384c0-.9345.6116-1.7025 1.614-1.7025.957 0 1.603.7345 1.603 1.7025 0 .969-.646 1.7035-1.603 1.7035-1.0025 0-1.614-.768-1.614-1.7035zm4.3076 0V5.1789h-1.158v.646c-.3676-.4795-.9236-.78-1.6806-.78-1.4904 0-2.66 1.1675-2.66 2.7935 0 1.6255 1.1696 2.7945 2.66 2.7945.757 0 1.313-.3015 1.6806-.78v.647h1.158V7.8384zm39.091 0c0-.9345.6115-1.7025 1.6135-1.7025.957 0 1.603.7345 1.603 1.7025 0 .969-.646 1.7035-1.603 1.7035-1.002 0-1.6136-.768-1.6136-1.7035zm5.602 2.407v.084h.077c.018 0 .0324-.003.0425-.01.0104-.007.016-.0175.016-.033a.0356.0356 0 00-.016-.0305.083.083 0 00-.0426-.0105h-.077zm.0774-.058c.04 0 .0726.009.094.027.0216.017.032.0435.032.072 0 .027-.008.0495-.026.065-.0174.0175-.042.028-.073.0315l.1016.118h-.081l-.094-.117h-.031v.117h-.067v-.3135h.1445zm-.0195.421c.036 0 .0705-.007.1015-.02a.266.266 0 00.0826-.0565.286.286 0 00.0574-.0835.2745.2745 0 00.02-.102c0-.037-.007-.072-.02-.103a.2696.2696 0 00-.0574-.084.2842.2842 0 00-.0826-.0565.2536.2536 0 00-.1014-.02.272.272 0 00-.1045.02.3034.3034 0 00-.0835.0565.2404.2404 0 00-.055.084.2494.2494 0 00-.0206.103c0 .0355.0066.069.0206.102a.2528.2528 0 00.055.0835.283.283 0 00.0834.0565c.0326.013.068.02.1045.02zm0-.5995c.0485 0 .092.007.1335.0255.042.018.079.0415.11.072a.349.349 0 01.073.108.3183.3183 0 01.027.132.3157.3157 0 01-.027.13.3468.3468 0 01-.073.1075.3629.3629 0 01-.11.0725c-.0414.0185-.085.026-.1335.026a.3363.3363 0 01-.136-.026.3487.3487 0 01-.1094-.0725.3384.3384 0 01-.1-.2375.3406.3406 0 01.1-.24.3391.3391 0 01.1095-.072c.0425-.0185.088-.0255.136-.0255zm-1.352-2.1705v-4.797h-1.1574v2.7835c-.3686-.4795-.9256-.78-1.6816-.78-1.492 0-2.661 1.1675-2.661 2.7935 0 1.6255 1.169 2.7945 2.661 2.7945.756 0 1.313-.3015 1.6816-.78v.647h1.1574V7.8384zm-29.0404-1.758c.746 0 1.223.467 1.347 1.291h-2.76c.1215-.7685.5894-1.291 1.413-1.291zm.0215-1.0355c-1.558 0-2.6486 1.135-2.6486 2.7935 0 1.692 1.136 2.7945 2.727 2.7945.802 0 1.5356-.201 2.182-.7455l-.5674-.8585c-.4455.357-1.0135.5575-1.547.5575-.747 0-1.4256-.346-1.593-1.302h3.9525c.0104-.1455.022-.29.022-.446-.0116-1.6585-1.0356-2.7935-2.5276-2.7935zm13.969 2.7935c0-.9345.613-1.7025 1.615-1.7025.957 0 1.603.7345 1.603 1.7025 0 .969-.646 1.7035-1.603 1.7035-1.002 0-1.615-.768-1.615-1.7035zm4.3085 0V5.1789h-1.1586v.646c-.366-.4795-.923-.78-1.6804-.78-1.492 0-2.6596 1.1675-2.6596 2.7935 0 1.6255 1.1676 2.7945 2.6596 2.7945.7574 0 1.3144-.3015 1.6804-.78v.647h1.1586V7.8384zm-10.842 0c0 1.614 1.1234 2.7945 2.839 2.7945.8 0 1.3354-.1785 1.914-.6355l-.556-.934c-.434.3115-.891.4785-1.392.4785-.9235-.0115-1.602-.6795-1.602-1.7035 0-1.0245.6785-1.6925 1.602-1.7025.501 0 .958.1665 1.392.4785l.556-.9355c-.5786-.4555-1.114-.634-1.914-.634-1.7156 0-2.839 1.179-2.839 2.7935zm14.916-2.7935c-.668 0-1.1035.3115-1.403.78v-.646h-1.1465v5.321h1.1574V7.5154c0-.879.3786-1.3695 1.135-1.3695.234 0 .479.034.724.1345l.357-1.0915c-.257-.0985-.591-.144-.824-.144zm-31.01.5565c-.5575-.367-1.325-.5565-2.1715-.5565-1.346 0-2.214.645-2.214 1.7025 0 .869.645 1.4025 1.8364 1.5695l.5446.078c.635.09.936.2565.936.5565 0 .4125-.4236.646-1.214.646-.801 0-1.38-.256-1.7695-.557l-.5455.902c.635.4675 1.4355.6905 2.304.6905 1.536 0 2.427-.7235 2.427-1.737 0-.9345-.701-1.4255-1.8586-1.592l-.5454-.0785c-.502-.0655-.9025-.1665-.9025-.5215 0-.3905.3785-.6235 1.013-.6235.68 0 1.336.256 1.659.456l.501-.935zm14.926-.5565c-.668 0-1.1025.3115-1.4026.78v-.646h-1.1465v5.321h1.157V7.5154c0-.879.379-1.3695 1.136-1.3695.2336 0 .478.034.7236.1345l.3564-1.0915c-.256-.0985-.5904-.144-.824-.144zm-9.873.134h-1.8935v-1.614h-1.167v1.614h-1.08v1.057h1.08v2.4255c0 1.237.4784 1.9715 1.8464 1.9715.502 0 1.0806-.1565 1.448-.4125l-.334-.991c-.3455.201-.7245.301-1.025.301-.578 0-.7684-.356-.7684-.8905v-2.404h1.8935v-1.057zm-17.297 5.321v-3.34c0-1.2585-.802-2.1035-2.093-2.115-.6786-.011-1.3796.2-1.869.9465-.367-.59-.9475-.9465-1.7595-.9465-.5675 0-1.124.167-1.5575.791v-.657h-1.1586v5.321h1.169V7.5484c0-.923.5126-1.4125 1.3026-1.4125.768 0 1.1574.5005 1.1574 1.401v2.963h1.1686V7.5484c0-.923.534-1.4125 1.3025-1.4125.7904 0 1.168.5005 1.168 1.401v2.963h1.1695z" fill="#FFF"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-content show-tablet">
+      <h1>Mastercard Geographic Insights<br/><span>January 2020 index using a z18 QuadGrid</span></h1>
+    </div>
+    <div class="legend hide-mobile">
+      <div class="legend-meaning">
+        <div>
+          Top<br/>&gt; 2000
+        </div>
+        <div>
+          High<br/>1000-2000
+        </div>
+        <div>
+          Medium-high<br/>600-1000
+        </div>
+        <div>
+          Medium<br/>300-600
+        </div>
+        <div>
+          Medium-low<br/>150-300
+        </div>
+        <div>
+          Low<br/>50-150
+        </div>
+        <div>
+          Minimum<br/>0-50
+        </div>
+      </div>
+      <div class="legend-colors">
+        <div style="background: rgb(253, 255, 208)"></div>
+        <div style="background: rgb(254, 239, 157)"></div>
+        <div style="background: rgb(255, 179, 66)"></div>
+        <div style="background: rgb(255, 142, 54)"></div>
+        <div style="background: rgb(255, 77, 32)"></div>
+        <div style="background: rgb(190, 1, 31)"></div>
+        <div style="background: rgb(128, 0, 32)"></div>
+      </div>
     </div>
 
     <div id="map" style="width: 100vw; height: 100vh;"></div>
@@ -78,8 +446,8 @@
 
   <script type="text/javascript">
     deck.carto.setDefaultCredentials({
-      username: "aasuero",
-      apiKey: "Mdz_4y_BYrgocnBNnEhvEQ",
+      username: "public",
+      apiKey: "8l-WraD-0s4A5FJj9W7uIg",
     });
 
     const industries = {
@@ -92,16 +460,44 @@
     };
 
     let selectIndustries = document.getElementById('industries');
+    let industry = 'ret';
     for(index in industries) {
-      selectIndustries.options[selectIndustries.options.length] = new Option(industries[index], index);
+      const elem = addCategory(selectIndustries, industries[index], index, changeIndustry);
+      if(index == industry)
+        elem.classList.add("selected");
     }
 
-    let industry = 'ret';
+    // const toggle = document.getElementById("toggle");
+    // toggle.addEventListener("click", toggleBasemap);
 
-    selectIndustries.addEventListener('change', () => {
-      industry = selectIndustries.value;
-      render();
-    });
+    function addCategory(parent, categoryName, index, clickCallback) {
+      const elem = document.createElement('li');
+      elem.innerText = categoryName;
+      elem.dataset.category = index;
+      elem.addEventListener("click", clickCallback);
+      parent.appendChild(elem);
+      return elem;
+    }
+
+    function changeIndustry() {
+      if(this.dataset.category != industry){
+        const previousIndustry = this.parentElement.querySelector(".selected");
+        previousIndustry.classList.remove("selected");
+        this.classList.add("selected");
+        industry = this.dataset.category;
+        render();
+      }
+    }
+
+    function changeIndex() {
+      if(this.dataset.category != currentIndex){
+        const previousIndex = this.parentElement.querySelector(".selected");
+        previousIndex.classList.remove("selected");
+        this.classList.add("selected");
+        currentIndex = this.dataset.category;
+        render();
+      }
+    }
 
     const indexes = {
       txn_amt: 'Total Spend',
@@ -111,26 +507,36 @@
     };
 
     var selectIndexes = document.getElementById('indexes');
-    for(index in indexes) {
-      selectIndexes.options[selectIndexes.options.length] = new Option(indexes[index], index);
-    }
-
     let currentIndex = 'txn_amt';
+    for(index in indexes) {
+      const elem = addCategory(selectIndexes, indexes[index], index, changeIndex);
+      if(index == currentIndex)
+        elem.classList.add("selected");
+    }
 
     selectIndexes.addEventListener('change', () => {
       currentIndex = selectIndexes.value;
       render();
     });
 
-    // Colors for the breaks of the polygon layer
+    // const POLYGON_COLORS = {
+    //   OTHER: [225, 83, 131],
+    //   COLOR_6: [241, 109, 122],
+    //   COLOR_5: [250, 138, 118],
+    //   COLOR_4: [255, 166, 121],
+    //   COLOR_3: [255, 194, 133],
+    //   COLOR_2: [255, 221, 154],
+    //   COLOR_1: [254, 246, 181],
+    // };
+
     const POLYGON_COLORS = {
-      COLOR_1: [225, 83, 131],
-      COLOR_2: [241, 109, 122],
-      COLOR_3: [250, 138, 118],
-      COLOR_4: [255, 166, 121],
-      COLOR_5: [255, 194, 133],
-      COLOR_6: [255, 221, 154],
-      OTHER: [254, 246, 181],
+      COLOR_1: [253, 255, 208],
+      COLOR_2: [254, 239, 157],
+      COLOR_3: [255, 179, 66],
+      COLOR_4: [255, 142, 54],
+      COLOR_5: [255, 77, 32],
+      COLOR_6: [190, 1, 31],
+      OTHER: [128, 0, 32],
     };
 
     const viewState = {
@@ -147,7 +553,9 @@
       container: "map",
       mapStyle: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
       viewState,
-      controller: true,
+      controller: {
+        scrollZoom: false
+      },
       getTooltip: ({ object }) => {
         if (!object)
           return false;
@@ -155,21 +563,29 @@
 
         return {
           html: `
-            Geo ID: ${geoid} <br/>
-            Index: ${index.toFixed(2)}
-          `
+            <h4 class="tooltip-subtitle">Index value</h4>
+            <h2 class="tooltip-index">${index.toFixed(2)}</h2>
+          `,
+          style: {
+            "backgroundColor": "rgba(255, 255, 255, 0.92)",
+            "borderRadius": "2px 12px 12px 12px",
+            "transform": "translateY(-100%)",
+            "padding": "12px 24px 16px 16px",
+            "top": "4px",
+          }
         }
       },
       layers: []
     });
 
     render();
+    window.requestAnimationFrame(animate);
 
     // Function to render the layers. Will be invoked any time visibility changes.
     function render() {
 
       const sql = `SELECT geoid, the_geom_webmercator, avg(${currentIndex}) as index
-            FROM aasuero.mrli_ny_jan WHERE industry ='${industry}'
+            FROM public.mrli_ny_jan WHERE industry ='${industry}'
             group by geoid, the_geom_webmercator`;
 
       console.log(sql);
@@ -180,17 +596,17 @@
           id: "mrli",
           data: sql,
           getFillColor: (object) => {
-            if (object.properties.index > 1000) {
+            if (object.properties.index > 2000) {
               return POLYGON_COLORS.COLOR_1;
-            } else if (object.properties.index > 500) {
+            } else if (object.properties.index > 1000) {
               return POLYGON_COLORS.COLOR_2;
-            } else if (object.properties.index > 300) {
+            } else if (object.properties.index > 600) {
               return POLYGON_COLORS.COLOR_3;
-            } else if (object.properties.index > 100) {
+            } else if (object.properties.index > 300) {
               return POLYGON_COLORS.COLOR_4;
-            } else if (object.properties.index > 50) {
+            } else if (object.properties.index > 150) {
               return POLYGON_COLORS.COLOR_5;
-            } else if (object.properties.index > 25) {
+            } else if (object.properties.index > 50) {
               return POLYGON_COLORS.COLOR_6;
             } else {
               return POLYGON_COLORS.OTHER;
@@ -202,19 +618,40 @@
           filled: true,
           extruded: true,
           wireframe: true,
-          getElevation: f => f.properties.index,
+          getElevation: (f) => {
+            return f.properties.index ? f.properties.index : 0
+          },
+          transitions: {
+            getElevation: {
+              duration: 1000,
+              enter: value => [0]
+            }
+          }
         }),
       ];
 
       deckgl.setProps({ layers });
-
-      window.requestAnimationFrame(animate)
     }
 
     function animate() {
       viewState.bearing += 0.03;
       deckgl.setProps({ viewState: {...viewState} });
       window.requestAnimationFrame(animate)
+    }
+
+    let basemap = 'dark';
+
+    function toggleBasemap() {
+      let basemapUrl = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json';
+      if (basemap === 'dark') {
+        basemapUrl = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+        basemap = 'positron';
+      } else {
+        basemap = 'dark';
+      }
+      deckgl.setProps({
+          mapStyle: basemapUrl,
+      })
     }
   </script>
 </html>
