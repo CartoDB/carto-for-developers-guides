@@ -1,0 +1,131 @@
+<html>
+  <head>
+    <!-- FONT -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://unpkg.com/deck.gl@^8.3.0/dist.min.js"></script>
+    <script src="https://unpkg.com/@deck.gl/carto@^8.3.0/dist.min.js"></script>
+    
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+
+    <style type="text/css">
+      .layer-selector {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        background-color: #fff;
+        width: 240px;
+        margin: 24px;
+        padding: 10 24px;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        border-radius: 4px;
+      }
+      .layer-selector h3 {
+        font-size: 16px;
+        margin: 8px 0;
+      }
+      .layer-selector .layout {
+        display: table;
+        width: 100%;
+        margin-top: 8px;
+      }
+      .layer-selector .layout > * {
+        display: table-cell;
+        height: 12px;
+      }
+      .right-align {
+        text-align: right;
+      }
+    </style>
+  </head>
+
+  <body style="margin: 0; padding: 0; font-family: 'Open Sans, Helvetica, sans-serif';">
+    <div id="map" style="width: 100vw; height: 100vh;"></div>
+    <div class="layer-selector">
+      <h3>Higher education by county</h3>
+      <div class="layout">
+        <div class="legend" style="background: rgb(254, 246, 181)"></div>
+        <div class="legend" style="background: rgb(255, 221, 154)"></div>
+        <div class="legend" style="background: rgb(255, 194, 133)"></div>
+        <div class="legend" style="background: rgb(255, 166, 121)"></div>
+        <div class="legend" style="background: rgb(250, 138, 118)"></div>
+        <div class="legend" style="background: rgb(241, 109, 122)"></div>
+        <div class="legend" style="background: rgb(225, 83, 131)"></div>
+      </div>
+      <p class="layout">
+        <span>Lower</span>
+        <span class="right-align">Higher</span>
+      </p>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    deck.carto.setDefaultCredentials({
+      username: "public",
+      apiKey: "default_public",
+    });
+
+    // Color breaks
+    const POLYGON_COLORS = {
+      COLOR_1: [225, 83, 131],
+      COLOR_2: [241, 109, 122],
+      COLOR_3: [250, 138, 118],
+      COLOR_4: [255, 166, 121],
+      COLOR_5: [255, 194, 133],
+      COLOR_6: [255, 221, 154],
+      OTHER: [254, 246, 181],
+    };
+
+    const deckgl = new deck.DeckGL({
+      container: "map",
+      mapStyle: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+
+      initialViewState: {
+        latitude: 31.80289258670676,
+        longitude: -103.0078125,
+        zoom: 3,
+      },
+      controller: true,
+
+      layers: [
+        new deck.carto.CartoSQLLayer({
+          id: "higher_edu_by_county",
+          data: `SELECT the_geom_webmercator, pct_higher_ed FROM higher_edu_by_county`,
+          getFillColor: (object) => {
+            if (object.properties.pct_higher_ed > 70) {
+              return POLYGON_COLORS.COLOR_1;
+            } else if (object.properties.pct_higher_ed > 60) {
+              return POLYGON_COLORS.COLOR_2;
+            } else if (object.properties.pct_higher_ed > 50) {
+              return POLYGON_COLORS.COLOR_3;
+            } else if (object.properties.pct_higher_ed > 40) {
+              return POLYGON_COLORS.COLOR_4;
+            } else if (object.properties.pct_higher_ed > 30) {
+              return POLYGON_COLORS.COLOR_5;
+            } else if (object.properties.pct_higher_ed > 20) {
+              return POLYGON_COLORS.COLOR_6;
+            } else {
+              return POLYGON_COLORS.OTHER;
+            }
+          },
+          getLineColor: [0, 0, 0, 100],
+          lineWidthMinPixels: 0.5,
+          pickable: true,
+        }),
+      ],
+
+      getTooltip: ({ object }) => {
+        if (!object) return false;
+        return {
+          html: `${object.properties.pct_higher_ed.toFixed(2)}%`,
+        };
+      },
+    });
+
+  </script>
+</html>
