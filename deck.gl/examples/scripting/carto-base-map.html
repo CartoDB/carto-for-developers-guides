@@ -5,82 +5,18 @@
     
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
-
-    <style type="text/css">
-      .basemap-selector {
-        position: absolute;
-        z-index: 1;
-        top: 24px;
-        right: 24px;
-        background-color: #fff;
-        padding: 10px 32px 24px;
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-        border-radius: 4px;
-      }
-      .basemap-selector h3 {
-        font-size: 16px;
-        margin: 8px 0 16px;
-      }
-      .basemap-selector .input {
-        display: flex;
-        align-items: center;
-        margin-top: 12px;
-        font-size: 14px;
-      }
-      .basemap-selector .input input {
-        width: 16px;
-        height: 16px;
-        margin: 0 8px 0 0;
-      }
-    </style>
   </head>
 
   <body style="margin: 0; padding: 0">
     <div id="map" style="width: 100vw; height: 100vh;"></div>
-    <div class="basemap-selector">
-      <h3>Basemap selector</h3>
-      <div class="input">
-        <input
-          type="radio"
-          id="voyager"
-          name="base-map"
-          value="voyager"
-          checked
-          onclick="setBaseMap(this.value)"
-        />
-        <label for="voyager">Voyager</label>
-      </div>
-      <div class="input">
-        <input
-          type="radio"
-          id="positron"
-          name="base-map"
-          value="positron"
-          onclick="setBaseMap(this.value)"
-        />
-        <label for="positron">Positron</label>
-      </div>
-      <div class="input">
-        <input
-          type="radio"
-          id="dark-matter"
-          name="base-map"
-          value="dark-matter"
-          onclick="setBaseMap(this.value)"
-        />
-        <label for="dark-matter">Dark matter</label>
-      </div>
-    </div>
   </body>
 
   <script type="text/javascript">
-    function setBaseMap(basemap) {
-      deckgl.getMapboxMap().setStyle(getBasemapUrl(basemap));
-    }
-
-    function getBasemapUrl(basemap) {
-      return `https://basemaps.cartocdn.com/gl/${basemap}-gl-style/style.json`;
-    }
+    const cartoBasemaps = {
+      VOYAGER: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json",
+      POSITRON: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+      DARK_MATTER: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+    };
 
     deck.carto.setDefaultCredentials({
       username: "public",
@@ -90,7 +26,7 @@
     const deckgl = new deck.DeckGL({
       container: "map",
       // CARTO's provides three basemaps voyager, positron, dark-matter
-      mapStyle: getBasemapUrl("voyager"),
+      mapStyle: cartoBasemaps.VOYAGER,
 
       initialViewState: {
         latitude: 0,
