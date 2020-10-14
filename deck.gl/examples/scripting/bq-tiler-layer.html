@@ -32,8 +32,9 @@
         longitude: -73.9936065,
         zoom: 8,
       },
-      controller: true,
-
+      controller: {
+        scrollZoom: false
+      },
       layers: [
         new deck.carto.CartoBQTilerLayer({
           data: "cartobq.maps.nyc_taxi_points_demo_id",

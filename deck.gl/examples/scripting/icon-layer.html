@@ -32,7 +32,9 @@
         longitude: 0,
         zoom: 1
       },
-      controller: true,
+      controller: {
+        scrollZoom: false
+      },
 
       layers: [
         new deck.carto.CartoSQLLayer({
