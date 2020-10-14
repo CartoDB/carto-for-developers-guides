@@ -1,10 +1,6 @@
 <html>
   <head>
-    <!-- FONT -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
 
     <script src="https://unpkg.com/deck.gl@^8.3.0/dist.min.js"></script>
     <script src="https://unpkg.com/@deck.gl/carto@^8.3.0/dist.min.js"></script>
@@ -13,14 +9,6 @@
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
 
     <style type="text/css">
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      #map {
-        width: 100vw;
-        height: 100vh;
-      }
       .deck-tooltip::after {
         content: "";
         position: absolute;
@@ -36,8 +24,8 @@
     </style>
   </head>
 
-  <body>
-    <div id="map"></div>
+  <body style="margin: 0; padding: 0">
+    <div id="map" style="width: 100vw; height: 100vh;"></div>
   </body>
 
   <script type="text/javascript">
