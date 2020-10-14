@@ -7,7 +7,7 @@ After completing this guide, you will have your first Google Maps API map with a
 <div class="example-map">
     <iframe
         id="getting-started-final-result"
-        src="/developers/web-sdk/examples/maps/guides/getting-started/step-2.html"
+        src="/developers/gmaps/examples/maps/guides/getting-started/step-2.html"
         width="100%"
         height="500"
         frameBorder="0">
