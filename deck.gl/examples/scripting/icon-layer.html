@@ -36,7 +36,7 @@
 
       layers: [
         new deck.carto.CartoSQLLayer({
-          data: 'world_population_2015',
+          data: `SELECT the_geom_webmercator, country_name FROM world_population_2015`
 
           /* Substitute default GeoJSONLayer with an IconLayer, but you can use different layers here */
           renderSubLayers: props => new deck.IconLayer({...props}),

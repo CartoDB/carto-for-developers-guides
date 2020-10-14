@@ -47,7 +47,7 @@
 
       layers: [
         new deck.carto.CartoSQLLayer({
-          data: `SELECT * FROM london_neighbourhoods`,
+          data: `SELECT the_geom_webmercator, neighbourh FROM london_neighbourhoods`,
           getLineColor: [255, 255, 255],
           getFillColor: [130, 109, 186],
           pointRadiusMinPixels: 6,

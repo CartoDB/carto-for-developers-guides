@@ -186,7 +186,7 @@
       const layers = [
         new deck.carto.CartoSQLLayer({
           id: "temps",
-          data: `SELECT * FROM temps`,
+          data: `SELECT the_geom_webmercator, value FROM temps`,
           visible: visibleLayer === "temps",
           getFillColor: (object) => {
             if (object.properties.value > 100) {
@@ -216,7 +216,7 @@
         }),
         new deck.carto.CartoSQLLayer({
           id: "higher_edu_by_county",
-          data: `SELECT * FROM higher_edu_by_county`,
+          data: `SELECT the_geom_webmercator, pct_higher_ed FROM higher_edu_by_county`,
           visible: visibleLayer === "higher_edu_by_county",
           getFillColor: (object) => {
             if (object.properties.pct_higher_ed > 70) {
