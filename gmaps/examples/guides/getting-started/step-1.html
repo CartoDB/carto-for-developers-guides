@@ -20,22 +20,5 @@
       zoom: 2,
     });
     
-    deck.carto.setDefaultCredentials({
-      username: "public",
-      apiKey: "default_public",
-    });
-
-    const deckOverlay = new deck.GoogleMapsOverlay({
-      layers: [
-        new deck.carto.CartoSQLLayer({
-          data: `SELECT the_geom_webmercator, name FROM populated_places`,
-          getFillColor: [238, 77, 90],
-          pointRadiusMinPixels: 2.5
-        }),
-      ]
-    });
-
-    deckOverlay.setMap(map);
-
   </script>
 </html>

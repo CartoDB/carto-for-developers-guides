@@ -1,47 +1,14 @@
 <html>
   <head>
-    <!-- FONT -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- deck.gl standalone bundle -->
     <script src="https://unpkg.com/deck.gl@^8.3.0/dist.min.js"></script>
-
-    <!-- @deck.gl/carto module -->
-    <script src="https://unpkg.com/@deck.gl/carto@latest/dist.min.js"></script>
-
-    <!-- Mapbox dependencies -->
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js"></script>
-    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css" rel="stylesheet" />
-
-    <style type="text/css">
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      #map {
-        width: 100vw;
-        height: 100vh;
-      }
-      .deck-tooltip::after {
-        content: "";
-        position: absolute;
-        right: 0;
-        width: 16px;
-        height: 16px;
-        border-radius: 0 0 0 2px;
-        background-color: #fff;
-        left: -8px;
-        transform: translateY(-50%) rotate(45deg);
-        top: 50%;
-      }
-    </style>
+    <script src="https://unpkg.com/@deck.gl/carto@^8.3.0/dist.min.js"></script>
+    
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
   </head>
 
-  <body>
-    <div id="map"></div>
+  <body style="margin: 0; padding: 0">
+    <div id="map" style="width: 100vw; height: 100vh;"></div>
   </body>
 
   <script type="text/javascript">
@@ -55,9 +22,9 @@
       mapStyle: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json",
 
       initialViewState: {
-        latitude: 51.507,
-        longitude: -0.127,
-        zoom: 10,
+        latitude: 0,
+        longitude: 0,
+        zoom: 1,
       },
       controller: {
         scrollZoom: false
@@ -65,28 +32,15 @@
 
       layers: [
         new deck.carto.CartoSQLLayer({
-          data: `SELECT * FROM london_neighbourhoods`,
-          getLineColor: [255, 255, 255],
-          getFillColor: [130, 109, 186],
-          pointRadiusMinPixels: 6,
-          lineWidthMinPixels: 1,
+          data: `SELECT the_geom_webmercator, country_name FROM world_population_2015`,
+          getFillColor: [238, 77, 90],
+          pointRadiusMinPixels: 4,
           pickable: true,
         }),
       ],
       getTooltip: ({ object }) =>
         object && {
-          html: `<strong>Neighbourhood name</strong>: ${object.properties.neighbourh}`,
-          style: {
-            backgroundColor: "#fff",
-            fontFamily: "Open Sans",
-            fontSize: "14px",
-            color: "#000",
-            boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
-            borderRadius: "4px",
-            top: "-18px",
-            left: "20px",
-            padding: "12px",
-          },
+          html: `<strong>Country</strong>: ${object.properties.country_name}`
         },
     });
   </script>

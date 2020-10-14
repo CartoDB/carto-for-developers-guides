@@ -28,11 +28,13 @@
     const deckOverlay = new deck.GoogleMapsOverlay({
       layers: [
         new deck.carto.CartoSQLLayer({
-          data: `SELECT the_geom_webmercator, name FROM populated_places`,
+          data: `SELECT * FROM populated_places`,
+          getLineColor: [255, 255, 255],
           getFillColor: [238, 77, 90],
-          pointRadiusMinPixels: 2.5
+          pointRadiusMinPixels: 6,
+          lineWidthMinPixels: 1,
         }),
-      ]
+      ],
     });
 
     deckOverlay.setMap(map);
