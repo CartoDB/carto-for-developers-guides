@@ -124,6 +124,30 @@
         <span>Fewer</span>
         <span class="right-align">More</span>
       </p>
+
+      <div class="input">
+        <input
+          type="radio"
+          id="lines"
+          name="layer-visibility"
+          value="usa_rivers"
+          onclick="setLayerVisibility(this.value)"
+        />
+        <label for="polygons">Rivers (lines)</label><br />
+      </div>
+      <div class="layout">
+        <div class="legend" style="background: rgb(254, 246, 181)"></div>
+        <div class="legend" style="background: rgb(255, 221, 154)"></div>
+        <div class="legend" style="background: rgb(255, 194, 133)"></div>
+        <div class="legend" style="background: rgb(255, 166, 121)"></div>
+        <div class="legend" style="background: rgb(250, 138, 118)"></div>
+        <div class="legend" style="background: rgb(241, 109, 122)"></div>
+        <div class="legend" style="background: rgb(225, 83, 131)"></div>
+      </div>
+      <p class="layout">
+        <span>Fewer</span>
+        <span class="right-align">More</span>
+      </p>
     </div>
   </body>
 
@@ -156,6 +180,17 @@
       COLOR_5: [255, 194, 133],
       COLOR_6: [255, 221, 154],
       OTHER: [254, 246, 181],
+    };
+
+    const LINE_COLORS = {
+      COLOR_1: [76, 41, 145],
+      COLOR_2: [135, 44, 162],
+      COLOR_3: [192, 54, 158],
+      COLOR_4: [234, 79, 136],
+      COLOR_5: [250, 120, 118],
+      COLOR_6: [246, 169, 122],
+      COLOR_7: [237, 217, 163],
+      OTHER: [237, 217, 163],
     };
 
     // Set the default visible layer
@@ -193,6 +228,15 @@
     // Change the visible layer
     function setLayerVisibility(value) {
       visibleLayer = value;
+      console.log("SET LAYER VISIBILITY")
+      console.log(deckgl);
+      deckgl.setProps({
+        mapStyle: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+        viewState: {
+          latitude: 38.851788545949745,
+          longitude: -109.09006557529761,
+          zoom: 8
+        }})
       render();
     }
 
@@ -253,6 +297,35 @@
           getLineColor: [0, 0, 0, 100],
           lineWidthMinPixels: 0.5,
           pickable: true,
+        }),
+        new deck.carto.CartoSQLLayer({
+          id: 'usa_rivers',
+          data: `SELECT * FROM river_directions_upper_co`,
+          lineWidthMinPixels: 0,
+          lineWidthUnits: 'pixels',
+          visible: visibleLayer === "usa_rivers",
+          getLineColor: (object) => {
+            if (object.properties.strahler == 1) {
+              return LINE_COLORS.COLOR_1;
+            } else if (object.properties.strahler == 2) {
+              return LINE_COLORS.COLOR_2;
+            } else if (object.properties.strahler == 3) {
+              return LINE_COLORS.COLOR_3;
+            } else if (object.properties.strahler == 4) {
+              return LINE_COLORS.COLOR_4;
+            } else if (object.properties.strahler == 5) {
+              return LINE_COLORS.COLOR_5;
+            } else if (object.properties.strahler == 6) {
+              return LINE_COLORS.COLOR_6;
+            } else if (object.properties.strahler == 7) {
+              return LINE_COLORS.COLOR_7;
+            } else {
+              return LINE_COLORS.OTHER;
+            }
+          },
+          getLineWidth: (object) => {
+            return (object.properties.strahler / 2)
+          }
         }),
       ];
 
