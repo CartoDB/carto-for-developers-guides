@@ -19,8 +19,8 @@ After completing this guide, you will have your first Mapbox GL map with a CARTO
 The first thing you need to do is to add all the required Mapbox GL dependencies (library and CSS files):
 
 ```html
-<script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.js"></script>
+  <link href="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.css" rel="stylesheet" />
 ```
 
 #### Add map container
