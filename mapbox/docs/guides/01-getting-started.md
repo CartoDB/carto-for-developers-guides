@@ -19,7 +19,7 @@ After completing this guide, you will have your first Mapbox GL map with a CARTO
 
 Beginning with **v2.0.0**, `mapbox-gl-js` is no longer under the 3-Clause BSD license. Also, from that same version, a billable map load occurs whenever a Map object is initialized. That leaves **1.13.0** as the latest mapbox-gl-js version with BSD, that can be freely used.
 
-Thus, in the current example we are using 1.13.0 assets, hosted at CARTO CDN, so no billing is ensured if you replicate it.
+Thus, in the current example we are using 1.13.0 assets, hosted at CARTO CDN, so no billing is applied if you replicate it as it is. For sure, you can replace those assets and use mapbox-gl >=v2 from their CDN, but in that case you would need to use a valid Mapbox access token and to ensure you know the new billing model and license.
 
 For more info about this, you can read our blogpost [Our Thoughts as MapboxGL JS v2.0 Goes Proprietary](https://carto.com/blog/our-thoughts-as-mapboxgl-js-2-goes-proprietary/).
 
