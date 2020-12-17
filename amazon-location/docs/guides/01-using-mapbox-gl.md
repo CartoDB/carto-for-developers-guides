@@ -81,7 +81,7 @@ async function initializeMap() {
 
 ### Sign the requests to AWS
 
-We need to use them to sign the requests from Mapbox GL JS to our map resource using the credentials. In order to do that, we take advantage of the [`transformRequest`](https://docs.mapbox.com/mapbox-gl-js/api/properties/#requestparameters) option to intercept the requests and modify them before they are sent.
+We need to sign the requests from Mapbox GL JS to our map resource using the credentials. In order to do that, we take advantage of the [`transformRequest`](https://docs.mapbox.com/mapbox-gl-js/api/properties/#requestparameters) option to intercept the requests and modify them before they are sent.
 
 ```js
 AWS.config.region = identityPoolId.split(":")[0];
@@ -113,7 +113,7 @@ Now we just need to call the function to initialize our map:
 initializeMap();
 ```
 
-At this point you will have a basic map with the Rivers AWS Location map resource:
+At this point you will have a basic map with the Rivers Amazon Location map resource:
 
 <div class="example-map">
     <iframe
@@ -131,7 +131,7 @@ At this point you will have a basic map with the Rivers AWS Location map resourc
 
 In order to visualize the CARTO tileset, we are going to take advantage of the new TileJSON endpoints in the Maps API v2. We just need to provide the endpoint URL through the [`source.url`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/) property while calling the [`addLayer`](https://docs.mapbox.com/mapbox-gl-js/api/map/#map#addlayer) method on the map.
 
-We are using a public tileset generated using our BigQuery Tiler and we have are assigning a different color to each line representing a river depending on the value of the `bearing` attribute.
+We are using a public tileset generated using our BigQuery Tiler and we are assigning a different color to each line representing a river, depending on the value of the `bearing` attribute.
 
 ```js
 map.addLayer(
