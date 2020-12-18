@@ -14,13 +14,22 @@ After completing this guide, you will have your first Mapbox GL map with a CARTO
     </iframe>
 </div>
 
+
+### About MapboxGL license
+
+Beginning with **v2.0.0**, `mapbox-gl-js` is no longer under the 3-Clause BSD license. Also, from that same version, a billable map load occurs whenever a Map object is initialized. That leaves **1.13.0** as the latest mapbox-gl-js version with BSD, that can be freely used.
+
+Thus, in the current example we are using 1.13.0 assets, hosted at CARTO CDN, so no billing is applied if you replicate it as it is. For sure, you can replace those assets and use mapbox-gl >=v2 from their CDN, but in that case you would need to use a valid Mapbox access token and to ensure you know the new billing model and license.
+
+For more info about this, you can read our blogpost [Our Thoughts as MapboxGL JS v2.0 Goes Proprietary](https://carto.com/blog/our-thoughts-as-mapboxgl-js-2-goes-proprietary/).
+
 ### Basic setup
 
 The first thing you need to do is to add all the required Mapbox GL dependencies (library and CSS files):
 
 ```html
-<script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.js"></script>
+  <link href="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.css" rel="stylesheet" />
 ```
 
 #### Add map container
@@ -152,8 +161,8 @@ MapConfig objects can be quite large and, depending on the browser and the web s
   
   <head>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.js"></script>
+    <link href="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.css" rel="stylesheet" />
   </head>
 
   <body style="margin: 0; padding: 0;">
