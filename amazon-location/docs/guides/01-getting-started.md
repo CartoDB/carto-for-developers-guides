@@ -7,7 +7,7 @@ After completing this guide, you will have your first Amazon Location map with a
 <div class="example-map">
     <iframe
         id="getting-started-final-result"
-        src="/developers/amazon-location/examples/maps/guides/using-mapbox-gl/step-2.html"
+        src="/developers/amazon-location/examples/maps/guides/getting-started/step-2.html"
         width="100%"
         height="500"
         frameBorder="0">
@@ -118,14 +118,14 @@ At this point you will have a basic map with the Rivers Amazon Location map reso
 <div class="example-map">
     <iframe
         id="using-mapbox-gl-step-1"
-        src="/developers/amazon-location/examples/maps/guides/using-mapbox-gl/step-1.html"
+        src="/developers/amazon-location/examples/maps/guides/getting-started/step-1.html"
         width="100%"
         height="500"
         style="margin: 20px auto !important"
         frameBorder="0">
     </iframe>
 </div>
-> View this step [here](/developers/amazon-location/examples/maps/guides/using-mapbox-gl/step-1.html)
+> View this step [here](/developers/amazon-location/examples/maps/guides/getting-started/step-1.html)
 
 ### Add CARTO layer
 
@@ -191,7 +191,7 @@ async function initializeMap() {
 <div class="example-map">
     <iframe
         id="getting-started-step-2"
-        src="/developers/amazon-location/examples/maps/guides/using-mapbox-gl/step-2.html"
+        src="/developers/amazon-location/examples/maps/guides/getting-started/step-2.html"
         width="100%"
         height="500"
         style="margin: 20px auto !important"
@@ -199,7 +199,7 @@ async function initializeMap() {
     </iframe>
 </div>
 
-> You can explore the final step [here](/developers/amazon-location/examples/maps/guides/using-mapbox-gl/step-2.html)
+> You can explore the final step [here](/developers/amazon-location/examples/maps/guides/getting-started/step-2.html)
 
 ```html
 <!DOCTYPE html>
