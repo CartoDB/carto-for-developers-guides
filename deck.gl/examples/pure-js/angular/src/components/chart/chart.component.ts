@@ -1,25 +1,40 @@
-import { Component, AfterViewInit } from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { StoreT } from '../../models';
 import { numberFormatter } from '../../utils/formatter';
+import {interval, Subscription} from "rxjs";
+import {debounce} from "rxjs/operators";
 
 @Component({
   selector: 'chart',
   templateUrl: './chart.component.html',
-  styleUrls: ['./chart.component.scss']
+  styleUrls: ['./chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChartComponent implements AfterViewInit {
+export class ChartComponent implements OnInit {
   chartOptions: {};
+  subscription: Subscription;
 
-  constructor(private store: Store<{ reducer: StoreT }>) {}
+  constructor(
+      private store: Store<{ reducer: StoreT }>,
+      private cdr: ChangeDetectorRef
+  ) {}
 
-  ngAfterViewInit() {
-    this.store.select('reducer').subscribe((state: StoreT) => {
-      if (state.viewportFeatures) {
-        const groupedValues = groupValuesByColumn(state.viewportFeatures, 'revenue', 'storetype');
-        this.setOptions(groupedValues);
-      }
+  ngOnInit() {
+    this.subscription = this.store.select('reducer')
+        .pipe(debounce(() => interval(1000)))
+        .subscribe((state: StoreT) => {
+          if (state.viewportFeatures) {
+            const groupedValues = groupValuesByColumn(state.viewportFeatures, 'revenue', 'storetype');
+            this.setOptions(groupedValues);
+          }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe()
+    }
   }
 
   setOptions(data: any) {
@@ -59,6 +74,7 @@ export class ChartComponent implements AfterViewInit {
         }
       }]
     };
+    this.cdr.detectChanges();
   }
 }
 
@@ -66,24 +82,23 @@ function groupValuesByColumn(data: [], valuesColumn: string, keysColumn: string)
   if (Array.isArray(data) && data.length === 0) {
     return null;
   }
-  
+
   const groups = data.reduce((accumulator: any, item: any) => {
     const group = item.properties[keysColumn];
-  
+
     accumulator[group] = accumulator[group] || [];
-  
+
     const isValid = item.properties[valuesColumn] !== null && item.properties[valuesColumn] !== undefined;
-  
+
     if (isValid) {
       accumulator[group].push(item.properties[valuesColumn]);
     }
-  
+
     return accumulator;
   }, {});
-  
+
   return Object.entries(groups).map(([category, value]: [string, any]) => ({
     category,
     value: value.reduce((a: number, b: number) => a + b, 0)
   }));
 }
-  
