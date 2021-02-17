@@ -30,7 +30,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   public deck: any = null;
   public geojsonData$: any = null;
 
-  private _updateSetBounds = debounce(this.updateSetBounds.bind(this), 500)
+  private _updateSetBounds = debounce(this.updateSetBounds.bind(this), 250)
 
   @ViewChild('mapboxContainer', { static: true }) mapboxContainer: ElementRef;
   @ViewChild('deckCanvas', { static: true }) deckCanvas: ElementRef;
@@ -102,20 +102,12 @@ export class MapComponent implements OnInit, AfterViewInit {
     })
   }
 
-  // code taken from here: https://github.com/visgl/react-map-gl/blob/ce6f6662ca34f8765cf0f515039e316adb52a957/src/mapbox/mapbox.js#L421
-  // Force redraw the map now. Typically resize() and jumpTo() is reflected in the next
-  // render cycle, which is managed by Mapbox's animation loop.
-  // This removes the synchronization issue caused by requestAnimationFrame.
   redrawMapbox(map: any) {
-    // map._render will throw error if style does not exist
-    // https://github.com/mapbox/mapbox-gl-js/blob/fb9fc316da14e99ff4368f3e4faa3888fb43c513/src/ui/map.js#L1834
     if (map.style) {
-      // cancel the scheduled update
       if (map._frame) {
         map._frame.cancel();
         map._frame = null;
       }
-      // the order is important - render() may schedule another update
       map._render();
     }
   }

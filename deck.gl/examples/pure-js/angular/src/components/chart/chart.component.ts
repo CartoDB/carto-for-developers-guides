@@ -22,7 +22,7 @@ export class ChartComponent implements OnInit {
 
   ngOnInit() {
     this.subscription = this.store.select('reducer')
-        .pipe(debounce(() => interval(1000)))
+        .pipe(debounce(() => interval(250)))
         .subscribe((state: StoreT) => {
           if (state.viewportFeatures) {
             const groupedValues = groupValuesByColumn(state.viewportFeatures, 'revenue', 'storetype');
@@ -39,6 +39,9 @@ export class ChartComponent implements OnInit {
 
   setOptions(data: any) {
     this.chartOptions = {
+      grid: {
+        left: 40
+      },
       title: {
         text: 'Stores by type'
       },
