@@ -1,7 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { StoreT } from '../../models';
-import { currencyFormatter } from '../../utils/formatter';
+import { numberFormatter } from '../../utils/formatter';
 
 @Component({
   selector: 'chart',
@@ -32,16 +32,16 @@ export class ChartComponent implements AfterViewInit {
         data: data.map((d: any) => d.category),
         axisLabel: {
           show: true,
-          rotate: 40
+          rotate: 40,
+          textStyle: {
+            fontSize: 11
+          }
         }
       },
       yAxis: {
         type: 'value',
         axisLabel: {
-          show: true,
-          textStyle: {
-            fontSize: 8
-          }
+          formatter: (v: number) => numberFormatter(v)
         }
       },
       tooltip: {
