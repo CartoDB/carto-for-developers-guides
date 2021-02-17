@@ -1,0 +1,34 @@
+.template {
+  display: grid;
+  grid-template-columns: 20rem auto;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+}
+
+.header {
+  grid-column: 1 / span 2;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  height: 4rem;
+  background-color: #036fe2;
+
+  img {
+    margin: 0 0.5rem;
+  }
+
+  span {
+    color: #fff;
+  }
+}
+
+.sidebar {
+  grid-column: 1;
+  grid-row: 2;
+  padding: 1.5rem 1rem;
+}
+
+.map-container {
+  grid-column: 2;
+  grid-row: 2;
+}

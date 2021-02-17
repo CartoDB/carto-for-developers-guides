@@ -53,7 +53,10 @@ export class ChartComponent implements AfterViewInit {
       },
       series: [{
         data: data.map((d: any) => d.value),
-        type: 'bar'
+        type: 'bar',
+        itemStyle: {
+          color: '#036fe2'
+        }
       }]
     };
   }
