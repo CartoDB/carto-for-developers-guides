@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { switchVisibility } from '../../store/actions';
-import { LayersState, LayersVisibility } from '../../models';
+import { LayersState, StoreT } from '../../models';
 
 @Component({
   selector: 'toggle',
@@ -11,7 +11,7 @@ import { LayersState, LayersVisibility } from '../../models';
 export class ToggleComponent {
   public layers$: LayersState | null = null;
 
-  constructor(private store: Store<LayersVisibility>) {}
+  constructor(private store: Store<StoreT>) {}
 
   ngOnInit() {
     this.store.select(state => this.layers$ = state.layersVisibility);

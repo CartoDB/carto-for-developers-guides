@@ -33,7 +33,7 @@ export function bigQueryLayer(props: {}) {
   });
 }
 
-const GEOJSON_ENDPOINT = 'https://public.carto.com/api/v2/sql?q=SELECT * FROM retail_stores&format=geojson';
+const GEOJSON_ENDPOINT = 'https://public.carto.com/api/v2/sql?q=SELECT * FROM retail_stores LIMIT 100&format=geojson';
 let geojsonData: { features: [] } | null = null;
 
 export async function geoJsonLayer(props: {}) {

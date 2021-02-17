@@ -10,6 +10,12 @@ export type LayersState = {
   [Layers.GEOJSON]: boolean
 }
 
-export type LayersVisibility = {
-  layersVisibility: LayersState
+export type StoreT = {
+  layersVisibility: LayersState,
+  geojsonData: [],
+  bounds: []
+}
+
+export type Payload = {
+  payload: []
 }
