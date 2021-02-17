@@ -34,20 +34,21 @@ export function bigQueryLayer(props: {}) {
 }
 
 const GEOJSON_ENDPOINT = 'https://public.carto.com/api/v2/sql?q=SELECT * FROM retail_stores&format=geojson';
+let geojsonData: { features: [] } | null = null;
 
 export async function geoJsonLayer(props: {}) {
-  let data = null;
-
-  try {
-    const response = await fetch(GEOJSON_ENDPOINT);
-    data = await response.json();
-  } catch(err) {
-    throw new Error(`Something went wrong: ${err}`);
+  if (!geojsonData) {
+    try {
+      const response = await fetch(GEOJSON_ENDPOINT);
+      geojsonData = await response.json();
+    } catch(err) {
+      throw new Error(`Something went wrong: ${err}`);
+    }
   }
-  
+
   return new GeoJsonLayer({
     id: 'geojson-stores',
-    data: data?.features,
+    data: geojsonData?.features,
     binary: true,
     pointRadiusUnits: 'pixels',
     lineWidthUnits: 'pixels',
