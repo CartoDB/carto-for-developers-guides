@@ -1,12 +1,11 @@
-import {Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
-import { Store } from '@ngrx/store';
-import { StoreT } from '../../models';
-import { numberFormatter } from '../../utils/formatter';
-import {interval, Subscription} from "rxjs";
-import {debounce} from "rxjs/operators";
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+// import { Store } from '@ngrx/store';
+import { numberFormatter } from '../../../../../utils/formatter';
+import { interval, Subscription } from "rxjs";
+import { debounce } from "rxjs/operators";
 
 @Component({
-  selector: 'chart',
+  selector: 'app-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -16,19 +15,20 @@ export class ChartComponent implements OnInit {
   subscription: Subscription;
 
   constructor(
-      private store: Store<{ reducer: StoreT }>,
-      private cdr: ChangeDetectorRef
-  ) {}
+    // private store: Store<{ reducer: StoreT }>,
+    private cdr: ChangeDetectorRef
+  ) {
+  }
 
   ngOnInit() {
-    this.subscription = this.store.select('reducer')
-        .pipe(debounce(() => interval(250)))
-        .subscribe((state: StoreT) => {
-          if (state.viewportFeatures) {
-            const groupedValues = groupValuesByColumn(state.viewportFeatures, 'revenue', 'storetype');
-            this.setOptions(groupedValues);
-          }
-    });
+    // this.subscription = this.store.select('reducer')
+    //     .pipe(debounce(() => interval(250)))
+    //     .subscribe((state: StoreT) => {
+    //       if (state.viewportFeatures) {
+    //         const groupedValues = groupValuesByColumn(state.viewportFeatures, 'revenue', 'storetype');
+    //         this.setOptions(groupedValues);
+    //       }
+    // });
   }
 
   ngOnDestroy() {

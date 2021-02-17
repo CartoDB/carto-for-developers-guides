@@ -1,0 +1,30 @@
+import { CartoSQLLayer, colorContinuous } from "@deck.gl/carto";
+import { Injectable } from "@angular/core";
+
+@Injectable()
+export class AirportLayer {
+
+  static id = 'AIRPORT_LAYER'
+
+  constructor() {
+  }
+
+  getLayer () {
+    return new CartoSQLLayer({
+      id: 'sql-airports',
+      data: 'SELECT cartodb_id, the_geom_webmercator, scalerank FROM ne_10m_railroads_public',
+      binary: true,
+      pickable: true,
+      lineWidthScale: 20,
+      lineWidthMinPixels: 2,
+      getLineColor: colorContinuous({
+        attr: 'scalerank',
+        domain: [1, 2, 3, 4, 5, 10],
+        colors: 'BluYl'
+      }),
+      getLineWidth: (f: any) => f.properties.scalerank,
+      autoHighlight: true,
+      highlightColor: [0, 255, 0],
+    });
+  }
+}

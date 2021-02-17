@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { switchVisibility } from '../../store/actions';
-import { LayersState, StoreT } from '../../models';
+import { switchVisibility } from '../../../../../store/actions';
+import { LayersState, StoreT } from '../../../../../models';
 
 @Component({
   selector: 'toggle',
