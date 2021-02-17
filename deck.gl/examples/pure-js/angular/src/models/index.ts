@@ -13,7 +13,8 @@ export type LayersState = {
 export type StoreT = {
   layersVisibility: LayersState,
   geojsonData: [],
-  bounds: []
+  bounds: [],
+  viewportFeatures: []
 }
 
 export type Payload = {

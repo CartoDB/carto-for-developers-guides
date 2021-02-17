@@ -1,5 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { WebMercatorViewport } from '@deck.gl/core';
+import bboxPolygon from '@turf/bbox-polygon';
+import intersects from '@turf/boolean-intersects';
 import { switchVisibility, setGeojsonData, setBounds } from './actions';
 import { StoreT, Payload } from '../models';
  
@@ -10,7 +12,8 @@ export const initialState = {
     geojson: true
   },
   geojsonData: null,
-  bounds: []
+  bounds: [],
+  viewportFeatures: null
 };
  
 const _appReducer = createReducer(
@@ -27,13 +30,18 @@ const _appReducer = createReducer(
   on(setGeojsonData, (state: any, data: Payload) => {
     return {
       ...state,
-      geojsonData: data.payload
+      geojsonData: data.payload,
+      viewportFeatures: data.payload
     }
   }),
   on(setBounds, (state: any, data: Payload) => {
+    const bounds = getBounds(data.payload);
+    const viewportFeatures = getViewportFeatures(state.geojsonData, bounds);
+
     return {
       ...state,
-      bounds: getBounds(data.payload)
+      bounds,
+      viewportFeatures
     }
   }),
 );
@@ -45,3 +53,9 @@ export function appReducer(state: StoreT | undefined, action: any) {
 function getBounds(viewState: {}) {
   return new WebMercatorViewport(viewState).getBounds();
 }
+
+function getViewportFeatures(data: [], bounds: any) {
+  const bbox = bboxPolygon(bounds);
+
+  return data.filter((f: any) => intersects(f, bbox));
+} 

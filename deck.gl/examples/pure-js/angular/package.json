@@ -25,6 +25,8 @@
     "@deck.gl/core": "^8.4.5",
     "@deck.gl/layers": "^8.4.5",
     "@ngrx/store": "^11.0.1",
+    "@turf/bbox-polygon": "^6.3.0",
+    "@turf/boolean-intersects": "^6.3.0",
     "@types/mapbox-gl": "^2.1.0",
     "deck.gl": "^8.4.5",
     "echarts": "^5.0.2",
