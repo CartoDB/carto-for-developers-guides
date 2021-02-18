@@ -26,13 +26,7 @@ import { MapService } from "./services/map.service";
     CommonModule,
     AppRoutingModule,
     HomeModule
-    // MatSlideToggleModule,
-    // MatGridListModule,
-    // NgxEchartsModule.forRoot({
-    //   echarts
-    // })
   ],
-  // schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [MapService],
   bootstrap: [AppComponent]
 })

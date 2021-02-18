@@ -8,12 +8,16 @@ import { ChartComponent } from "./components/chart/chart.component";
 import { NgxEchartsModule } from "ngx-echarts";
 import * as echarts from 'echarts';
 import { AirportLayer } from "./layers/airport-layer";
+import { ToggleComponent } from './components/toggle/toggle.component';
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatGridListModule } from "@angular/material/grid-list";
 
 @NgModule({
   declarations: [
     HomeComponent,
     SidebarComponent,
-    ChartComponent
+    ChartComponent,
+    ToggleComponent
   ],
   providers: [AirportLayer],
   imports: [
@@ -22,8 +26,11 @@ import { AirportLayer } from "./layers/airport-layer";
     HomeRoutingModule,
     NgxEchartsModule.forRoot({
       echarts
-    })
-  ]
+    }),
+    MatSlideToggleModule,
+    MatGridListModule
+  ],
+  // schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomeModule {
 }

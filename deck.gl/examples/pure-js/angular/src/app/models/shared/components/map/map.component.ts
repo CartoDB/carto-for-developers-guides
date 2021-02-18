@@ -109,7 +109,7 @@ export class MapComponent implements OnInit, AfterViewInit {
         ]
       });
 
-      this.mapService.setDeck(this.deck);
+      this.mapService.setDeckInstance(this.deck);
     })
   }
 

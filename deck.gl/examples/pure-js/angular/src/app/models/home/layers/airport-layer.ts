@@ -1,17 +1,18 @@
 import { CartoSQLLayer, colorContinuous } from "@deck.gl/carto";
 import { Injectable } from "@angular/core";
+import { Layer } from "../../../layers/layer";
+import { Subject } from "rxjs";
 
 @Injectable()
-export class AirportLayer {
+export class AirportLayer extends Layer {
 
-  static id = 'AIRPORT_LAYER'
+  id = 'AIRPORT_LAYER';
 
-  constructor() {
-  }
+  viewportLoaded = new Subject();
 
   getLayer () {
     return new CartoSQLLayer({
-      id: 'sql-airports',
+      id: this.id,
       data: 'SELECT cartodb_id, the_geom_webmercator, scalerank FROM ne_10m_railroads_public',
       binary: true,
       pickable: true,
@@ -25,6 +26,9 @@ export class AirportLayer {
       getLineWidth: (f: any) => f.properties.scalerank,
       autoHighlight: true,
       highlightColor: [0, 255, 0],
+      onViewportLoad: (d: any) => {
+        this.viewportLoaded.next(d)
+      }
     });
   }
 }
