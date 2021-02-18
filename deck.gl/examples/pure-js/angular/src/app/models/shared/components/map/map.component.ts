@@ -1,13 +1,20 @@
-import {Component, AfterViewInit, NgZone, ChangeDetectionStrategy, OnInit, ElementRef, ViewChild} from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  NgZone,
+  ChangeDetectionStrategy,
+  OnInit,
+  ElementRef,
+  ViewChild
+} from '@angular/core';
 import { Store } from '@ngrx/store';
-import { setGeojsonData, setBounds } from '../../store/actions';
 import { Map as MapboxMap } from 'mapbox-gl';
 import { Deck } from '@deck.gl/core';
 import { setDefaultCredentials, BASEMAP } from '@deck.gl/carto';
-import { sqlLayer, bigQueryLayer, geoJsonLayer } from '../../layers';
-import { LayersState, StoreT } from '../../models';
-import {debounce} from "../../utils/debounce";
-import {first} from "rxjs/operators";
+import { sqlLayer, bigQueryLayer, geoJsonLayer } from '../../../../../layers';
+import { debounce } from "../../../../../utils/debounce";
+import { first } from "rxjs/operators";
+import { MapService } from "../../../../services/map.service";
 
 setDefaultCredentials({
   username: 'public',
@@ -21,7 +28,7 @@ const INITIAL_VIEW_STATE = {
 };
 
 @Component({
-  selector: 'deckgl-map',
+  selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -32,18 +39,20 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   private _updateSetBounds = debounce(this.updateSetBounds.bind(this), 250)
 
-  @ViewChild('mapboxContainer', { static: true }) mapboxContainer: ElementRef;
-  @ViewChild('deckCanvas', { static: true }) deckCanvas: ElementRef;
+  @ViewChild('mapboxContainer', {static: true}) mapboxContainer: ElementRef;
+  @ViewChild('deckCanvas', {static: true}) deckCanvas: ElementRef;
 
   constructor(
-      private store: Store<{ reducer: StoreT }>,
-      private zone: NgZone
-  ) {}
+    // private store: Store<{ reducer: StoreT }>,
+    private zone: NgZone,
+    private mapService: MapService
+  ) {
+  }
 
   ngOnInit() {
-    this.store.select('reducer').subscribe((state: StoreT) => {
-      this.switchLayersVisibility(state.layersVisibility);
-    });
+    // this.store.select('reducer').subscribe((state: StoreT) => {
+    //   this.switchLayersVisibility(state.layersVisibility);
+    // });
   }
 
   ngAfterViewInit() {
@@ -52,17 +61,17 @@ export class MapComponent implements OnInit, AfterViewInit {
     })
   }
 
-  updateSetBounds (v: any) {
-    this.store.dispatch(setBounds({payload: v}))
+  updateSetBounds(v: any) {
+    // this.store.dispatch(setBounds({payload: v}))
   }
 
-  slowUpdateSetBounds (v: any) {
+  slowUpdateSetBounds(v: any) {
     this._updateSetBounds(v)
   }
 
   private async launchMap(initialViewState: any) {
-    const geojsonLayer = await geoJsonLayer({visible: true});
-    this.store.dispatch(setGeojsonData({payload: geojsonLayer.props.data}));
+    // const geojsonLayer = await geoJsonLayer({visible: true});
+    // this.store.dispatch(setGeojsonData({payload: geojsonLayer.props.data}));
 
     this.zone.runOutsideAngular(() => {
       const map = new MapboxMap({
@@ -96,9 +105,11 @@ export class MapComponent implements OnInit, AfterViewInit {
         layers: [
           // sqlLayer({visible: true}),
           // bigQueryLayer({visible: true}),
-          geojsonLayer
+          // geojsonLayer
         ]
       });
+
+      this.mapService.setDeckInstance(this.deck);
     })
   }
 
@@ -112,13 +123,13 @@ export class MapComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private async switchLayersVisibility(state: LayersState) {
+  private async switchLayersVisibility(state: any) {
     if (this.deck) {
       this.deck.setProps({
         layers: [
           // sqlLayer({ visible: state.sql }),
           // bigQueryLayer({ visible: state.bigquery }),
-          await geoJsonLayer({ visible: state.geojson })
+          await geoJsonLayer({visible: state.geojson})
         ]
       })
     }
