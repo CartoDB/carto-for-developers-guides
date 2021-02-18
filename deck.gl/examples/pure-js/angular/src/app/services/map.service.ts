@@ -75,13 +75,6 @@ export class MapService {
 
   setDeckInstance(deck: any) {
     this.deck = deck;
-
-    this.slowUpdateSetBounds({
-      ...this.deck.viewState,
-      width: window.innerWidth,
-      height: window.innerHeight
-    });
-
     this._onViewStateChange();
     this.updateDeck();
   }

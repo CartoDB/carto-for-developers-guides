@@ -17,8 +17,8 @@ setDefaultCredentials({
 });
 
 const INITIAL_VIEW_STATE = {
-  longitude: -85,
-  latitude: 40,
+  longitude: -97.2,
+  latitude: 44.33,
   zoom: 3,
 };
 

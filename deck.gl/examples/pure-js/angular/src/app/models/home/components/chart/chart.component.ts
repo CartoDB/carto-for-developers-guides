@@ -30,21 +30,22 @@ export class ChartComponent implements OnInit {
     this.subscription.add(
       this.storesLayer.dataLoaded.subscribe(data => {
         this.storesData = data;
+        this.setChartDataWithViewportFeatures(this.storesData);
       })
     );
 
     this.subscription.add(
       this.mapService.onViewStateChange.subscribe((viewportBbox: any) => {
         if (viewportBbox && this.storesData) {
-          this.setChartDataWithViewportFeatures(viewportBbox);
+          const viewportFeatures = getViewportFeatures(this.storesData, viewportBbox);
+          this.setChartDataWithViewportFeatures(viewportFeatures);
         }
       })
     );
   }
 
-  setChartDataWithViewportFeatures(viewportBbox: any) {
-    const viewportFeatures = getViewportFeatures(this.storesData, viewportBbox);
-    const groupedValues = groupValuesByColumn(viewportFeatures, 'revenue', 'storetype');
+  setChartDataWithViewportFeatures(features: any) {
+    const groupedValues = groupValuesByColumn(features, 'revenue', 'storetype');
     this.setOptions(groupedValues);
   }
 
