@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
+import { WebMercatorViewport } from '@deck.gl/core';
+import bboxPolygon from '@turf/bbox-polygon';
 import { Layer } from "../layers/layer";
-import { Observable, Subject } from "rxjs";
+import { Observable, Subject, BehaviorSubject } from "rxjs";
 import { filter } from "rxjs/operators";
+import { debounce } from "../../utils/debounce";
 
 @Injectable({
   providedIn: 'root'
@@ -16,30 +19,33 @@ export class MapService {
   private layerChange = new Subject();
   private layerChange$ = this.layerChange.asObservable();
 
-  constructor() {
-  }
+  private _updateSetBounds = debounce(this.updateSetBounds.bind(this), 500);
 
-  addLayer(layer: Layer) {
+  onViewStateChange = new BehaviorSubject<any>(null);
+
+  constructor() {}
+
+  async addLayer(layer: Layer) {
     this.layersIdx[layer.id] = this.layers.length;
-    this.layers.push(layer.getLayer());
+    this.layers.push(await layer.getLayer());
 
-    if (this.deck) this.updateDeck()
+    if (this.deck) this.updateDeck();
   }
 
   updateLayer(id: string, props: any = {}) {
     const layerIdx = this.layersIdx[id];
 
     if (layerIdx === undefined) {
-      throw new Error(`[MapService] Layer ${id} cannot be found.`)
+      throw new Error(`[MapService] Layer ${id} cannot be found.`);
     }
 
     const layer = this.layers[layerIdx];
     this.layers[layerIdx] = layer.clone(props);
 
     // Emit change
-    this.layerChange.next(this.layers[layerIdx])
+    this.layerChange.next(this.layers[layerIdx]);
 
-    if (this.deck) this.updateDeck()
+    if (this.deck) this.updateDeck();
   }
 
   getLayer(id: string) {
@@ -51,13 +57,13 @@ export class MapService {
     const layerIdx = this.layersIdx[id];
 
     if (Number.isFinite(layerIdx)) {
-      this.layers.splice(layerIdx, 1)
-      delete this.layersIdx[id]
+      this.layers.splice(layerIdx, 1);
+      delete this.layersIdx[id];
     } else {
-      throw new Error(`[MapService] Layer ${id} cannot be found.`)
+      throw new Error(`[MapService] Layer ${id} cannot be found.`);
     }
 
-    if (this.deck) this.updateDeck()
+    if (this.deck) this.updateDeck();
   }
 
   onLayerChange(ids: string | string[]): Observable<any> {
@@ -67,14 +73,39 @@ export class MapService {
     )
   }
 
-  // Deck stuff
-
   setDeckInstance(deck: any) {
     this.deck = deck;
-    this.updateDeck()
+
+    this.slowUpdateSetBounds({
+      ...this.deck.viewState,
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+
+    this._onViewStateChange();
+    this.updateDeck();
   }
 
   private updateDeck() {
     this.deck.setProps({layers: [...this.layers]});
   }
+
+  public updateSetBounds(v: any) {
+    this.onViewStateChange.next(getViewportBbox(v));
+  }
+
+  slowUpdateSetBounds(v: any) {
+    this._updateSetBounds(v);
+  }
+
+  private _onViewStateChange() {
+    this.deck.props.onViewStateChange = ({viewState}: any) => {
+      this.slowUpdateSetBounds(viewState);
+    };
+  }
+}
+
+function getViewportBbox(viewState: any) {
+  const bounds = new WebMercatorViewport(viewState).getBounds();
+  return bboxPolygon(bounds);
 }

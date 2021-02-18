@@ -13,5 +13,4 @@ import { MapComponent } from "./components/map/map.component";
     MapComponent
   ]
 })
-export class SharedModule {
-}
+export class SharedModule {}

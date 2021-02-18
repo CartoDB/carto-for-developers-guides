@@ -4,13 +4,12 @@ import { Layer } from "../../../layers/layer";
 import { Subject } from "rxjs";
 
 @Injectable()
-export class AirportLayer extends Layer {
+export class RailRoadsLayer extends Layer {
 
-  id = 'AIRPORT_LAYER';
-
+  id = 'RAILROADS_LAYER';
   viewportLoaded = new Subject();
 
-  getLayer () {
+  async getLayer() {
     return new CartoSQLLayer({
       id: this.id,
       data: 'SELECT cartodb_id, the_geom_webmercator, scalerank FROM ne_10m_railroads_public',
@@ -27,7 +26,7 @@ export class AirportLayer extends Layer {
       autoHighlight: true,
       highlightColor: [0, 255, 0],
       onViewportLoad: (d: any) => {
-        this.viewportLoaded.next(d)
+        this.viewportLoaded.next(d);
       }
     });
   }

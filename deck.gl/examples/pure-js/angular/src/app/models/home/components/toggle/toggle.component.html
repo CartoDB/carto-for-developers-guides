@@ -1,18 +1,19 @@
 <mat-slide-toggle
     (change)="onVisibilityChange($event)"
-    [checked]="layersStatus[airportLayer.id]"
+    [checked]="layersStatus[railRoadsLayer.id]"
     name="sql">
   SQL Layer
 </mat-slide-toggle>
-<!--<mat-slide-toggle-->
-<!--    (change)="onVisibilityChange($event)"-->
-<!--    [checked]="layers$?.bigquery"-->
-<!--    name="bigquery">-->
-<!--  BigQuery Layer-->
-<!--</mat-slide-toggle>-->
-<!--<mat-slide-toggle-->
-<!--    (change)="onVisibilityChange($event)"-->
-<!--    [checked]="layers$?.geojson"-->
-<!--    name="geojson">-->
-<!--  GeoJSON Layer-->
-<!--</mat-slide-toggle>-->
+<mat-slide-toggle
+    (change)="onVisibilityChange($event)"
+    [checked]="layersStatus[buildingsLayer.id]"
+    name="bigquery">
+  BigQuery Layer
+</mat-slide-toggle>
+<mat-slide-toggle
+    (change)="onVisibilityChange($event)"
+    [checked]="layersStatus[storesLayer.id]"
+    name="geojson">
+  GeoJSON Layer
+</mat-slide-toggle>
+

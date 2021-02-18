@@ -3,17 +3,12 @@ import {
   AfterViewInit,
   NgZone,
   ChangeDetectionStrategy,
-  OnInit,
   ElementRef,
   ViewChild
 } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Map as MapboxMap } from 'mapbox-gl';
 import { Deck } from '@deck.gl/core';
 import { setDefaultCredentials, BASEMAP } from '@deck.gl/carto';
-import { sqlLayer, bigQueryLayer, geoJsonLayer } from '../../../../../layers';
-import { debounce } from "../../../../../utils/debounce";
-import { first } from "rxjs/operators";
 import { MapService } from "../../../../services/map.service";
 
 setDefaultCredentials({
@@ -33,46 +28,24 @@ const INITIAL_VIEW_STATE = {
   styleUrls: ['./map.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapComponent implements OnInit, AfterViewInit {
+export class MapComponent implements AfterViewInit {
   public deck: any = null;
   public geojsonData$: any = null;
-
-  private _updateSetBounds = debounce(this.updateSetBounds.bind(this), 250)
 
   @ViewChild('mapboxContainer', {static: true}) mapboxContainer: ElementRef;
   @ViewChild('deckCanvas', {static: true}) deckCanvas: ElementRef;
 
   constructor(
-    // private store: Store<{ reducer: StoreT }>,
     private zone: NgZone,
     private mapService: MapService
   ) {
   }
 
-  ngOnInit() {
-    // this.store.select('reducer').subscribe((state: StoreT) => {
-    //   this.switchLayersVisibility(state.layersVisibility);
-    // });
-  }
-
   ngAfterViewInit() {
-    this.zone.onStable.pipe(first()).subscribe(() => {
-      this.launchMap(INITIAL_VIEW_STATE);
-    })
+    this.launchMap(INITIAL_VIEW_STATE);
   }
 
-  updateSetBounds(v: any) {
-    // this.store.dispatch(setBounds({payload: v}))
-  }
-
-  slowUpdateSetBounds(v: any) {
-    this._updateSetBounds(v)
-  }
-
-  private async launchMap(initialViewState: any) {
-    // const geojsonLayer = await geoJsonLayer({visible: true});
-    // this.store.dispatch(setGeojsonData({payload: geojsonLayer.props.data}));
-
+  private launchMap(initialViewState: any) {
     this.zone.runOutsideAngular(() => {
       const map = new MapboxMap({
         container: this.mapboxContainer.nativeElement,
@@ -86,9 +59,6 @@ export class MapComponent implements OnInit, AfterViewInit {
         canvas: this.deckCanvas.nativeElement,
         initialViewState,
         controller: true,
-        onViewStateChange: ({viewState}: any) => {
-          this.slowUpdateSetBounds(viewState);
-        },
         onBeforeRender: () => {
           if (this.deck) {
             const viewport = this.deck.getViewports()[0];
@@ -101,16 +71,11 @@ export class MapComponent implements OnInit, AfterViewInit {
             // TODO: only redraw when viewport has changed
             this.redrawMapbox(map);
           }
-        },
-        layers: [
-          // sqlLayer({visible: true}),
-          // bigQueryLayer({visible: true}),
-          // geojsonLayer
-        ]
+        }
       });
 
       this.mapService.setDeckInstance(this.deck);
-    })
+   })
   }
 
   redrawMapbox(map: any) {
@@ -120,18 +85,6 @@ export class MapComponent implements OnInit, AfterViewInit {
         map._frame = null;
       }
       map._render();
-    }
-  }
-
-  private async switchLayersVisibility(state: any) {
-    if (this.deck) {
-      this.deck.setProps({
-        layers: [
-          // sqlLayer({ visible: state.sql }),
-          // bigQueryLayer({ visible: state.bigquery }),
-          await geoJsonLayer({visible: state.geojson})
-        ]
-      })
     }
   }
 }

@@ -1,15 +1,14 @@
 // Base class of a deck layer
 import { ILayer } from "./ilayer";
 
-export class Layer implements ILayer{
+export class Layer implements ILayer {
 
   // Should be static
   id: string;
 
-  constructor() {
-  }
+  constructor() {}
 
-  getLayer () {
+  async getLayer () {
     // Implement in child
     return {}
   }
@@ -21,5 +20,4 @@ export class Layer implements ILayer{
   hide () {
     return { visible: false }
   }
-
 }

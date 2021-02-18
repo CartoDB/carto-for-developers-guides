@@ -1,8 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-// import { Store } from '@ngrx/store';
+import { WebMercatorViewport } from '@deck.gl/core';
+import bboxPolygon from '@turf/bbox-polygon';
+import intersects from '@turf/boolean-intersects';
+import { StoresLayer } from "../../layers/stores-layer";
+import { MapService } from "../../../../services/map.service";
 import { numberFormatter } from '../../../../../utils/formatter';
-import { interval, Subscription } from "rxjs";
-import { debounce } from "rxjs/operators";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-chart',
@@ -12,29 +15,37 @@ import { debounce } from "rxjs/operators";
 })
 export class ChartComponent implements OnInit {
   chartOptions: {};
-  subscription: Subscription;
+  subscription: Subscription = new Subscription();
+  storesData: any;
+  viewportBbox: any;
 
   constructor(
-    // private store: Store<{ reducer: StoreT }>,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private storesLayer: StoresLayer,
+    private mapService: MapService
   ) {
   }
 
   ngOnInit() {
-    // this.subscription = this.store.select('reducer')
-    //     .pipe(debounce(() => interval(250)))
-    //     .subscribe((state: StoreT) => {
-    //       if (state.viewportFeatures) {
-    //         const groupedValues = groupValuesByColumn(state.viewportFeatures, 'revenue', 'storetype');
-    //         this.setOptions(groupedValues);
-    //       }
-    // });
+    this.subscription.add(
+      this.storesLayer.dataLoaded.subscribe(data => {
+        this.storesData = data;
+      })
+    );
+
+    this.subscription.add(
+      this.mapService.onViewStateChange.subscribe((viewportBbox: any) => {
+        if (viewportBbox && this.storesData) {
+          this.setChartDataWithViewportFeatures(viewportBbox);
+        }
+      })
+    );
   }
 
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe()
-    }
+  setChartDataWithViewportFeatures(viewportBbox: any) {
+    const viewportFeatures = getViewportFeatures(this.storesData, viewportBbox);
+    const groupedValues = groupValuesByColumn(viewportFeatures, 'revenue', 'storetype');
+    this.setOptions(groupedValues);
   }
 
   setOptions(data: any) {
@@ -47,7 +58,7 @@ export class ChartComponent implements OnInit {
       },
       xAxis: {
         type: 'category',
-        data: data.map((d: any) => d.category),
+        data: Object.values(data).map((d: any) => d.category),
         axisLabel: {
           show: true,
           rotate: 40,
@@ -70,15 +81,26 @@ export class ChartComponent implements OnInit {
         formatter: `{b}: {c}`
       },
       series: [{
-        data: data.map((d: any) => d.value),
+        data: Object.values(data).map((d: any) => d.value),
         type: 'bar',
         itemStyle: {
           color: '#036fe2'
         }
       }]
     };
+
     this.cdr.detectChanges();
   }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+}
+
+function getViewportFeatures(features: any, viewport: any) {
+  return features.filter((f: any) => intersects(f, viewport));
 }
 
 function groupValuesByColumn(data: [], valuesColumn: string, keysColumn: string) {
@@ -102,6 +124,6 @@ function groupValuesByColumn(data: [], valuesColumn: string, keysColumn: string)
 
   return Object.entries(groups).map(([category, value]: [string, any]) => ({
     category,
-    value: value.reduce((a: number, b: number) => a + b, 0)
+    value: value.length
   }));
 }
