@@ -59,7 +59,7 @@ export class ChartComponent implements OnInit {
       },
       xAxis: {
         type: 'category',
-        data: Object.values(data).map((d: any) => d.category),
+        data: data.map((d: any) => d.category),
         axisLabel: {
           show: true,
           rotate: 40,
@@ -82,7 +82,7 @@ export class ChartComponent implements OnInit {
         formatter: `{b}: {c}`
       },
       series: [{
-        data: Object.values(data).map((d: any) => d.value),
+        data: data.map((d: any) => d.value),
         type: 'bar',
         itemStyle: {
           color: '#036fe2'
@@ -106,7 +106,7 @@ function getViewportFeatures(features: any, viewport: any) {
 
 function groupValuesByColumn(data: [], valuesColumn: string, keysColumn: string) {
   if (Array.isArray(data) && data.length === 0) {
-    return null;
+    return [{category: '', value: 0}];
   }
 
   const groups = data.reduce((accumulator: any, item: any) => {
