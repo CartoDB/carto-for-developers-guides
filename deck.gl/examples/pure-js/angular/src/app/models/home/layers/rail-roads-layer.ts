@@ -12,7 +12,7 @@ export class RailRoadsLayer extends Layer {
   async getLayer() {
     return new CartoSQLLayer({
       id: this.id,
-      data: 'SELECT cartodb_id, the_geom_webmercator, scalerank FROM ne_10m_railroads_public',
+      data: 'SELECT cartodb_id, the_geom_webmercator, category, scalerank FROM ne_10m_railroads_public',
       binary: true,
       pickable: true,
       lineWidthScale: 20,
@@ -27,7 +27,8 @@ export class RailRoadsLayer extends Layer {
       highlightColor: [0, 255, 0],
       onViewportLoad: (d: any) => {
         this.viewportLoaded.next(d);
-      }
+      },
     });
   }
+
 }
