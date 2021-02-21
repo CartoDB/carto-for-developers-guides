@@ -49,7 +49,7 @@ export class MapComponent implements AfterViewInit {
     this.zone.runOutsideAngular(() => {
       const map = new MapboxMap({
         container: this.mapboxContainer.nativeElement,
-        style: BASEMAP.DARK_MATTER,
+        style: BASEMAP.POSITRON,
         interactive: false,
         center: [initialViewState.longitude, initialViewState.latitude],
         zoom: initialViewState.zoom
@@ -71,7 +71,8 @@ export class MapComponent implements AfterViewInit {
             // TODO: only redraw when viewport has changed
             this.redrawMapbox(map);
           }
-        }
+        },
+        getTooltip: this.tooltip   
       });
 
       this.mapService.setDeckInstance(this.deck);
@@ -87,4 +88,26 @@ export class MapComponent implements AfterViewInit {
       map._render();
     }
   }
+
+  tooltip(pickingInfo: any) {
+    if (pickingInfo.object) {
+      let html = `<div style="padding-bottom: 10px;"><strong>${pickingInfo.layer.id}</strong></div>`;
+      for (const [name, value] of Object.entries(pickingInfo.object.properties)) {
+        if (name != "layerName" && name != "cartodb_id") {
+          html += `<div><strong>${name}: </strong>${value}</div>`;
+        }
+      }
+      let style = {
+        backgroundColor: '#FFF',
+        color: '#111',
+        fontFamily: 'Open Sans'          
+      };
+      return(pickingInfo.object && {
+        html: html,
+        style: style
+      });  
+    }
+    return(null);
+  }
+
 }
