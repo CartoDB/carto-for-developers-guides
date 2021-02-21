@@ -13,6 +13,7 @@ import { StoresLayer } from './layers/stores-layer';
 import { ToggleComponent } from './components/toggle/toggle.component';
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatGridListModule } from "@angular/material/grid-list";
+import { MatDividerModule } from "@angular/material/divider";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { MatGridListModule } from "@angular/material/grid-list";
       echarts
     }),
     MatSlideToggleModule,
-    MatGridListModule
+    MatGridListModule,
+    MatDividerModule
   ],
   // schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
