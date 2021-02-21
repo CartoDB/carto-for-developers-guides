@@ -1,15 +1,19 @@
+<span class="title">Layers</span>
+
 <mat-slide-toggle
     (change)="onVisibilityChange($event)"
     [checked]="layersStatus[railRoadsLayer.id]"
     name="sql">
   SQL Layer
 </mat-slide-toggle>
+
 <mat-slide-toggle
     (change)="onVisibilityChange($event)"
     [checked]="layersStatus[buildingsLayer.id]"
     name="bigquery">
   BigQuery Layer
 </mat-slide-toggle>
+
 <mat-slide-toggle
     (change)="onVisibilityChange($event)"
     [checked]="layersStatus[storesLayer.id]"
