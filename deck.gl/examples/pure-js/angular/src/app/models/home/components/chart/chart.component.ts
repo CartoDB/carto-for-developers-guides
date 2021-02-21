@@ -55,7 +55,10 @@ export class ChartComponent implements OnInit {
         left: 40
       },
       title: {
-        text: 'Stores by type'
+        text: 'Stores by type',
+        textStyle: {
+          fontFamily: 'Montserrat, "Open Sans", sans-serif'
+        }
       },
       xAxis: {
         type: 'category',
@@ -78,6 +81,7 @@ export class ChartComponent implements OnInit {
         trigger: 'item',
         textStyle: {
           fontSize: '15',
+          fontFamily: 'Montserrat, "Open Sans", sans-serif'
         },
         formatter: `{b}: {c}`
       },
@@ -85,7 +89,7 @@ export class ChartComponent implements OnInit {
         data: data.map((d: any) => d.value),
         type: 'bar',
         itemStyle: {
-          color: '#036fe2'
+          color: '#47db99'
         }
       }]
     };
