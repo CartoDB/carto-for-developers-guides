@@ -1,0 +1,26 @@
+/**
+ *  Home style file
+**/
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.home-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mapboxgl-control-container {
+  display: none;
+}
+

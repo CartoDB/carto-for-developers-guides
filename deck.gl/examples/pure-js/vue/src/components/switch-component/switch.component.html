@@ -1,0 +1,6 @@
+<!-- SwitchComponent template file -->
+<div class="switch-container">
+  <md-switch v-model="railRoads.isVisible" @change="handleChange(railRoads.id)">{{railRoads.toggleLabel}}</md-switch>
+  <md-switch v-model="stores.isVisible" @change="handleChange(stores.id)">{{stores.toggleLabel}}</md-switch>
+  <md-switch v-model="buildings.isVisible" @change="handleChange(buildings.id)">{{buildings.toggleLabel}}</md-switch>
+</div>
