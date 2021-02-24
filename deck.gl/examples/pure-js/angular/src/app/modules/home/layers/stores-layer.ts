@@ -1,8 +1,10 @@
-import { CartoSQLLayer, colorCategories } from "@deck.gl/carto";
 import { Injectable } from "@angular/core";
-import { Layer } from "../../../layers/layer";
 import { Subject } from "rxjs";
+
 import { GeoJsonLayer } from '@deck.gl/layers';
+import { colorCategories } from "@deck.gl/carto";
+
+import { Layer } from "../../../models/layer";
 
 const GEOJSON_ENDPOINT = 'https://public.carto.com/api/v2/sql?q=SELECT * FROM retail_stores&format=geojson';
 
@@ -10,6 +12,7 @@ const GEOJSON_ENDPOINT = 'https://public.carto.com/api/v2/sql?q=SELECT * FROM re
 export class StoresLayer extends Layer {
 
   id = 'STORES_LAYER';
+  visible = true;
   dataLoaded = new Subject();
   geojsonData: any = null;
 
@@ -34,8 +37,7 @@ export class StoresLayer extends Layer {
     return new GeoJsonLayer({
       id: this.id,
       data: features,
-      pointRadiusUnits: 'pixels',
-      lineWidthUnits: 'pixels',
+      visible: this.visible,
       pickable: true,
       getFillColor: colorCategories({
         attr: 'storetype',
@@ -43,6 +45,8 @@ export class StoresLayer extends Layer {
         colors: 'Pastel'
       }),
       getLineColor: [0, 0, 0, 100],
+      pointRadiusUnits: 'pixels',
+      lineWidthUnits: 'pixels',
       getRadius: 3,
       autoHighlight: true,
       highlightColor: [0, 255, 0]

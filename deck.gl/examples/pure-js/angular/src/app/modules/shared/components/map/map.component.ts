@@ -6,7 +6,7 @@ import {
   ElementRef,
   ViewChild
 } from '@angular/core';
-import { Map as MapboxMap } from 'mapbox-gl';
+import { Map as MapboxMap, NavigationControl } from 'mapbox-gl';
 import { Deck } from '@deck.gl/core';
 import { setDefaultCredentials, BASEMAP } from '@deck.gl/carto';
 import { MapService } from "../../../../services/map.service";
@@ -54,7 +54,22 @@ export class MapComponent implements AfterViewInit {
         center: [initialViewState.longitude, initialViewState.latitude],
         zoom: initialViewState.zoom
       });
+      
+      /*
+      map.addControl(new NavigationControl(), 'top-left');
 
+      map.on('zoomend', function(e) {
+        if (e.originalEvent) {
+          console.log('Zoom using navigation control.');
+          this.deck.setProps({
+            viewState: {
+              ...viewState,
+            }
+          });
+        }
+      });
+      */
+     
       this.deck = new Deck({
         canvas: this.deckCanvas.nativeElement,
         initialViewState,

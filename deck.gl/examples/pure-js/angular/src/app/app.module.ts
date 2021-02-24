@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { AppRoutingModule } from "./app-routing.module";
 import { CommonModule } from "@angular/common";
-import { HomeModule } from "./models/home/home.module";
+import { HomeModule } from "./modules/home/home.module";
 import { MapService } from "./services/map.service";
 
 @NgModule({

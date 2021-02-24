@@ -23,24 +23,13 @@ export class ToggleComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    const railRoadsLayerStatus = this.mapService.getLayer(this.railRoadsLayer.id);
-    this.layersStatus[this.railRoadsLayer.id] = railRoadsLayerStatus ? railRoadsLayerStatus.visible : true;
+    let layers = [this.railRoadsLayer, this.buildingsLayer, this.storesLayer];
 
-    this.subscription = this.mapService.onLayerChange(this.railRoadsLayer.id).subscribe(layer => {
-      this.layersStatus[layer.id] = layer.props.visible;
-    });
+    layers.forEach(layer => this.layersStatus[layer.id] = layer.visible);
 
-    const buildingsLayerStatus = this.mapService.getLayer(this.buildingsLayer.id);
-    this.layersStatus[this.buildingsLayer.id] = buildingsLayerStatus ? buildingsLayerStatus.visible : true;
-
-    this.subscription = this.mapService.onLayerChange(this.buildingsLayer.id).subscribe(layer => {
-      this.layersStatus[layer.id] = layer.props.visible;
-    });
-
-    const storesLayerStatus = this.mapService.getLayer(this.storesLayer.id);
-    this.layersStatus[this.storesLayer.id] = storesLayerStatus ? storesLayerStatus.visible : true;
-
-    this.subscription = this.mapService.onLayerChange(this.storesLayer.id).subscribe(layer => {
+    this.subscription = this.mapService.onLayerChange([this.storesLayer.id, 
+                                                       this.buildingsLayer.id, 
+                                                       this.railRoadsLayer.id]).subscribe(layer => {
       this.layersStatus[layer.id] = layer.props.visible;
     });
   }

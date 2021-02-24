@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
-import { WebMercatorViewport } from '@deck.gl/core';
-import bboxPolygon from '@turf/bbox-polygon';
-import { Layer } from "../layers/layer";
 import { Observable, Subject, BehaviorSubject } from "rxjs";
 import { filter } from "rxjs/operators";
+
+import { WebMercatorViewport } from '@deck.gl/core';
+
+import bboxPolygon from '@turf/bbox-polygon';
+
+import { Layer } from "../models/layer";
 import { debounce } from "../../utils/debounce";
 
 @Injectable({
