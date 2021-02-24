@@ -1,10 +1,8 @@
-// Base class of a deck layer
-import { ILayer } from "./ilayer";
+// Base class for layers
+export class Layer {
 
-export class Layer implements ILayer {
-
-  // Should be static
   id: string;
+  visible: boolean = true;
 
   constructor() {}
 
@@ -14,10 +12,12 @@ export class Layer implements ILayer {
   }
 
   show () {
+    this.visible = true;
     return { visible: true }
   }
 
   hide () {
+    this.visible = false;
     return { visible: false }
   }
 }
