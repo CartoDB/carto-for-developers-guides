@@ -9,5 +9,6 @@ export const initialViewState = () => ({
 })
 
 export const state = {
-  viewState: initialViewState()
+  viewState: initialViewState(),
+  viewportFeatures: []
 }

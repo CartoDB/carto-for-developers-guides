@@ -6,5 +6,6 @@ export const GETTERS = {}
 
 export const MUTATIONS = {
   SET_VIEWSTATE: 'setViewState',
-  RESET_VIEWSTATE: 'resetViewstate'
+  RESET_VIEWSTATE: 'resetViewstate',
+  SET_VIEWPORT_FEATURES: 'setViewportFeatures'
 }

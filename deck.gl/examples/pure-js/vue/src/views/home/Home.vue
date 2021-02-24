@@ -6,11 +6,15 @@
 /* style import */
 <style lang="scss" src="./home.scss"></style>
 <script>
+import { mapMutations, mapState } from 'vuex'
+import { MODULE_NAME, MUTATIONS } from '@/store/map'
 import TemplateComponent from '@/components/template-component/TemplateComponent.vue';
-import { CartoBQTilerLayer, CartoSQLLayer, setDefaultCredentials, colorCategories, colorContinuous } from '@deck.gl/carto';
-import { GeoJsonLayer } from '@deck.gl/layers';
+import { CartoBQTilerLayer, CartoSQLLayer, setDefaultCredentials, colorCategories, colorContinuous } from '@deck.gl/carto'
+import { GeoJsonLayer } from '@deck.gl/layers'
 import layerService from '@/services/layerService'
-import { layersInfo } from '@/layersConfig';
+import { layersInfo } from '@/layersConfig'
+import htmlForFeature from '@/utils/htmlForFeature'
+import { viewportFeaturesFunctions } from '@/utils/viewportFeatures'
 
 setDefaultCredentials({
   username: 'public',
@@ -22,6 +26,9 @@ export default {
   components: {
     TemplateComponent
   },
+  data: () => ({
+    storesData: []
+  }),
   mounted () {
     const { buildings, railRoads, stores } = layersInfo;
 
@@ -32,7 +39,7 @@ export default {
       visible: buildings.isVisible,
       pointRadiusUnits: 'pixels',
       getFillColor: [240, 142, 240],
-      getFileColor: [240, 142, 240],
+      getFileColor: [240, 142, 240]
     })
 
     layerService.addLayer({
@@ -50,6 +57,17 @@ export default {
         domain: [1, 2, 3, 4, 5, 10],
         colors: 'BluYl'
       }),
+      onHover: (info) => {
+        if (info?.object) {
+          info.object = {
+            html: htmlForFeature({
+              feature: info.object,
+              includeColumns: ['scalerank'],
+              showColumnName: true
+            }),
+          };
+        }
+      }
     })
 
     layerService.addLayer({
@@ -68,7 +86,39 @@ export default {
         domain: ['Supermarket', 'Discount Store', 'Hypermarket', 'Drugstore', 'Department Store'],
         colors: 'Pastel'
       }),
+      onDataLoad: data => this.storesData = data.features,
+      onHover: (info) => {
+        if (info?.object) {
+          info.object = {
+            html: htmlForFeature({
+              title: `store ${info.object.properties.store_id}`,
+              feature: info.object,
+              formatter: {
+                type: 'number',
+                columns: ['revenue'],
+              },
+              includeColumns: ['revenue'],
+              showColumnName: true
+            }),
+          };
+        }
+      }
     })
+  },
+  methods: {
+    ...mapMutations(MODULE_NAME, [MUTATIONS.SET_VIEWPORT_FEATURES])
+  },
+  computed: {
+    ...mapState(MODULE_NAME, ['viewState']),
+  },
+  watch: {
+    viewState(v) {
+      const viewportFeatures = viewportFeaturesFunctions.compute(v, this.storesData)
+      this[MUTATIONS.SET_VIEWPORT_FEATURES](viewportFeatures)
+    },
+    storesData(d) {
+      this[MUTATIONS.SET_VIEWPORT_FEATURES](d)
+    }
   }
 }
 </script>

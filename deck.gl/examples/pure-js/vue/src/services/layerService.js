@@ -1,12 +1,4 @@
-import DeckMap from '../utils/DeckMap'
-
-export const tooltipStyle = {
-  background: 'var(--colorWhite)',
-  color: 'var(--colorHigh)',
-  margin: '8px',
-  'border-radius': '4px',
-  'box-shadow': '0 0 4px 1px rgba(0,0,0, 0.2)'
-}
+import DeckMap from '@/utils/DeckMap'
 
 export default {
   layers: {},

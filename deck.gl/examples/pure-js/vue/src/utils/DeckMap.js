@@ -17,14 +17,12 @@ const DEFAULT_MAP_PROPS = {
   basemap: null,
   controller: true,
   useDevicePixels: 2,
-  getCursor: ({ isDragging }) => (isDragging ? 'grabbing' : 'pointer'),
-  getTooltip ({ x, y, object, layer }) {
-    if (!object) {
-      return
-    }
-    const tooltipFn = layer.props.getTooltip
-    if (typeof tooltipFn === 'function') {
-      return tooltipFn({ object, layer, x, y })
+  getCursor: ({ isDragging, isHovering }) => (isDragging ? 'grabbing' : isHovering ? 'pointer' : ''),
+  getTooltip: (info) => {
+    if (info?.object) {
+      return {
+        html: info.object.html
+      };
     }
   },
   layerFilter ({ layer, viewport }) {
