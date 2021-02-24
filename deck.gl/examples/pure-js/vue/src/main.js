@@ -6,8 +6,6 @@ import { MdLayout, MdSwitch } from 'vue-material/dist/components'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 
-Vue.config.productionTip = false
-
 for (const component of [MdLayout, MdSwitch]) {
   Vue.use(component)
 }
