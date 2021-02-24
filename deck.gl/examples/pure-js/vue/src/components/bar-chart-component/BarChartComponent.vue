@@ -24,11 +24,15 @@ export default {
   data: () => ({
     bar: {
       grid: {
-        left: 40,
-        right: 40
+        left: 50,
+        right: 50
       },
       title: {
-        text: 'Stores by type'
+        text: 'Stores by type',
+        textStyle: {
+          fontFamily: 'Montserrat, "Open Sans", sans-serif',
+          fontSize: '1.125rem'
+        }
       },
       xAxis: {
         type: 'category',
@@ -36,15 +40,16 @@ export default {
         axisLabel: {
           show: true,
           rotate: 40,
-          textStyle: {
-            fontSize: 11
-          }
+          fontSize: 11,
+          fontFamily: 'Montserrat, "Open Sans", sans-serif',
+          formatter: v => v.replace(/ Store/g, ''),
         }
       },
       yAxis: {
         type: 'value',
         axisLabel: {
-          formatter: v => numberFormatter(v)
+          formatter: v => numberFormatter(v),
+          fontFamily: 'Montserrat, "Open Sans", sans-serif'
         }  
       },
       series: {
