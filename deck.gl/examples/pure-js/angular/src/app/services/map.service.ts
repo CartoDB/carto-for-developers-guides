@@ -45,7 +45,6 @@ export class MapService {
     const layer = this.layers[layerIdx];
     this.layers[layerIdx] = layer.clone(props);
 
-    // Emit change
     this.layerChange.next(this.layers[layerIdx]);
 
     if (this.deck) this.updateDeck();
