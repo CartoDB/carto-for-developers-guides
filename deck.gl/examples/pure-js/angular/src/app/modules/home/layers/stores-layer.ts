@@ -41,7 +41,8 @@ export class StoresLayer extends Layer {
       pickable: true,
       getFillColor: colorCategories({
         attr: 'storetype',
-        domain: ['Supermarket', 'Discount Store', 'Hypermarket', 'Drugstore', 'Department Store'],
+        domain: ['Supermarket', 'Discount Store', 'Hypermarket', 'Drugstore', 
+                 'Department Store', 'Speciality Store', 'Convenience Store'],
         colors: 'Pastel'
       }),
       getLineColor: [0, 0, 0, 100],
