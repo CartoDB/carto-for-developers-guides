@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
 
 import { CartoSQLLayer, colorContinuous } from "@deck.gl/carto";
 
@@ -10,13 +9,11 @@ export class RailRoadsLayer extends Layer {
 
   id = 'RAILROADS_LAYER';
   visible = true;
-  viewportLoaded = new Subject();
 
   async getLayer() {
     return new CartoSQLLayer({
       id: this.id,
       data: 'SELECT cartodb_id, the_geom_webmercator, category, scalerank FROM ne_10m_railroads_public',
-      binary: true,
       visible: this.visible,
       pickable: true,
       lineWidthScale: 20,
@@ -29,9 +26,6 @@ export class RailRoadsLayer extends Layer {
       getLineWidth: (f: any) => f.properties.scalerank,
       autoHighlight: true,
       highlightColor: [0, 255, 0],
-      onViewportLoad: (d: any) => {
-        this.viewportLoaded.next(d);
-      },
     });
   }
 
