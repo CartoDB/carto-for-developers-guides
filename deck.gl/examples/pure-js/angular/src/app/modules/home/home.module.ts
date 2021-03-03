@@ -7,7 +7,7 @@ import { MatDividerModule } from "@angular/material/divider";
 import { NgxEchartsModule } from "ngx-echarts";
 import * as echarts from 'echarts';
 
-import { HomeRoutingModule } from "./home-routing.module";
+import { AppRoutingModule } from "../../app-routing.module";
 import { SharedModule } from "../shared/shared.module";
 import { HomeComponent } from "./home.component";
 import { SidebarComponent } from './views/sidebar/sidebar.component';
@@ -28,7 +28,7 @@ import { StoresLayer } from './layers/stores-layer';
   imports: [
     CommonModule,
     SharedModule,
-    HomeRoutingModule,
+    AppRoutingModule,
     NgxEchartsModule.forRoot({
       echarts
     }),
