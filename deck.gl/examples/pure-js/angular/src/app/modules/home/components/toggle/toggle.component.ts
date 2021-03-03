@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from "rxjs";
+
 import { RailRoadsLayer } from "../../layers/rail-roads-layer";
 import { BuildingsLayer } from "../../layers/buildings-layer";
 import { StoresLayer } from "../../layers/stores-layer";
 import { MapService } from "../../../../services/map.service";
-import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-toggle',
