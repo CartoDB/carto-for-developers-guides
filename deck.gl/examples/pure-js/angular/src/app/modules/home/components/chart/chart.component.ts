@@ -1,11 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { WebMercatorViewport } from '@deck.gl/core';
-import bboxPolygon from '@turf/bbox-polygon';
+import { Subscription } from "rxjs";
+
 import intersects from '@turf/boolean-intersects';
+
 import { StoresLayer } from "../../layers/stores-layer";
 import { MapService } from "../../../../services/map.service";
 import { numberFormatter } from '../../../../../utils/formatter';
-import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-chart',
@@ -66,9 +66,7 @@ export class ChartComponent implements OnInit {
         axisLabel: {
           show: true,
           rotate: 40,
-          textStyle: {
-            fontSize: 11
-          }
+          fontSize: 11
         }
       },
       yAxis: {
