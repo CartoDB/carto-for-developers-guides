@@ -1,14 +1,10 @@
-import {
-  Component,
-  AfterViewInit,
-  NgZone,
-  ChangeDetectionStrategy,
-  ElementRef,
-  ViewChild
-} from '@angular/core';
-import { Map as MapboxMap, NavigationControl } from 'mapbox-gl';
+import { Component, AfterViewInit, NgZone, ChangeDetectionStrategy, ElementRef, ViewChild } from '@angular/core';
+
+import { Map as MapboxMap } from 'mapbox-gl';
+
 import { Deck } from '@deck.gl/core';
 import { setDefaultCredentials, BASEMAP } from '@deck.gl/carto';
+
 import { MapService } from "../../../../services/map.service";
 
 setDefaultCredentials({
@@ -55,21 +51,6 @@ export class MapComponent implements AfterViewInit {
         zoom: initialViewState.zoom
       });
       
-      /*
-      map.addControl(new NavigationControl(), 'top-left');
-
-      map.on('zoomend', function(e) {
-        if (e.originalEvent) {
-          console.log('Zoom using navigation control.');
-          this.deck.setProps({
-            viewState: {
-              ...viewState,
-            }
-          });
-        }
-      });
-      */
-     
       this.deck = new Deck({
         canvas: this.deckCanvas.nativeElement,
         initialViewState,
@@ -83,7 +64,6 @@ export class MapComponent implements AfterViewInit {
               bearing: viewport.bearing,
               pitch: viewport.pitch
             });
-            // TODO: only redraw when viewport has changed
             this.redrawMapbox(map);
           }
         },
