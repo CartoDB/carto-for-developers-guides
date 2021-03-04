@@ -13,14 +13,6 @@ import layerService from '@/services/layerService'
 
 export default {
   name: 'MapComponent',
-  mixins: [],
-  components: {},
-  props: {},
-  data () {
-    return {
-      loaded: false
-    }
-  },
   mounted () {
     this.layerService = layerService // for debugging purposes
     this.setupDeck()
@@ -35,7 +27,8 @@ export default {
   methods: {
     ...mapMutations(MODULE_NAME, [
       MUTATIONS.SET_VIEWSTATE,
-      MUTATIONS.RESET_VIEWSTATE
+      MUTATIONS.RESET_VIEWSTATE,
+      MUTATIONS.SET_MAP_LOADED
     ]),
     setupDeck () {
       if (layerService.deckInstance) {
@@ -43,17 +36,15 @@ export default {
       }
       layerService.init({
         container: '#map',
-        mapStyle: BASEMAP.DARK_MATTER,
+        mapStyle: BASEMAP.POSITRON,
         viewState: this.viewState,
         onViewStateChange: ({ viewState }) => {
           this[MUTATIONS.SET_VIEWSTATE](viewState)
         },
         onLoad: () => {
-          this.loaded = true
-          this.$emit('loaded')
+          this[MUTATIONS.SET_MAP_LOADED](true)
         }
       })
-      window.deckMap = layerService.deckInstance
     }
   }
 }

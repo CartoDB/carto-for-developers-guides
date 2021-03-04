@@ -1,4 +1,4 @@
-import DeckMap from '@/utils/DeckMap'
+import DeckMap from '@/components/map-component/map-utils/DeckMap'
 
 export default {
   layers: {},
@@ -12,6 +12,9 @@ export default {
   },
   hasLayer (id) {
     return !!this.layers[id]
+  },
+  getLayers() {
+    return this.layers;
   },
   isVisible (id) {
     // visible = undefined is treated by deckgl as visible = true
@@ -65,9 +68,5 @@ export default {
     if (this.hasLayer(id)) {
       this.updateLayer(id, { visible: true })
     }
-  },
-  getZoomFactor () {
-    const viewport = this.deckInstance.getViewports()[0]
-    return viewport.metersPerPixel
   }
 }

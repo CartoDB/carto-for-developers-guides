@@ -9,6 +9,7 @@ export const initialViewState = () => ({
 })
 
 export const state = {
+  mapLoaded: false,
   viewState: initialViewState(),
   viewportFeatures: []
 }

@@ -1,24 +1,14 @@
-# deckgl-for-vue
+# CARTO for deck.gl + Vue example
 
-## Project setup
-```
-yarn install
-```
+This example demonstrates how to build an application with Vue and CARTO for deck.gl including common location intelligence apps functionality like:
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+- Multiple types of layers (CARTO dataset, BigQuery tileset, GeoJSON source)
+- Layer visualization component
+- Interactivity
+- Chart synchronized with map
 
-### Compiles and minifies for production
-```
-yarn build
-```
+This project was generated with [Vue CLI](https://cli.vuejs.org/) version 11.2.0.
 
-### Lints and fixes files
-```
-yarn lint
-```
+## Development server
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Run `yarn serve` for a dev server. Navigate to `http://localhost:8080/`. The app will automatically reload if you change any of the source files.

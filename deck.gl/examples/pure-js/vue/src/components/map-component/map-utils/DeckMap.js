@@ -12,19 +12,41 @@ const CANVAS_STYLE = {
   height: '100%'
 }
 
+const TOOLTIP_STYLE = {
+  color: '#fff',
+  opacity: '0.9',
+  borderRadius: '0.25rem',
+  textTransform: 'capitalize',
+  fontFamily: 'Montserrat, "Open Sans", sans-serif',
+  fontSize: '0.7rem'         
+};
+
+function getTooltip(pickingInfo) {
+  if (pickingInfo.object) {
+    let html = `<div style="font-size: 0.9rem;"><strong>${pickingInfo.layer.id}</strong></div>`;
+
+    for (const [name, value] of Object.entries(pickingInfo.object.properties)) {
+      if (name !== 'layerName' && name !== 'cartodb_id') {
+        html += `<div><strong>${name}: </strong>${value}</div>`;
+      }
+    }
+    
+    return {
+      html,
+      style: TOOLTIP_STYLE
+    }
+  }
+
+  return null;
+}
+
 const DEFAULT_MAP_PROPS = {
   layers: [],
   basemap: null,
   controller: true,
   useDevicePixels: 2,
   getCursor: ({ isDragging, isHovering }) => (isDragging ? 'grabbing' : isHovering ? 'pointer' : ''),
-  getTooltip: (info) => {
-    if (info?.object) {
-      return {
-        html: info.object.html
-      };
-    }
-  },
+  getTooltip,
   layerFilter ({ layer, viewport }) {
     const filterFn = layer.props.layerFilter
     if (typeof filterFn === 'function') {
