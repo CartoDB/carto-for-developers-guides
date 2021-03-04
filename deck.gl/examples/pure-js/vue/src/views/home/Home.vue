@@ -41,9 +41,7 @@ export default {
         attr: 'scalerank',
         domain: [1, 2, 3, 4, 5, 10],
         colors: 'BluYl'
-      }),
-      // The following prop is not a deckgl one. Added in order to access it in switch-component
-      _vueToggleLabel: 'Rail roads'
+      })
     })
 
     const storesQuery = 'SELECT * FROM retail_stores';
@@ -63,8 +61,7 @@ export default {
         domain: ['Supermarket', 'Discount Store', 'Hypermarket', 'Drugstore', 'Department Store'],
         colors: 'Pastel'
       }),
-      onDataLoad: data => this.storesData = data.features,
-      _vueToggleLabel: 'Stores'
+      onDataLoad: data => this.storesData = data.features
     })
 
     layerService.addLayer({
@@ -73,8 +70,7 @@ export default {
       data: 'cartobq.maps.msft_buildings',
       visible: false,
       pointRadiusUnits: 'pixels',
-      getFillColor: [240, 142, 240],
-      _vueToggleLabel: 'Buildings'
+      getFillColor: [240, 142, 240]
     })
   },
   methods: {

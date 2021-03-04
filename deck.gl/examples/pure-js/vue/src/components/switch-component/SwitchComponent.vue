@@ -30,7 +30,7 @@ export default {
     mapLoaded(isLoaded) {
       const layers = Object.entries(layerService.getLayers());
       this.layersData = layers.map(([id, props]) =>
-        ({ id, isVisible: 'visible' in props ? props.visible : true, label: props._vueToggleLabel }))
+        ({ id, isVisible: 'visible' in props ? props.visible : true, label: id || '' }))
       this.mapLoaded_ = isLoaded
     },
   }
