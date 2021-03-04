@@ -4,6 +4,9 @@ import { initialViewState } from './state'
 import { debounce } from '@/utils/debounce';
 
 export const mutations = {
+  [MUTATIONS.SET_MAP_LOADED]: (state, isMapLoaded) => {
+    state.mapLoaded = isMapLoaded
+  },
   [MUTATIONS.SET_VIEWSTATE]: (state, viewState) => {
     setDelayedViewState(state, viewState);
     layerService.deckInstance.setProps({ viewState: { ...viewState } })

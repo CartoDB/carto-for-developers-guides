@@ -11,7 +11,6 @@ import { MODULE_NAME } from '@/store/map'
 import ECharts from 'vue-echarts'
 import * as echarts from 'echarts'
 import { CanvasRenderer } from 'echarts/renderers'
-import { numberFormatter } from '@/utils/formatter'
 
 const { use } = echarts
 
@@ -24,8 +23,8 @@ export default {
   data: () => ({
     bar: {
       grid: {
-        left: 50,
-        right: 50
+        left: 55,
+        right: 55
       },
       title: {
         text: 'Stores by type',
@@ -48,8 +47,9 @@ export default {
       yAxis: {
         type: 'value',
         axisLabel: {
-          formatter: v => numberFormatter(v),
-          fontFamily: 'Montserrat, "Open Sans", sans-serif'
+          fontSize: 11,
+          fontFamily: 'Montserrat, "Open Sans", sans-serif',
+          formatter: v => `${v / 1e6}M`
         }  
       },
       series: {
@@ -60,9 +60,9 @@ export default {
       tooltip: {
         trigger: 'item',
         textStyle: {
-          fontSize: '15',
+          fontSize: 15,
         },
-        formatter: params => numberFormatter(params.value)
+        formatter: params => `${(params.value / 1e6).toFixed(0)}M`
       }
     },
     isLoading: true

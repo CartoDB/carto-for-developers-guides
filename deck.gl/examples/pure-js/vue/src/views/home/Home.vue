@@ -8,12 +8,10 @@
 <script>
 import { mapMutations, mapState } from 'vuex'
 import { MODULE_NAME, MUTATIONS } from '@/store/map'
-import TemplateComponent from '@/components/template-component/TemplateComponent.vue';
-import { CartoBQTilerLayer, CartoSQLLayer, setDefaultCredentials, colorCategories, colorContinuous } from '@deck.gl/carto'
 import { GeoJsonLayer } from '@deck.gl/layers'
+import { CartoBQTilerLayer, CartoSQLLayer, setDefaultCredentials, colorCategories, colorContinuous } from '@deck.gl/carto'
+import TemplateComponent from '@/components/template-component/TemplateComponent.vue';
 import layerService from '@/services/layerService'
-import { layersInfo } from '@/layersConfig'
-import htmlForFeature from '@/utils/htmlForFeature'
 import { viewportFeaturesFunctions } from '@/utils/viewportFeatures'
 
 setDefaultCredentials({
@@ -30,23 +28,10 @@ export default {
     storesData: []
   }),
   mounted () {
-    const { buildings, railRoads, stores } = layersInfo;
-
     layerService.addLayer({
-      id: buildings.id,
-      layerType: CartoBQTilerLayer,
-      data: buildings.data,
-      visible: buildings.isVisible,
-      pointRadiusUnits: 'pixels',
-      getFillColor: [240, 142, 240],
-      getFileColor: [240, 142, 240]
-    })
-
-    layerService.addLayer({
-      id: railRoads.id,
+      id: 'roads',
       layerType: CartoSQLLayer,
-      data: railRoads.data,
-      visible: railRoads.isVisible,
+      data: 'SELECT cartodb_id, the_geom_webmercator, scalerank FROM ne_10m_railroads_public',
       pickable: true,
       lineWidthScale: 20,
       lineWidthMinPixels: 2,
@@ -57,24 +42,16 @@ export default {
         domain: [1, 2, 3, 4, 5, 10],
         colors: 'BluYl'
       }),
-      onHover: (info) => {
-        if (info?.object) {
-          info.object = {
-            html: htmlForFeature({
-              feature: info.object,
-              includeColumns: ['scalerank'],
-              showColumnName: true
-            }),
-          };
-        }
-      }
+      // The following prop is not a deckgl one. Added in order to access it in switch-component
+      _vueToggleLabel: 'Rail roads'
     })
 
+    const storesQuery = 'SELECT * FROM retail_stores';
+    const storesUrl = `https://public.carto.com/api/v2/sql?q=${storesQuery}&format=geojson`;
     layerService.addLayer({
-      id: stores.id,
+      id: 'stores',
       layerType: GeoJsonLayer,
-      data: `https://public.carto.com/api/v2/sql?q=${stores.data}&format=geojson`,
-      visible: stores.isVisible,
+      data: storesUrl,
       pointRadiusUnits: 'pixels',
       lineWidthUnits: 'pixels',
       pickable: true,
@@ -87,22 +64,17 @@ export default {
         colors: 'Pastel'
       }),
       onDataLoad: data => this.storesData = data.features,
-      onHover: (info) => {
-        if (info?.object) {
-          info.object = {
-            html: htmlForFeature({
-              title: `store ${info.object.properties.store_id}`,
-              feature: info.object,
-              formatter: {
-                type: 'number',
-                columns: ['revenue'],
-              },
-              includeColumns: ['revenue'],
-              showColumnName: true
-            }),
-          };
-        }
-      }
+      _vueToggleLabel: 'Stores'
+    })
+
+    layerService.addLayer({
+      id: 'buildings',
+      layerType: CartoBQTilerLayer,
+      data: 'cartobq.maps.msft_buildings',
+      visible: false,
+      pointRadiusUnits: 'pixels',
+      getFillColor: [240, 142, 240],
+      _vueToggleLabel: 'Buildings'
     })
   },
   methods: {
