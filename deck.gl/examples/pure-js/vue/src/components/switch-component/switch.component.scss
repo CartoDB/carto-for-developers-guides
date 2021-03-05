@@ -7,7 +7,7 @@
   flex-direction: column;
   top: 5rem;
   right: 2rem;
-  padding: 1rem 1rem 1rem 1.25rem;
+  padding: 0.5rem 1rem 1rem 1.25rem;
 
   .md-switch.md-theme-default.md-checked.md-primary .md-switch-container {
     background-color: #036fe2;
@@ -39,6 +39,12 @@
     text-transform: capitalize;
     align-items: center;
 
+    label {
+      padding-left: 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
     .md-switch-container {
       height: 23px;
       width: 36px;
@@ -57,5 +63,6 @@
     font-family: Montserrat, "Open Sans", sans-serif;
     font-size: 1.125rem;
     font-weight: 600;
+    margin-bottom: 0.75rem;
   }
 }
