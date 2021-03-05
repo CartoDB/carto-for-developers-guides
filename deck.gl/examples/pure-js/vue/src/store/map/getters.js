@@ -2,4 +2,9 @@
  *  Getters module file
 **/
 
-export const getters = {}
+import { GETTERS } from './constants'
+
+export const getters = {
+  [GETTERS.GET_CREDENTIALS]: state => state.credentials,
+  [GETTERS.GET_BASEMAP]: state => state.basemap
+}
