@@ -6,18 +6,13 @@
 /* style import */
 <style lang="scss" src="./home.scss"></style>
 <script>
-import { mapMutations, mapState } from 'vuex'
-import { MODULE_NAME, MUTATIONS } from '@/store/map'
+import { mapMutations, mapState, mapGetters } from 'vuex'
+import { MODULE_NAME, MUTATIONS, GETTERS } from '@/store/map'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { CartoBQTilerLayer, CartoSQLLayer, setDefaultCredentials, colorCategories, colorContinuous } from '@deck.gl/carto'
 import TemplateComponent from '@/components/template-component/TemplateComponent.vue';
 import layerService from '@/services/layerService'
 import { viewportFeaturesFunctions } from '@/utils/viewportFeatures'
-
-setDefaultCredentials({
-  username: 'public',
-  apiKey: 'default_public'
-});
 
 export default {
   name: 'app-home',
@@ -28,6 +23,8 @@ export default {
     storesData: []
   }),
   mounted () {
+    setDefaultCredentials(this.credentials);
+
     layerService.addLayer({
       id: 'roads',
       layerType: CartoSQLLayer,
@@ -78,6 +75,9 @@ export default {
   },
   computed: {
     ...mapState(MODULE_NAME, ['viewState']),
+    ...mapGetters(MODULE_NAME, {
+      credentials: GETTERS.GET_CREDENTIALS
+    })
   },
   watch: {
     viewState(v) {

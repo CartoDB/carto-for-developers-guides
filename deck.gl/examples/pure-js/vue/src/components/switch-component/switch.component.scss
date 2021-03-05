@@ -8,10 +8,49 @@
   top: 5rem;
   right: 2rem;
   padding: 1rem 1rem 1rem 1.25rem;
+
+  .md-switch.md-theme-default.md-checked.md-primary .md-switch-container {
+    background-color: #036fe2;
+  }
+
+  .md-switch.md-theme-default.md-checked.md-primary .md-switch-thumb {
+    background-color: #fff;
+  }
+
+  .md-switch.md-checked .md-switch-thumb {
+    transform: translate3d(15px, 0, 0);
+  }
+
+  .md-switch.md-theme-default .md-switch-container {
+    background-color: #fff;
+    border: 2px solid grey;
+  }
+
+  .md-switch.md-theme-default.md-checked .md-switch-container {
+    border: none;
+  }
+
+  .md-switch.md-theme-default .md-switch-thumb {
+    background-color: grey;
+  }
   
   .md-switch {
     margin: 0.5rem 1rem 0.5rem 0;
     text-transform: capitalize;
+    align-items: center;
+
+    .md-switch-container {
+      height: 23px;
+      width: 36px;
+      min-width: 36px;
+      transition: none;
+    }
+
+    .md-switch-thumb {
+      width: 11px;
+      height: 11px;
+      left: 4px;
+    }
   }
 
   .title {

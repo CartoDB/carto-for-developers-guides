@@ -11,6 +11,7 @@ import { MODULE_NAME } from '@/store/map'
 import ECharts from 'vue-echarts'
 import * as echarts from 'echarts'
 import { CanvasRenderer } from 'echarts/renderers'
+import { groupValuesByColumn } from './chart-utils/histogram'
 
 const { use } = echarts
 
@@ -49,7 +50,7 @@ export default {
         axisLabel: {
           fontSize: 11,
           fontFamily: 'Montserrat, "Open Sans", sans-serif',
-          formatter: v => `${v / 1e6}M`
+          formatter: v => v >= 1e6 ? `${v / 1e6}M` : v
         }  
       },
       series: {
@@ -62,7 +63,7 @@ export default {
         textStyle: {
           fontSize: 15,
         },
-        formatter: params => `${(params.value / 1e6).toFixed(0)}M`
+        formatter: ({ value }) => value >= 1e6 ? `${(value / 1e6).toFixed(0)}M` : value
       }
     },
     isLoading: true
@@ -79,35 +80,5 @@ export default {
       this.isLoading = false;
     }
   }
-};
-
-function groupValuesByColumn(data, valuesColumn, keysColumn) {
-  if (Array.isArray(data) && data.length === 0) {
-    return [{category: '', value: 0}];
-  }
-
-  const groups = data.reduce((accumulator, item) => {
-    const group = item.properties[keysColumn];
-
-    accumulator[group] = accumulator[group] || [];
-
-    const isValid = item.properties[valuesColumn] !== null && item.properties[valuesColumn] !== undefined;
-
-    if (isValid) {
-      accumulator[group].push(item.properties[valuesColumn]);
-    }
-
-    return accumulator;
-  }, {});
-
-  return Object.entries(groups).map(([category, value]) => ({
-    category,
-    value: sum(value)
-  }));
-}
-
-const sum = (values, key) => {
-  const fn = key ? (a, b) => a + b[key] : (a, b) => a + b;
-  return values.reduce(fn, 0);
 };
 </script>
