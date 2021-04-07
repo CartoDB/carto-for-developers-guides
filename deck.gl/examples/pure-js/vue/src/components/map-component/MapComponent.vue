@@ -6,8 +6,8 @@
 /* style import */
 <style scoped lang="scss" src="./map-component.scss"></style>
 <script>
-import { mapMutations, mapState, mapGetters } from 'vuex'
-import { MODULE_NAME, MUTATIONS, GETTERS } from '@/store/map'
+import { mapMutations, mapState } from 'vuex'
+import { MODULE_NAME, MUTATIONS } from '@/store/map'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import layerService from '@/services/layerService'
 
@@ -22,10 +22,7 @@ export default {
     layerService.destroy()
   },
   computed: {
-    ...mapState(MODULE_NAME, ['viewState']),
-    ...mapGetters(MODULE_NAME, {
-      mapStyle: GETTERS.GET_BASEMAP
-    })
+    ...mapState(MODULE_NAME, ['viewState', 'basemap'])
   },
   methods: {
     ...mapMutations(MODULE_NAME, [
@@ -39,7 +36,7 @@ export default {
       }
       layerService.init({
         container: '#map',
-        mapStyle: this.mapStyle,
+        mapStyle: this.basemap,
         viewState: this.viewState,
         onViewStateChange: ({ viewState }) => {
           this[MUTATIONS.SET_VIEWSTATE](viewState)

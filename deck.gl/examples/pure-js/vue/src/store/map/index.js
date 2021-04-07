@@ -4,13 +4,11 @@
 
 import { state } from './state'
 import { mutations } from './mutations'
-import { getters } from './getters'
 
 export default {
   namespaced: true,
   state,
-  mutations,
-  getters
+  mutations
 }
 
-export { MODULE_NAME, GETTERS, MUTATIONS } from './constants'
+export { MODULE_NAME, MUTATIONS } from './constants'

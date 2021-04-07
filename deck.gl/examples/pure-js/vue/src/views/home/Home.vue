@@ -6,8 +6,8 @@
 /* style import */
 <style lang="scss" src="./home.scss"></style>
 <script>
-import { mapMutations, mapState, mapGetters } from 'vuex'
-import { MODULE_NAME, MUTATIONS, GETTERS } from '@/store/map'
+import { mapMutations, mapState } from 'vuex'
+import { MODULE_NAME, MUTATIONS } from '@/store/map'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { CartoBQTilerLayer, CartoSQLLayer, setDefaultCredentials, colorCategories, colorContinuous } from '@deck.gl/carto'
 import TemplateComponent from '@/components/template-component/TemplateComponent.vue';
@@ -74,10 +74,7 @@ export default {
     ...mapMutations(MODULE_NAME, [MUTATIONS.SET_VIEWPORT_FEATURES])
   },
   computed: {
-    ...mapState(MODULE_NAME, ['viewState']),
-    ...mapGetters(MODULE_NAME, {
-      credentials: GETTERS.GET_CREDENTIALS
-    })
+    ...mapState(MODULE_NAME, ['viewState', 'credentials'])
   },
   watch: {
     viewState(v) {
