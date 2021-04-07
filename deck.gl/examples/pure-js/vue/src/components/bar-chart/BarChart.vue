@@ -28,7 +28,7 @@ export default {
         right: 55
       },
       title: {
-        text: 'Stores by type',
+        text: 'Revenue by store type',
         textStyle: {
           fontFamily: 'Montserrat, "Open Sans", sans-serif',
           fontSize: '1.125rem'
