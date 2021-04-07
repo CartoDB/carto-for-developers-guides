@@ -10,14 +10,14 @@ import { mapMutations, mapState } from 'vuex'
 import { MODULE_NAME, MUTATIONS } from '@/store/map'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { CartoBQTilerLayer, CartoSQLLayer, setDefaultCredentials, colorCategories, colorContinuous } from '@deck.gl/carto'
-import TemplateComponent from '@/components/template-component/TemplateComponent.vue';
+import ViewTemplate from '@/components/view-template/ViewTemplate.vue';
 import layerService from '@/services/layerService'
 import { viewportFeaturesFunctions } from '@/utils/viewportFeatures'
 
 export default {
   name: 'app-home',
   components: {
-    TemplateComponent
+    ViewTemplate
   },
   data: () => ({
     storesData: []

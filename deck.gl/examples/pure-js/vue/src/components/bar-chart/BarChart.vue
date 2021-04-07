@@ -1,10 +1,10 @@
 /**
- *  BarChartComponent.vue
+ *  BarChart.vue
 **/
 /* template import */
-<template src="./bar.chart.component.html"></template>
+<template src="./bar-chart.html"></template>
 /* style import */
-<style scoped lang="scss" src="./bar.chart.component.scss"></style>
+<style scoped lang="scss" src="./bar-chart.scss"></style>
 <script>
 import { mapState } from 'vuex'
 import { MODULE_NAME } from '@/store/map'

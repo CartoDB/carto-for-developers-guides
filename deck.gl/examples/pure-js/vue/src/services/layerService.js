@@ -1,4 +1,4 @@
-import DeckMap from '@/components/map-component/map-utils/DeckMap'
+import DeckMap from '@/components/app-map/map-utils/DeckMap'
 
 export default {
   layers: {},

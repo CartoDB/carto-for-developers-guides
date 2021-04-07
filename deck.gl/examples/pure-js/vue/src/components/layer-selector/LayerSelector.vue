@@ -1,17 +1,17 @@
 /**
- *  SwitchComponent.vue
+ *  LayerSelector.vue
 **/
 /* template import */
-<template src="./switch.component.html"></template>
+<template src="./layer-selector.html"></template>
 /* style import */
-<style lang="scss" src="./switch.component.scss"></style>
+<style lang="scss" src="./layer-selector.scss"></style>
 <script>
 import { mapState } from 'vuex'
 import { MODULE_NAME } from '@/store/map'
 import layerService from '@/services/layerService'
 
 export default {
-  name: 'SwitchComponent',
+  name: 'LayerSelector',
   components: {},
   data: () => ({
     mapLoaded_: false,
