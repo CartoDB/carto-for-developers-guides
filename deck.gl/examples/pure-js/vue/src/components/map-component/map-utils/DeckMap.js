@@ -132,7 +132,6 @@ export default class DeckMap extends Deck {
           bearing: viewport.bearing,
           pitch: viewport.pitch
         })
-        // TODO: only redraw when viewport has changed
         this.redrawMapbox()
       }
     }
