@@ -8,7 +8,7 @@
 <script>
 import { mapState } from 'vuex'
 import { MODULE_NAME } from '@/store/map'
-import layerService from '@/services/layerService'
+import layerManager from '../map-component/map-utils/layerManager'
 
 export default {
   name: 'LayerSelector',
@@ -19,8 +19,8 @@ export default {
   }),
   methods: {
     handleChange (layerId) {
-      const isVisible = layerService.isVisible(layerId);
-      layerService[isVisible ? 'hideLayer' : 'showLayer'](layerId);
+      const isVisible = layerManager.isVisible(layerId);
+      layerManager[isVisible ? 'hideLayer' : 'showLayer'](layerId);
     }
   },
   computed: {
@@ -28,9 +28,9 @@ export default {
   },
   watch: {
     mapLoaded(isLoaded) {
-      const layers = Object.entries(layerService.getLayers());
-      this.layersData = layers.map(([id, props]) =>
-        ({ id, isVisible: 'visible' in props ? props.visible : true, label: id || '' }))
+      const layers = Object.entries(layerManager.getLayers());
+      this.layersData = layers.map(([id, layer]) =>
+        ({ id, isVisible: 'visible' in layer.props ? layer.props.visible : true, label: id || '' }))
       this.mapLoaded_ = isLoaded
     },
   }

@@ -11,7 +11,7 @@ import { MODULE_NAME, MUTATIONS } from '@/store/map'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import { CartoBQTilerLayer, CartoSQLLayer, setDefaultCredentials, colorCategories, colorContinuous } from '@deck.gl/carto'
 import ViewTemplate from '@/components/view-template/ViewTemplate.vue';
-import layerService from '@/services/layerService'
+import layerManager from '@/components/map-component/map-utils/layerManager'
 import { viewportFeaturesFunctions } from '@/utils/viewportFeatures'
 
 export default {
@@ -25,50 +25,53 @@ export default {
   mounted () {
     setDefaultCredentials(this.credentials);
 
-    layerService.addLayer({
-      id: 'roads',
-      layerType: CartoSQLLayer,
-      data: 'SELECT cartodb_id, the_geom_webmercator, scalerank FROM ne_10m_railroads_public',
-      pickable: true,
-      lineWidthScale: 20,
-      lineWidthMinPixels: 2,
-      autoHighlight: true,
-      highlightColor: [0, 255, 0],
-      getLineColor: colorContinuous({
-        attr: 'scalerank',
-        domain: [1, 2, 3, 4, 5, 10],
-        colors: 'BluYl'
+    layerManager.addLayer(
+      new CartoSQLLayer({
+        id: 'roads',
+        data: 'SELECT cartodb_id, the_geom_webmercator, scalerank FROM ne_10m_railroads_public',
+        pickable: true,
+        lineWidthScale: 20,
+        lineWidthMinPixels: 2,
+        autoHighlight: true,
+        highlightColor: [0, 255, 0],
+        getLineColor: colorContinuous({
+          attr: 'scalerank',
+          domain: [1, 2, 3, 4, 5, 10],
+          colors: 'BluYl'
+        })
       })
-    })
+    )
 
     const storesQuery = 'SELECT * FROM retail_stores';
     const storesUrl = `https://public.carto.com/api/v2/sql?q=${storesQuery}&format=geojson`;
-    layerService.addLayer({
-      id: 'stores',
-      layerType: GeoJsonLayer,
-      data: storesUrl,
-      pointRadiusUnits: 'pixels',
-      lineWidthUnits: 'pixels',
-      pickable: true,
-      getRadius: 3,
-      autoHighlight: true,
-      highlightColor: [0, 255, 0],
-      getFillColor: colorCategories({
-        attr: 'storetype',
-        domain: ['Supermarket', 'Discount Store', 'Hypermarket', 'Drugstore', 'Department Store'],
-        colors: 'Pastel'
-      }),
-      onDataLoad: data => this.storesData = data.features
-    })
+    layerManager.addLayer(
+      new GeoJsonLayer({
+        id: 'stores',
+        data: storesUrl,
+        pointRadiusUnits: 'pixels',
+        lineWidthUnits: 'pixels',
+        pickable: true,
+        getRadius: 3,
+        autoHighlight: true,
+        highlightColor: [0, 255, 0],
+        getFillColor: colorCategories({
+          attr: 'storetype',
+          domain: ['Supermarket', 'Discount Store', 'Hypermarket', 'Drugstore', 'Department Store'],
+          colors: 'Pastel'
+        }),
+        onDataLoad: data => this.storesData = data.features
+      })
+    )
 
-    layerService.addLayer({
-      id: 'buildings',
-      layerType: CartoBQTilerLayer,
-      data: 'cartobq.maps.msft_buildings',
-      visible: false,
-      pointRadiusUnits: 'pixels',
-      getFillColor: [240, 142, 240]
-    })
+    layerManager.addLayer(
+      new CartoBQTilerLayer({
+        id: 'buildings',
+        data: 'cartobq.maps.msft_buildings',
+        visible: false,
+        pointRadiusUnits: 'pixels',
+        getFillColor: [240, 142, 240]
+      })
+    )
   },
   methods: {
     ...mapMutations(MODULE_NAME, [MUTATIONS.SET_VIEWPORT_FEATURES])

@@ -9,17 +9,17 @@
 import { mapMutations, mapState } from 'vuex'
 import { MODULE_NAME, MUTATIONS } from '@/store/map'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import layerService from '@/services/layerService'
+import layerManager from './map-utils/layerManager'
 
 export default {
   name: 'MapComponent',
   mounted () {
-    this.layerService = layerService // for debugging purposes
+    this.layerManager = layerManager // for debugging purposes
     this.setupDeck()
   },
   beforeDestroy () {
     this[MUTATIONS.RESET_VIEWSTATE]()
-    layerService.destroy()
+    layerManager.destroy()
   },
   computed: {
     ...mapState(MODULE_NAME, ['viewState', 'basemap'])
@@ -31,10 +31,10 @@ export default {
       MUTATIONS.SET_MAP_LOADED
     ]),
     setupDeck () {
-      if (layerService.deckInstance) {
+      if (layerManager.deckInstance) {
         return
       }
-      layerService.init({
+      layerManager.init({
         container: '#map',
         mapStyle: this.basemap,
         viewState: this.viewState,

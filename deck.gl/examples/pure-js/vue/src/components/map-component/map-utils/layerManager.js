@@ -1,4 +1,4 @@
-import DeckMap from '@/components/app-map/map-utils/DeckMap'
+import DeckMap from './DeckMap'
 
 export default {
   layers: {},
@@ -18,39 +18,42 @@ export default {
   },
   isVisible (id) {
     // visible = undefined is treated by deckgl as visible = true
-    return this.layers[id] && this.layers[id].visible !== false
+    return this.layers[id] && this.layers[id].props.visible !== false
   },
   updateDeckInstance () {
     if (!this.deckInstance) {
       return
     }
+    const layers =[ ...Object.values(this.layers) ];
+    /*
     const layers = Object.values(this.layers)
       .sort((l1, l2) => ((l1.zIndex || 0) - (l2.zIndex || 0)))
       // NOTE: uncomment next line if you are rendering many (>= 5) MVTLayers at the same time
       // .filter(l => this.isVisible(l.id))
       .map(({ layerType: LayerClass, ...props }) => new LayerClass(props))
+    */
     if (this.deckInstance) {
       this.deckInstance.setProps({ layers })
     }
   },
   addLayer (layer) {
     if (!layer.id) {
-      throw new Error(`[layerService.addLayer] layer id must defined. Received "${layer.id}" instead`)
-    }
-    if (typeof layer.layerType !== 'function') {
-      throw new Error(`[layerService.addLayer] layerType must be a function. Received "${layer.layerType}" instead`)
+      throw new Error(`[layerManager.addLayer] layer id must defined. Received "${layer.id}" instead`)
     }
     this.layers[layer.id] = layer
     this.updateDeckInstance()
   },
-  updateLayer (id, data) {
+  updateLayer (id, props) {
     if (!this.layers[id]) {
       return
     }
+    const layer = this.layers[id];
+    this.layers[id] = layer.clone(props);
+    /*
     this.layers[id] = {
       ...this.layers[id],
       ...data
-    }
+    }*/
     this.updateDeckInstance()
   },
   removeLayer (id) {
