@@ -24,7 +24,7 @@ export default {
     if (!this.deckInstance) {
       return
     }
-    const layers =[ ...Object.values(this.layers) ];
+    const layers = [...Object.values(this.layers)];
     /*
     const layers = Object.values(this.layers)
       .sort((l1, l2) => ((l1.zIndex || 0) - (l2.zIndex || 0)))
@@ -47,13 +47,8 @@ export default {
     if (!this.layers[id]) {
       return
     }
-    const layer = this.layers[id];
-    this.layers[id] = layer.clone(props);
-    /*
-    this.layers[id] = {
-      ...this.layers[id],
-      ...data
-    }*/
+    const layer = this.layers[id]
+    this.layers[id] = layer.clone(props)
     this.updateDeckInstance()
   },
   removeLayer (id) {
