@@ -28,7 +28,7 @@ export class MapService {
 
   constructor() {}
 
-  async addLayer(layer: Layer) {
+  addLayer(layer: Layer) {
     this.layersIdx[layer.id] = this.layers.length;
     this.layers.push(layer.getLayer());
 
