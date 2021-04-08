@@ -25,13 +25,6 @@ export default {
       return
     }
     const layers = [...Object.values(this.layers)];
-    /*
-    const layers = Object.values(this.layers)
-      .sort((l1, l2) => ((l1.zIndex || 0) - (l2.zIndex || 0)))
-      // NOTE: uncomment next line if you are rendering many (>= 5) MVTLayers at the same time
-      // .filter(l => this.isVisible(l.id))
-      .map(({ layerType: LayerClass, ...props }) => new LayerClass(props))
-    */
     if (this.deckInstance) {
       this.deckInstance.setProps({ layers })
     }
