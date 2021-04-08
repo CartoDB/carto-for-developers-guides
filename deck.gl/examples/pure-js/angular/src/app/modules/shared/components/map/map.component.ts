@@ -18,6 +18,12 @@ const INITIAL_VIEW_STATE = {
   zoom: 3,
 };
 
+const TOOLTIP_STYLE = {
+  backgroundColor: '#FFF',
+  color: '#111',
+  fontFamily: 'Open Sans'          
+};
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -88,21 +94,15 @@ export class MapComponent implements AfterViewInit {
     if (pickingInfo.object) {
       let html = `<div style="padding-bottom: 10px;"><strong>${pickingInfo.layer.id}</strong></div>`;
       for (const [name, value] of Object.entries(pickingInfo.object.properties)) {
-        if (name != "layerName" && name != "cartodb_id") {
+        if (name !== "layerName" && name !== "cartodb_id") {
           html += `<div><strong>${name}: </strong>${value}</div>`;
         }
       }
-      let style = {
-        backgroundColor: '#FFF',
-        color: '#111',
-        fontFamily: 'Open Sans'          
-      };
-      return(pickingInfo.object && {
+      return {
         html: html,
-        style: style
-      });  
+        style: TOOLTIP_STYLE
+      };
     }
-    return(null);
+    return;
   }
-
 }

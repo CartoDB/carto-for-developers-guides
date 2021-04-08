@@ -30,7 +30,7 @@ export class MapService {
 
   async addLayer(layer: Layer) {
     this.layersIdx[layer.id] = this.layers.length;
-    this.layers.push(await layer.getLayer());
+    this.layers.push(layer.getLayer());
 
     if (this.deck) this.updateDeck();
   }
