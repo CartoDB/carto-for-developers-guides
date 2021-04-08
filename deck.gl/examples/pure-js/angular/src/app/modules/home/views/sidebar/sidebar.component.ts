@@ -20,10 +20,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  async ngOnInit() {
-    await this.mapService.addLayer(this.railRoadsLayer);
-    await this.mapService.addLayer(this.buildingsLayer);
-    await this.mapService.addLayer(this.storesLayer);
+  ngOnInit() {
+    this.mapService.addLayer(this.railRoadsLayer);
+    this.mapService.addLayer(this.buildingsLayer);
+    this.mapService.addLayer(this.storesLayer);
   }
 
   ngOnDestroy () {

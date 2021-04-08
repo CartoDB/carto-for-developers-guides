@@ -10,7 +10,7 @@ export class BuildingsLayer extends Layer {
   id = 'BUILDINGS_LAYER';
   visible = false;
 
-  async getLayer() {
+  getLayer() {
     return new CartoBQTilerLayer({
       id: this.id,
       data: 'cartobq.maps.msft_buildings',

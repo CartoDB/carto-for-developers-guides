@@ -6,7 +6,7 @@ export class Layer {
 
   constructor() {}
 
-  async getLayer () {
+  getLayer () {
     // Implement in child
     return {}
   }

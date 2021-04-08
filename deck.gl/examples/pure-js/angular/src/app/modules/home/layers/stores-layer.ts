@@ -6,37 +6,17 @@ import { colorCategories } from "@deck.gl/carto";
 
 import { Layer } from "../../../models/layer";
 
-const GEOJSON_ENDPOINT = 'https://public.carto.com/api/v2/sql?q=SELECT * FROM retail_stores&format=geojson';
-
 @Injectable()
 export class StoresLayer extends Layer {
 
   id = 'STORES_LAYER';
   visible = true;
   dataLoaded = new Subject();
-  geojsonData: any = null;
 
-  async fetchData(url: string) {
-    try {
-      const response = await fetch(url);
-      return await response.json();
-    } catch(err) {
-      throw new Error(`Something went wrong: ${err}`);
-    }
-  }
-
-  async getLayer() {
-    if (!this.geojsonData) {
-      this.geojsonData = await this.fetchData(GEOJSON_ENDPOINT);
-    }
-
-    const features = this.geojsonData.features;
-
-    this.dataLoaded.next(features);
-
+  getLayer() {
     return new GeoJsonLayer({
       id: this.id,
-      data: features,
+      data: 'https://public.carto.com/api/v2/sql?q=SELECT * FROM retail_stores&format=geojson',
       visible: this.visible,
       pickable: true,
       getFillColor: colorCategories({
@@ -50,7 +30,8 @@ export class StoresLayer extends Layer {
       lineWidthUnits: 'pixels',
       getRadius: 3,
       autoHighlight: true,
-      highlightColor: [0, 255, 0]
+      highlightColor: [0, 255, 0],
+      onDataLoad: (data: any) => this.dataLoaded.next(data.features)
     });
   }
 }
