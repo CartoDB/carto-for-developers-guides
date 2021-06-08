@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <!-- FONT -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/deck.gl@^8.4.0/dist.min.js"></script>
+    <script src="https://unpkg.com/@deck.gl/carto@^8.4.0/dist.min.js"></script>
+    
+    <script src="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.js"></script>
+    <link href="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.css" rel="stylesheet" />
+  </head>
+
+  <body style="margin: 0; padding: 0; overflow: hidden; font-family: 'Open Sans', sans-serif">
+    <div id="map" style="width: 100vw; height: 100vh"></div>
+  </body>
+
+  <script type="text/javascript">
+    async function initialize() {
+      deck.carto.setDefaultCredentials({
+        username: 'public',
+        apiKey: 'default_public',
+      });
+
+      // Fetch Data from CARTO
+      const url = 'https://public.carto.com/api/v2/sql?q=SELECT token, value FROM sf_s2_cells&format=json';
+      const jsonData = await fetch(url).then(response => response.json());
+
+      // Create Deck.GL map
+      const deckgl = new deck.DeckGL({
+        container: 'map',
+        mapStyle: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+        initialViewState: {
+          longitude: -122.42,
+          latitude: 37.77,
+          zoom: 10.5,
+          bearing: 15,
+          pitch: 60
+        },
+        controller: true,
+        layers: [
+          new deck.S2Layer({
+            id: 's2-layer',
+            data: jsonData.rows,
+            pickable: true,
+            autoHighlight: true,
+            wireframe: false,
+            filled: true,
+            extruded: true,
+            elevationScale: 1000,
+            getS2Token: d => d.token,
+            getFillColor: d => [d.value * 255, (1 - d.value) * 255, (1 - d.value) * 128],
+            getElevation: d => d.value
+          })
+        ],
+        getTooltip: ({ object }) => object && `token: ${object.token}\n value: ${object.value}`
+      });
+    }
+
+    initialize();    
+  </script>
+</html>

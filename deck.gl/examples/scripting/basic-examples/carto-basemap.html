@@ -1,7 +1,7 @@
 <html>
   <head>
-    <script src="https://unpkg.com/deck.gl@^8.3.0/dist.min.js"></script>
-    <script src="https://unpkg.com/@deck.gl/carto@^8.3.0/dist.min.js"></script>
+    <script src="https://unpkg.com/deck.gl@^8.4.0/dist.min.js"></script>
+    <script src="https://unpkg.com/@deck.gl/carto@^8.4.0/dist.min.js"></script>
     
     <script src="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.js"></script>
     <link href="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.css" rel="stylesheet" />
@@ -19,12 +19,12 @@
     };
 
     deck.carto.setDefaultCredentials({
-      username: "public",
-      apiKey: "default_public",
+      username: 'public',
+      apiKey: 'default_public',
     });
 
     const deckgl = new deck.DeckGL({
-      container: "map",
+      container: 'map',
       // CARTO's provides three basemaps voyager, positron, dark-matter
       mapStyle: cartoBasemaps.VOYAGER,
 
@@ -33,9 +33,7 @@
         longitude: 0,
         zoom: 1,
       },
-      controller: {
-        scrollZoom: false
-      },
+      controller: true,
 
       layers: [
         new deck.carto.CartoSQLLayer({

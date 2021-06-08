@@ -1,7 +1,7 @@
 <html>
   <head>
-    <script src="https://unpkg.com/deck.gl@^8.3.0/dist.min.js"></script>
-    <script src="https://unpkg.com/@deck.gl/carto@^8.3.0/dist.min.js"></script>
+    <script src="https://unpkg.com/deck.gl@^8.4.0/dist.min.js"></script>
+    <script src="https://unpkg.com/@deck.gl/carto@^8.4.0/dist.min.js"></script>
     
     <script src="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.js"></script>
     <link href="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.css" rel="stylesheet" />
@@ -32,13 +32,11 @@
         longitude: 0,
         zoom: 1
       },
-      controller: {
-        scrollZoom: false
-      },
+      controller: true,
 
       layers: [
         new deck.carto.CartoSQLLayer({
-          data: `SELECT the_geom_webmercator, country_name FROM world_population_2015`,
+          data: 'SELECT the_geom_webmercator, country_name FROM world_population_2015',
 
           /* Substitute default GeoJSONLayer with an IconLayer, but you can use different layers here */
           renderSubLayers: props => new deck.IconLayer({...props}),
