@@ -1,0 +1,17 @@
+{
+  "hosting": [{
+    "target": "angular-carto",
+    "public": "dist/deckgl-for-angular",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }]
+}
