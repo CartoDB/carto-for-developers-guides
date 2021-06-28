@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/deck.gl@^8.4.0/dist.min.js"></script>
+    <script src="https://unpkg.com/@deck.gl/carto@^8.4.0/dist.min.js"></script>
+    
+    <script src="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.js"></script>
+    <link href="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.css" rel="stylesheet" />
+  </head>
+
+  <body style="margin: 0; padding: 0; background-color: #212121;">
+    <div id="map" style="width: 100vw; height: 100vh"></div>
+  </body>
+
+  <script type="text/javascript">
+    async function initialize() {
+      deck.carto.setDefaultCredentials({
+        username: 'public',
+        apiKey: 'default_public',
+      });
+
+      // Fetch Data from CARTO
+      // Notice that you can use any Deck.gl layer with CARTO datasets getting GeoJSON data from CARTO's API.
+      const url = 'https://public.carto.com/api/v2/sql?q=SELECT the_geom, scalerank FROM airports_to_london WHERE scalerank > 7&format=geojson';
+      const geojsonData = await fetch(url).then(response => response.json());
+
+      // Create Deck.GL map
+      const deckgl = new deck.DeckGL({
+        container: 'map',
+        mapStyle: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+        initialViewState: {
+          latitude: 30,
+          longitude: 10,
+          zoom: 1,
+          pitch: 30
+        },
+        controller: true,
+        layers: [
+          new deck.ArcLayer({
+            id: 'arc-layer',
+            data: geojsonData.features,
+            getSourcePosition: f => [-0.4531566, 51.4709959], // London
+            getTargetPosition: f => f.geometry.coordinates,
+            getSourceColor: [0, 128, 200],
+            getTargetColor: [200, 0, 80],
+            getWidth: 1
+          })
+        ]
+      });
+    }
+
+    initialize();    
+  </script>
+</html>

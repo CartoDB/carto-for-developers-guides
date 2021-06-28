@@ -1,0 +1,188 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/deck.gl@^8.4.0/dist.min.js"></script>
+    <script src="https://unpkg.com/@deck.gl/carto@^8.4.0/dist.min.js"></script>
+    
+    <script src="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.js"></script>
+    <link href="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.css" rel="stylesheet" />
+  </head>
+
+  <body style="margin: 0; padding: 0;">
+    <div id="map" style="width: 100vw; height: 100vh; overflow: hidden;"></div>
+  </body>
+
+  <script type="text/javascript">
+    class AnimatedArcLayer extends deck.ArcLayer {
+      getShaders() {
+        const shaders = super.getShaders();
+        shaders.inject = {
+          'vs:#decl': `\
+            uniform vec2 timeRange;
+            attribute float instanceSourceTimestamp;
+            attribute float instanceTargetTimestamp;
+            varying float vTimestamp;
+          `,
+          'vs:#main-end': `\
+             vTimestamp = mix(instanceSourceTimestamp, instanceTargetTimestamp, segmentRatio);
+          `,
+          'fs:#decl': `\
+            uniform vec2 timeRange;
+            varying float vTimestamp;
+          `,
+          'fs:#main-start': `\
+            if (vTimestamp < timeRange.x || vTimestamp > timeRange.y) {
+              discard;
+            }
+          `,
+          'fs:DECKGL_FILTER_COLOR': `\
+            color.a *= (vTimestamp - timeRange.x) / (timeRange.y - timeRange.x);`
+        };
+          return shaders;
+      }
+
+      initializeState() {
+        super.initializeState();
+        this.getAttributeManager().addInstanced({
+          instanceSourceTimestamp: {
+            size: 1,
+            accessor: 'getSourceTimestamp'
+          },
+          instanceTargetTimestamp: {
+            size: 1,
+            accessor: 'getTargetTimestamp'
+          }
+        });
+      }
+
+      draw(params) {
+        params.uniforms = Object.assign({}, params.uniforms, {
+          timeRange: this.props.timeRange
+        });
+        super.draw(params);
+      }
+    }
+
+    AnimatedArcLayer.layerName = 'AnimatedArcLayer';
+    AnimatedArcLayer.defaultProps = {
+      getSourceTimestamp: {type: 'accessor', value: 0},
+      getTargetTimestamp: {type: 'accessor', value: 1},
+      timeRange: {type: 'array', compare: true, value: [0, 1]}
+    };
+
+    const INITIAL_VIEW_STATE = {
+      longitude: 0,
+      latitude: 20,
+      zoom: 0
+    };
+
+    const TIME_WINDOW = 900; // 15 minutes
+    const EARTH_RADIUS_METERS = 6.3e6;
+    const MIN_TIME = 5;
+    const MAX_TIME = 103289;
+    const SEC_PER_DAY = 60 * 60 * 24;
+
+    const ambientLight = new deck.AmbientLight({
+      color: [255, 255, 255],
+      intensity: 0.5
+    });
+
+    const sunLight = new deck._SunLight({
+      color: [255, 255, 255],
+      intensity: 2.0,
+      timestamp: 0
+    });
+
+    // create lighting effect with light sources
+    const lightingEffect = new deck.LightingEffect({ ambientLight, sunLight });
+
+    // Look up the real date time from our artifical timestamp
+    function getDate(t) {
+      const timestamp = new Date('2020-01-14T00:00:00Z').getTime() + (t % SEC_PER_DAY) * 1000;
+      return new Date(timestamp);
+    }
+
+    async function initialize() {
+      // Fetch Data from CARTO
+      const flightsQuery = 'SELECT time1, time2, lat1, lat2, lon1, lon2, alt1, alt2 FROM animated_deckgl_layer_flights';
+      const flightsUrl = `https://public.carto.com/api/v2/sql?q=${flightsQuery}&format=json`;
+      const jsonFlightsData = await fetch(flightsUrl).then(response => response.json());
+
+      const worldLandQuery = 'SELECT the_geom FROM ne_50m_land_world';
+      const worldLandUrl = `https://public.carto.com/api/v2/sql?q=${worldLandQuery}&format=geojson`;
+      const geoJsonWorldLandData = await fetch(worldLandUrl).then(response => response.json());
+
+      const backgroundLayers = [
+        new deck.SimpleMeshLayer({
+          id: 'earth-sphere',
+          data: [0],
+          mesh: new luma.SphereGeometry({ radius: EARTH_RADIUS_METERS, nlat: 18, nlong: 36 }),
+          coordinateSystem: deck.COORDINATE_SYSTEM.CARTESIAN,
+          getPosition: [0, 0, 0],
+          getColor: [255, 255, 255]
+        }),
+        new deck.GeoJsonLayer({
+          id: 'earth-land-layer',
+          data: geoJsonWorldLandData.features,
+          stroked: false,
+          filled: true,
+          opacity: 0.1,
+          getFillColor: [30, 80, 120]
+        })
+      ];
+
+      // Create Deck.GL map
+      const deckgl = new deck.DeckGL({
+        views: new deck._GlobeView(),
+        initialViewState: INITIAL_VIEW_STATE,
+        mapStyle: {
+          version: 8,
+          sources: {},
+          layers: [
+            {
+              id: 'background',
+              type: 'background',
+              paint: { 'background-color': '#111' }
+            }
+          ]
+        },
+        controller: true,
+        effects: [lightingEffect],
+        layers: [backgroundLayers]
+      });
+
+      let currentTime = 0;
+
+      setInterval(() => {
+        deckgl.setProps({
+          layers: [
+            ...backgroundLayers,
+            new AnimatedArcLayer({
+              id: 'flights-layer',
+              data: jsonFlightsData.rows,
+              visible: MIN_TIME < currentTime && MAX_TIME > currentTime + TIME_WINDOW,
+              getSourcePosition: d => [d.lon1, d.lat1, d.alt1],
+              getTargetPosition: d => [d.lon2, d.lat2, d.alt2],
+              getSourceTimestamp: d => d.time1,
+              getTargetTimestamp: d => d.time2,
+              getHeight: 0.5,
+              getWidth: 1,
+              timeRange: [currentTime, currentTime + TIME_WINDOW],
+              getSourceColor: [255, 0, 128],
+              getTargetColor: [0, 128, 255]
+            })
+          ]
+        });
+
+        currentTime = currentTime + 300;
+
+        if (currentTime >= MAX_TIME) {
+          currentTime = 0;
+        }
+
+        sunLight.timestamp = getDate(currentTime).getTime();
+      }, 50);
+    }
+
+    initialize();
+  </script>
+</html>

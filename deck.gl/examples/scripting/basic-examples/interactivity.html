@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <!-- FONT -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://unpkg.com/deck.gl@^8.4.0/dist.min.js"></script>
+    <script src="https://unpkg.com/@deck.gl/carto@^8.4.0/dist.min.js"></script>
+    
+    <script src="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.js"></script>
+    <link href="https://libs.cartocdn.com/mapbox-gl/v1.13.0/mapbox-gl.css" rel="stylesheet" />
+  </head>
+
+  <body style="margin: 0; padding: 0; font-family: 'Open Sans', sans-serif">
+    <div id="map" style="width: 100vw; height: 100vh;"></div>
+  </body>
+
+  <script type="text/javascript">
+    deck.carto.setDefaultCredentials({
+      username: 'public',
+      apiKey: 'default_public',
+    });
+
+    const deckgl = new deck.DeckGL({
+      container: 'map',
+      mapStyle: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+
+      initialViewState: {
+        latitude: 0,
+        longitude: 0,
+        zoom: 1,
+      },
+      controller: true,
+
+      layers: [
+        new deck.carto.CartoSQLLayer({
+          data: 'SELECT the_geom_webmercator, country_name FROM world_population_2015',
+          getFillColor: [238, 77, 90],
+          pointRadiusMinPixels: 4,
+          pickable: true,
+        }),
+      ],
+      getTooltip: ({ object }) =>
+        object && {
+          html: `
+            <strong>Country</strong>: ${object.properties.country_name}<br/>
+            <strong>Longitude</strong>: ${object.geometry.coordinates[0].toFixed(6)}<br/>
+            <strong>Latitude</strong>: ${object.geometry.coordinates[1].toFixed(6)}
+          `
+        },
+    });
+  </script>
+</html>
