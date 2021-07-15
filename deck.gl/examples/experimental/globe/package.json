@@ -1,0 +1,20 @@
+{
+  "name": "pure-js-carto",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack-dev-server --progress --hot --open",
+    "start-local": "webpack-dev-server --env.local --progress --hot --open",
+    "build": "webpack --env.production"
+  },
+  "dependencies": {
+    "@deck.gl/core": "^8.2.8",
+    "@deck.gl/layers": "^8.2.8"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^4.5.0",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.1"
+  }
+}
