@@ -1,0 +1,30 @@
+/**
+ *  AppHeader style file
+**/
+
+.header-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  background-color: #036fe2;;
+  padding: 0 1.5rem;
+
+  .title {
+    display: flex;
+    align-items: center;
+  }
+
+  h3 {
+    margin: 0 0.15rem;
+    color: #fff;
+
+    &:last-child {
+      font-weight: 300;
+    }
+  }
+
+  img {
+    height: 1.5rem;
+    margin-right: 1rem;
+  }
+}
