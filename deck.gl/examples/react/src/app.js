@@ -1,4 +1,4 @@
-import {CartoSQLLayer, setDefaultCredentials} from '@deck.gl/carto';
+import {CartoLayer, MAP_TYPES, setDefaultCredentials} from '@deck.gl/carto';
 import React, {useState} from 'react';
 import {render} from 'react-dom';
 import {StaticMap} from 'react-map-gl';
@@ -38,7 +38,8 @@ function getContinentCondition(continent) {
 export default function App() {
   const [continent, setContinent] = useState('All');
 
-  const layer = new CartoSQLLayer({
+  const layer = new CartoLayer({
+    type: MAP_TYPES.QUERY,
     data: `SELECT * FROM world_population_2015 ${getContinentCondition(continent)}`,
     pointRadiusMinPixels: 6,
     getLineColor: [0, 0, 0, 0.75],
