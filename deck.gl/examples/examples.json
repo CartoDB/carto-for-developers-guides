@@ -5,36 +5,23 @@
       "samples": [
         {
           "title": "Hello World",
-          "file": "scripting/hello-world.html"
+          "file": "scripting/basic-examples/hello-world.html"
         },
         {
           "title": "CartoBQTilerLayer",
-          "file": "scripting/bq-tiler-layer.html"
+          "file": "scripting/basic-examples/bigquery-tileset-layer.html"
         },
         {
           "title": "Basemaps",
-          "file": "scripting/carto-base-map.html"
+          "file": "scripting/basic-examples/carto-basemap.html"
         },
         {
           "title": "Interactivity",
-          "file": "scripting/interactivity.html"
-        }
-      ]
-    },
-    {
-      "title": "Styling",
-      "samples": [
-        {
-          "title": "Point Styles",
-          "file": "scripting/pointStyle.html"
-        },
-        {
-          "title": "Polygon Styles",
-          "file": "scripting/polygonStyle.html"
+          "file": "scripting/basic-examples/interactivity.html"
         },
         {
           "title": "Icon Layer",
-          "file": "scripting/icon-layer.html"
+          "file": "scripting/basic-examples/icon-layer.html"
         }
       ]
     }
