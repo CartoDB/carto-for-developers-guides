@@ -35,6 +35,7 @@ export default {
         lineWidthMinPixels: 2,
         autoHighlight: true,
         highlightColor: [0, 255, 0],
+        uniqueIdProperty: 'cartodb_id',
         getLineColor: colorContinuous({
           attr: 'scalerank',
           domain: [4, 5, 6, 7, 8, 9, 10],
@@ -52,7 +53,7 @@ export default {
         pointRadiusUnits: 'pixels',
         lineWidthUnits: 'pixels',
         pickable: true,
-        getRadius: 3,
+        getPointRadius: 3,
         autoHighlight: true,
         highlightColor: [0, 255, 0],
         getFillColor: colorCategories({
