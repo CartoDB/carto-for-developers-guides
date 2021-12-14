@@ -42,7 +42,7 @@ export class StoresLayer extends Layer {
       getLineColor: [0, 0, 0, 100],
       pointRadiusUnits: 'pixels',
       lineWidthUnits: 'pixels',
-      getRadius: 3,
+      getPointRadius: 3,
       autoHighlight: true,
       highlightColor: [0, 255, 0]
     });

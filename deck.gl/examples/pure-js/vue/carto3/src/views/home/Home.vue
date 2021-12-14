@@ -59,7 +59,7 @@ export default {
         pointRadiusUnits: 'pixels',
         lineWidthUnits: 'pixels',
         pickable: true,
-        getRadius: 3,
+        getPointRadius: 3,
         autoHighlight: true,
         highlightColor: [0, 255, 0],
         getFillColor: colorCategories({
