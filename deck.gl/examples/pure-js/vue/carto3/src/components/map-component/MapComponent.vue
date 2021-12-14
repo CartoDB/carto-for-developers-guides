@@ -41,9 +41,9 @@ export default {
         onViewStateChange: ({ viewState }) => {
           this[MUTATIONS.SET_VIEWSTATE](viewState)
         },
-        // onLoad: () => {
-        //   this[MUTATIONS.SET_MAP_LOADED](true)
-        // }
+        onLoad: () => {
+          this[MUTATIONS.SET_MAP_LOADED](true)
+        }
       })
     }
   }
