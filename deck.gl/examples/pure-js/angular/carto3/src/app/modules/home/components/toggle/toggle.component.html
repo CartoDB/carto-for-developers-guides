@@ -1,0 +1,23 @@
+<span class="title">Layers</span>
+
+<mat-slide-toggle
+    (change)="onVisibilityChange($event)"
+    [checked]="layersStatus[railRoadsLayer.id]"
+    name="sql">
+  Railroads
+</mat-slide-toggle>
+
+<mat-slide-toggle
+    (change)="onVisibilityChange($event)"
+    [checked]="layersStatus[buildingsLayer.id]"
+    name="bigquery">
+  Buildings
+</mat-slide-toggle>
+
+<mat-slide-toggle
+    (change)="onVisibilityChange($event)"
+    [checked]="layersStatus[storesLayer.id]"
+    name="geojson">
+  Stores
+</mat-slide-toggle>
+

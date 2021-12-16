@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "cartodb-fb-documentation"
+  },
+  "targets": {
+    "cartodb-fb-documentation": {
+      "hosting": {
+        "vue-carto": [
+          "vue-carto"
+        ]
+      }
+    }
+  }
+}
