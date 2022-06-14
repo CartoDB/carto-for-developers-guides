@@ -1,0 +1,55 @@
+{
+  "name": "deckgl-for-vue",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@deck.gl/carto": "8.7.10",
+    "@turf/bbox-polygon": "^6.3.0",
+    "@turf/boolean-intersects": "^6.3.0",
+    "core-js": "^3.6.5",
+    "deck.gl": "8.7.10",
+    "echarts": "^5.0.2",
+    "mapbox-gl": "1.13.0",
+    "vue": "^2.6.11",
+    "vue-echarts": "6.0.0-rc.4",
+    "vue-material": "^1.0.0-beta-15",
+    "vue-router": "^3.5.1",
+    "vuex": "^3.6.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/composition-api": "^1.0.0-rc.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "sass": "^1.32.8",
+    "sass-loader": "^10",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
