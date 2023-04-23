@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://app.carto.com/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://app.carto.com/favicon/favicon-16x16.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CARTO Auth SPA example</title>
+  </head>
+  <body>
+    <button id="login">Login</button>
+    <div id="loggedContainer">
+      <div id="profile"></div>
+      <div>
+        <span>OAuth AccessToken:</span>
+        <span id="accessToken"></span>
+        <button id="copyToClipboard">Copy</button>
+      </div>
+      <div>
+        <button id="requestSQLAPI">Request CARTO SQL API</button>
+        
+      </div>
+      <button id="logout">Logout</button>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

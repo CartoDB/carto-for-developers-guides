@@ -1,0 +1,18 @@
+{
+  "name": "carto-auth-spa",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --https",
+    "build": "vite build --https",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^4.3.0"
+  },
+  "dependencies": {
+    "@auth0/auth0-spa-js": "^2.0.4",
+    "@vitejs/plugin-basic-ssl": "^1.0.1"
+  }
+}
