@@ -14,9 +14,10 @@ const scopes = [
 let auth0Client, accessToken;
 
 async function initAuth() {
+  const clientId = import.meta.env.VITE_CLIENT_ID
   auth0Client = await createAuth0Client({
     domain: 'auth.carto.com',
-    clientId: 'IgDNU5b3cLr22ZWhDG5QpUBMMJoq8lfG',
+    clientId,
     authorizationParams: {
       redirect_uri: window.location.origin,
       scopes: scopes.join(' '),
