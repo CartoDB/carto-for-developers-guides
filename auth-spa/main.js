@@ -1,5 +1,8 @@
 import { createAuth0Client } from '@auth0/auth0-spa-js';
 import { executeRequest } from './api.js';
+import { createMap } from './map.js';
+import './styles.css'
+
 const scopes = [
   'read:current_user',
   'update:current_user',
@@ -33,10 +36,10 @@ async function initAuth() {
   }
 
   const isAuthenticated = await auth0Client.isAuthenticated();
-  const loggedContainer = document.getElementById('loggedContainer');
-  loggedContainer.style.display = isAuthenticated ? 'block' : 'none';
+  const appEl = document.getElementById('app');
 
   if (isAuthenticated) {
+    appEl.classList.add('isAuthenticated');
     const userProfile = await auth0Client.getUser();
     accessToken = await auth0Client.getTokenSilently();
 
@@ -48,9 +51,8 @@ async function initAuth() {
     
     const accessTokenEl = document.getElementById('accessToken');
     accessTokenEl.innerHTML = `${accessToken.substring(0, 10)}...`;
-   
-    const loginEl = document.getElementById('login');
-    loginEl.style.display = 'none';
+  } else {
+    appEl.classList.remove('isAuthenticated');
   }
 }
 
@@ -75,12 +77,18 @@ copyToClipboardButton.addEventListener('click', (e) => {
   navigator.clipboard.writeText(accessToken);
 });
 
-// Request to clipboard
-const copyRequestutton = document.getElementById('requestSQLAPI');
-copyRequestutton.addEventListener('click', (e) => {
+// Request API using the token
+const requestAPIButton = document.getElementById('requestAPI');
+requestAPIButton.addEventListener('click', (e) => {
   e.preventDefault();
-  executeRequest(accessToken);
+  executeRequest(accessToken)
 });
 
+// Create Map with deck.gl using the token
+const createMapButton = document.getElementById('createMap');
+createMapButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  createMap(accessToken);
+});
 
 initAuth()

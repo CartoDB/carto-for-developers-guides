@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^2.0.4",
-    "@vitejs/plugin-basic-ssl": "^1.0.1"
+    "@deck.gl/carto": "^8.9.9",
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
+    "maplibre-gl": "^2.4.0"
   }
 }
