@@ -12,8 +12,9 @@ export function createMap(accessToken) {
     pitch: 30
   };
 
+  const ACCOUNT_REGION_API_BASE = 'https://gcp-us-east1.api.carto.com'
   setDefaultCredentials({
-    apiBaseUrl: 'https://gcp-us-east1.api.carto.com',
+    apiBaseUrl: ACCOUNT_REGION_API_BASE,
     accessToken
   })
 
