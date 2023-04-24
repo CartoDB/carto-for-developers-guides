@@ -185,6 +185,18 @@ sections
   border-radius: 4px;
 }
 
+/* copy-to-clipboard */
+.copy-to-clipboard p {
+  margin: 0;
+}
+.copy-to-clipboard .copied-text,
+.copy-to-clipboard .isSuccess .copy-text {
+  display: none;
+}
+.copy-to-clipboard .isSuccess .copied-text {
+  display: inline-block;
+}
+
 /************************* 
 logged out
 *************************/

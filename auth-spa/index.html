@@ -41,22 +41,23 @@
         <div class="container">
           <div class="sidebar">
             <div class="sidebar__item sidebar__item--highlight">
-              <div class="tag">
-                <strong>OAuth AccessToken:</strong>
+              <div class="tag copy-to-clipboard">
+                <p>OAuth AccessToken:</p>
                 <span id="accessToken"></span>
                 <button id="copyToClipboard" class="button button--link">
-                  Copy
+                  <span class="copy-text"> Copy </span>
+                  <span class="copied-text"> Text copied </span>
                 </button>
               </div>
             </div>
 
             <div class="sidebar__item">
               <div class="list">
-                <button id="requestAPI" class="button button--primary">
-                  Request CARTO SQL API
-                </button>
                 <button id="createMap" class="button button--primary">
                   Create Map
+                </button>
+                <button id="requestAPI" class="button button--primary">
+                  Request CARTO SQL API
                 </button>
               </div>
             </div>
