@@ -71,17 +71,37 @@ loginButton.addEventListener('click', (e) => {
 });
 
 // Copy to clipboard
-const copyToClipboardButton = document.getElementById('copyToClipboard');
+const copyToClipboardButton = document.getElementById('copyToClipboardButton');
+const copyToClipboardWrapper = document.getElementById('copyToClipboard');
+function showSuccessText(element) {
+  element.classList.add('isSuccess');
+  setTimeout(function () {
+    element.classList.remove('isSuccess');
+  }, 1500);
+}
 copyToClipboardButton.addEventListener('click', (e) => {
   e.preventDefault();
   navigator.clipboard.writeText(accessToken);
+  showSuccessText(copyToClipboardWrapper);
 });
 
 // Request API using the token
 const requestAPIButton = document.getElementById('requestAPI');
+const alertEl = document.getElementById('alertContainer');
 requestAPIButton.addEventListener('click', (e) => {
   e.preventDefault();
-  executeRequest(accessToken)
+  executeRequest(accessToken).then(
+      setTimeout(function () {
+        alertEl.classList.add('isVisible');
+      }, 1000)
+    )
+});
+
+// Close request API alert
+const alertButtonEl = document.getElementById('alertClose');
+alertButtonEl.addEventListener('click', (e) => {
+  e.preventDefault();
+  alertEl.classList.remove('isVisible');
 });
 
 // Create Map with deck.gl using the token
@@ -89,6 +109,7 @@ const createMapButton = document.getElementById('createMap');
 createMapButton.addEventListener('click', (e) => {
   e.preventDefault();
   createMap(accessToken);
+  createMapButton.classList.add("button--disabled");
 });
 
 initAuth()
