@@ -1,4 +1,4 @@
-# CARTO AUTH SPA example
+# CARTO AUTH SPA example
 
 CARTO Single Page Application (SPA) example that shows how to get a CARTO OAuth Token in a SPA.
 
