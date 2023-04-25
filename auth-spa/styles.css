@@ -7,8 +7,10 @@ Vars
   --text-color: #2c3032;
   --textContrast-color: #ffffff;
   --textAlert-color: #435f11;
+  --textDisabled-color: rgba(44, 48, 50, 0.25);
   --brand-color: #162945;
   --background-color: #f8f9f9;
+  --backgroundDisabled-color: #e1e3e4;
   --backgroundAlert-color: #709f1d17;
   --borderAlert-color: #709f1d;
   --divider-color: rgba(44, 48, 50, 0.12);
@@ -77,6 +79,11 @@ Components
   color: var(--textContrast-color);
   background-color: transparent;
   border-color: var(--textContrast-color);
+}
+.button--disabled {
+  pointer-events: none;
+  color: var(--textDisabled-color);
+  background-color: var(--backgroundDisabled-color);
 }
 
 /* Tag */

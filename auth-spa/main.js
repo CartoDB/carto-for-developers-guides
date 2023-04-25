@@ -108,6 +108,7 @@ const createMapButton = document.getElementById('createMap');
 createMapButton.addEventListener('click', (e) => {
   e.preventDefault();
   createMap(accessToken);
+  createMapButton.classList.add("button--disabled");
 });
 
 initAuth()
