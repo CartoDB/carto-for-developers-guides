@@ -89,7 +89,7 @@ Components
 .tag__title {
   margin: 0;
 }
-.tag__link {
+.tag__button {
   min-width: auto;
   padding: 0;
   font-size: inherit;
@@ -210,6 +210,7 @@ Sections
   max-height: 100%;
 }
 
+/* Map legend fix */
 .maplibregl-ctrl-bottom-right.mapboxgl-ctrl-bottom-right {
   padding: 0 8px;
   font-size: 0.6rem;
