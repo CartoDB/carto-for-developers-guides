@@ -3,11 +3,14 @@ vars
 *************************/
 :root {
   --primary-color: #036fe2;
-  --secondary-color: #47db99;
+  --secondary-color: #6be2ad;
   --text-color: #2c3032;
   --textContrast-color: #ffffff;
+  --textAlert-color: #435f11;
   --brand-color: #162945;
   --background-color: #f8f9f9;
+  --backgroundAlert-color: #709f1d17;
+  --borderAlert-color: #709f1d;
   --divider-color: rgba(44, 48, 50, 0.12);
 }
 
@@ -80,6 +83,13 @@ components
   background-color: transparent;
   border-color: var(--textContrast-color);
 }
+.button--alert {
+  height: 24px;
+  padding: 0 8px;
+  color: var(--textAlert-color);
+  background-color: transparent;
+  border-color: var(--borderAlert-color);
+}
 .button--link {
   min-width: auto;
   padding: 0;
@@ -93,6 +103,19 @@ components
   border: 1px solid var(--divider-color);
   border-radius: 4px;
   font-size: 0.8125rem;
+}
+
+.alert {
+  padding: 16px;
+  margin: 16px 0;
+  color: var(--textAlert-color);
+  font-size: 0.8125rem;
+  background-color: var(--backgroundAlert-color);
+  border: 1px solid var(--borderAlert-color);
+  border-radius: 4px;
+}
+.alert p {
+  margin: 0 0 16px;
 }
 
 .list {
@@ -160,6 +183,14 @@ sections
   margin-bottom: 16px;
 }
 
+/* Request SQL button Alert */
+#alertContainer {
+  display: none;
+}
+.isVisible#alertContainer {
+  display: block;
+}
+
 /* Content */
 .content {
   flex: 1 1 0%;
@@ -185,7 +216,7 @@ sections
   border-radius: 4px;
 }
 
-/* copy-to-clipboard */
+/* Copy to clipboard */
 .copy-to-clipboard p {
   margin: 0;
 }

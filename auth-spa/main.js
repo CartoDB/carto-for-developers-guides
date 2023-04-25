@@ -86,9 +86,20 @@ copyToClipboardButton.addEventListener('click', (e) => {
 
 // Request API using the token
 const requestAPIButton = document.getElementById('requestAPI');
+const alertEl = document.getElementById('alertContainer');
 requestAPIButton.addEventListener('click', (e) => {
   e.preventDefault();
-  executeRequest(accessToken)
+  executeRequest(accessToken).then(
+      setTimeout(function () {
+        alertEl.classList.add('isVisible');
+      }, 1000)
+    )
+});
+
+// Close request API alert
+const alertButtonEl = document.getElementById('alert-close');
+alertButtonEl.addEventListener('click', (e) => {
+  alertEl.classList.remove('isVisible');
 });
 
 // Create Map with deck.gl using the token
