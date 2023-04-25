@@ -100,6 +100,7 @@ requestAPIButton.addEventListener('click', (e) => {
 // Close request API alert
 const alertButtonEl = document.getElementById('alertClose');
 alertButtonEl.addEventListener('click', (e) => {
+  e.preventDefault();
   alertEl.classList.remove('isVisible');
 });
 
