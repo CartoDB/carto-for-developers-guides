@@ -1,5 +1,5 @@
 /************************* 
-vars 
+Vars 
 *************************/
 :root {
   --primary-color: #036fe2;
@@ -15,7 +15,7 @@ vars
 }
 
 /************************* 
-common
+Common
 *************************/
 body,
 html {
@@ -45,8 +45,10 @@ a {
 }
 
 /************************* 
-components 
+Components 
 *************************/
+
+/* Buttons */
 .button {
   -webkit-tap-highlight-color: transparent;
   outline: 0;
@@ -67,13 +69,6 @@ components
   border-radius: 4px;
   border: 1px solid transparent;
 }
-.button--main {
-  height: 48px;
-  padding: 0 20px;
-  font-size: 1.07rem;
-  color: var(--text-color);
-  background-color: var(--secondary-color);
-}
 .button--primary {
   color: var(--textContrast-color);
   background-color: var(--primary-color);
@@ -83,14 +78,18 @@ components
   background-color: transparent;
   border-color: var(--textContrast-color);
 }
-.button--alert {
-  height: 24px;
-  padding: 0 8px;
-  color: var(--textAlert-color);
-  background-color: transparent;
-  border-color: var(--borderAlert-color);
+
+/* Tag */
+.tag {
+  padding: 8px 16px;
+  border: 1px solid var(--divider-color);
+  border-radius: 4px;
+  font-size: 0.8125rem;
 }
-.button--link {
+.tag__title {
+  margin: 0;
+}
+.tag__link {
   min-width: auto;
   padding: 0;
   font-size: inherit;
@@ -98,13 +97,7 @@ components
   background-color: transparent;
 }
 
-.tag {
-  padding: 8px 16px;
-  border: 1px solid var(--divider-color);
-  border-radius: 4px;
-  font-size: 0.8125rem;
-}
-
+/* Alert */
 .alert {
   padding: 16px;
   margin: 16px 0;
@@ -114,10 +107,18 @@ components
   border: 1px solid var(--borderAlert-color);
   border-radius: 4px;
 }
-.alert p {
+.alert__text {
   margin: 0 0 16px;
 }
+.alert__button {
+  height: 24px;
+  padding: 0 8px;
+  color: var(--textAlert-color);
+  background-color: transparent;
+  border-color: var(--borderAlert-color);
+}
 
+/* List */
 .list {
   display: flex;
   flex-direction: column;
@@ -125,9 +126,9 @@ components
 }
 
 /************************* 
-sections 
+Sections 
 *************************/
-#app {
+.root {
   flex: 1 1 auto;
   min-height: 100vh;
   display: flex;
@@ -135,19 +136,22 @@ sections
 }
 
 /* Header */
-.appBar {
+.header {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
+  justify-content: space-between;
   height: 48px;
-  padding: 0 8px;
+  padding: 0 16px;
   background-color: var(--brand-color);
   color: var(--textContrast-color);
 }
+.header__info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-/* profile */
+/* Profile */
 .profile {
   display: flex;
   align-items: center;
@@ -161,10 +165,9 @@ sections
   border-radius: 50%;
 }
 
-/* page content */
+/* Page content */
 .container {
   display: flex;
-  flex-direction: row;
   flex: 1;
 }
 
@@ -183,7 +186,7 @@ sections
   margin-bottom: 16px;
 }
 
-/* Request SQL button Alert */
+/* Request SQL button alert */
 #alertContainer {
   display: none;
 }
@@ -217,52 +220,59 @@ sections
 }
 
 /* Copy to clipboard */
-.copy-to-clipboard p {
-  margin: 0;
-}
-.copy-to-clipboard .copied-text,
-.copy-to-clipboard .isSuccess .copy-text {
+#copyToClipboard .copied-text,
+#copyToClipboard.isSuccess .copy-text {
   display: none;
 }
-.copy-to-clipboard .isSuccess .copied-text {
+#copyToClipboard.isSuccess .copied-text {
   display: inline-block;
 }
 
 /************************* 
-logged out
+Logged out
 *************************/
-#loggedOutContainer {
+#loggedContainer {
+  display: none;
+}
+
+.login {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   flex: 1 1 auto;
+  position: relative;
   width: 100%;
   height: 100%;
   background-color: var(--primary-color);
 }
-
-#loggedContainer,
-#logout {
-  display: none;
+.login__logo {
+  position: absolute;
+  top: 48px;
+}
+.login__button {
+  height: 48px;
+  padding: 0 20px;
+  font-size: 1.07rem;
+  color: var(--text-color);
+  background-color: var(--secondary-color);
 }
 
 /************************* 
-logged in 
+Logged in 
 *************************/
-.isAuthenticated #logout {
-  display: block;
-}
 .isAuthenticated #loggedContainer {
   display: flex;
+}
+.isAuthenticated #loggedOutContainer {
+  display: none;
+}
+
+.logged-in {
   flex-direction: column;
   flex: 1 1 auto;
   flex-wrap: wrap;
   width: 100%;
   height: 100%;
-}
-
-.isAuthenticated #loggedOutContainer {
-  display: none;
 }

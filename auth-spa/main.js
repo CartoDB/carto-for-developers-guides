@@ -71,7 +71,8 @@ loginButton.addEventListener('click', (e) => {
 });
 
 // Copy to clipboard
-const copyToClipboardButton = document.getElementById('copyToClipboard');
+const copyToClipboardButton = document.getElementById('copyToClipboardButton');
+const copyToClipboardWrapper = document.getElementById('copyToClipboard');
 function showSuccessText(element) {
   element.classList.add('isSuccess');
   setTimeout(function () {
@@ -81,7 +82,7 @@ function showSuccessText(element) {
 copyToClipboardButton.addEventListener('click', (e) => {
   e.preventDefault();
   navigator.clipboard.writeText(accessToken);
-  showSuccessText(copyToClipboardButton);
+  showSuccessText(copyToClipboardWrapper);
 });
 
 // Request API using the token
@@ -97,7 +98,7 @@ requestAPIButton.addEventListener('click', (e) => {
 });
 
 // Close request API alert
-const alertButtonEl = document.getElementById('alert-close');
+const alertButtonEl = document.getElementById('alertClose');
 alertButtonEl.addEventListener('click', (e) => {
   alertEl.classList.remove('isVisible');
 });

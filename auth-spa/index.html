@@ -26,25 +26,34 @@
     <title>CARTO Auth SPA example</title>
   </head>
   <body>
-    <div id="app">
-      <div id="loggedOutContainer">
-        <button id="login" class="button button--main">Login</button>
+    <div id="app" class="root">
+      <div id="loggedOutContainer" class="login">
+        <img
+          src="carto-logo.svg"
+          loading="lazy"
+          height="48"
+          alt="CARTO"
+          class="login__logo"
+        />
+        <button id="login" class="button login__button">Login</button>
       </div>
 
-      <div id="loggedContainer">
-        <div class="appBar">
-          <div id="profile" class="profile"></div>
-
-          <button id="logout" class="button button--secondary">Logout</button>
-        </div>
+      <div id="loggedContainer" class="logged-in">
+        <header class="header">
+          <img src="carto-logo.svg" loading="lazy" height="32" alt="CARTO" />
+          <div class="header__info">
+            <div id="profile" class="profile"></div>
+            <button id="logout" class="button button--secondary">Logout</button>
+          </div>
+        </header>
 
         <div class="container">
           <div class="sidebar">
-            <div class="sidebar__item sidebar__item--highlight">
-              <div class="tag copy-to-clipboard">
-                <p>OAuth AccessToken:</p>
+            <div class="sidebar__item">
+              <div id="copyToClipboard" class="tag">
+                <p class="tag__title">OAuth AccessToken:</p>
                 <span id="accessToken"></span>
-                <button id="copyToClipboard" class="button button--link">
+                <button id="copyToClipboardButton" class="button tag__link">
                   <span class="copy-text"> Copy </span>
                   <span class="copied-text"> Text copied </span>
                 </button>
@@ -62,11 +71,11 @@
               </div>
               <div id="alertContainer">
                 <div class="alert">
-                  <p>
+                  <p class="alert__text">
                     The request has been processed, you can check the results in
                     the console
                   </p>
-                  <button id="alert-close" class="button button--alert">
+                  <button id="alertClose" class="button alert__button">
                     Close
                   </button>
                 </div>
