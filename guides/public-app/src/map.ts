@@ -7,12 +7,9 @@ import {
   MAP_TYPES
 } from '@deck.gl/carto/typed';
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const accessToken = import.meta.env.VITE_API_ACCESS_TOKEN
-setDefaultCredentials({
-  // API Base URL (copy this from CARTO Workspace -> Developers)
-  apiBaseUrl: 'https://gcp-us-east1.api.carto.com',
-  accessToken
-})
+setDefaultCredentials({ apiBaseUrl, accessToken })
 
 export function createMap() {
   const INITIAL_VIEW_STATE = {
