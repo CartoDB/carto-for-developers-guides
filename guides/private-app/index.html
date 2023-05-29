@@ -20,74 +20,10 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link href="./styles.css" rel="stylesheet" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CARTO Auth SPA example</title>
-  </head>
+    <title>CARTO guide public app</title>
   <body>
-    <div id="app" class="root">
-      <div id="loggedOutContainer" class="login">
-        <img
-          src="carto-logo.svg"
-          loading="lazy"
-          height="48"
-          alt="CARTO"
-          class="login__logo"
-        />
-        <button id="login" class="button login__button">Login</button>
-      </div>
-
-      <div id="loggedContainer" class="logged-in">
-        <header class="header">
-          <img src="carto-logo.svg" loading="lazy" height="32" alt="CARTO" />
-          <div class="header__info">
-            <div id="profile" class="profile"></div>
-            <button id="logout" class="button button--secondary">Logout</button>
-          </div>
-        </header>
-
-        <div class="container">
-          <div class="sidebar">
-            <div class="sidebar__item">
-              <div id="copyToClipboard" class="tag">
-                <p class="tag__title">OAuth AccessToken:</p>
-                <span id="accessToken"></span>
-                <button id="copyToClipboardButton" class="button tag__button">
-                  <span class="copy-text"> Copy </span>
-                  <span class="copied-text"> Text copied </span>
-                </button>
-              </div>
-            </div>
-
-            <div class="sidebar__item">
-              <div class="list">
-                <button id="createMap" class="button button--primary">
-                  Create Map
-                </button>
-                <button id="requestAPI" class="button button--primary">
-                  Request CARTO SQL API
-                </button>
-              </div>
-              <div id="alertContainer" class="alert">
-                <p class="alert__text">
-                  The request has been processed, you can check the results in
-                  the console
-                </p>
-                <button id="alertClose" class="button alert__button">
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="content">
-            <div id="map"></div>
-            <canvas id="deck-canvas"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script type="module" src="/main.js"></script>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

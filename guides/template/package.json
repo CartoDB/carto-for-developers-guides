@@ -1,11 +1,11 @@
 {
-  "name": "public-app",
+  "name": "carto-app-template",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "vite --https",
+    "build": "tsc && vite build --https",
     "preview": "vite preview"
   },
   "devDependencies": {
@@ -15,6 +15,7 @@
   "dependencies": {
     "@deck.gl/carto": "^8.9.16",
     "@deck.gl/core": "^8.9.16",
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
     "maplibre-gl": "^3.0.0"
   }
 }
