@@ -1,16 +1,5 @@
 import { Auth0Client, createAuth0Client } from '@auth0/auth0-spa-js';
 
-const scopes = [
-  'read:current_user',
-  'update:current_user',
-  'read:connections',
-  'write:connections',
-  'read:maps',
-  'write:maps',
-  'read:account',
-  'admin:account',
-]
-
 let auth0Client: Auth0Client
 
 export async function initAuth() {
@@ -22,7 +11,6 @@ export async function initAuth() {
     clientId,
     authorizationParams: {
       redirect_uri: window.location.origin,
-      scopes: scopes.join(' '),
       audience: 'carto-cloud-native-api'
     }
   })
