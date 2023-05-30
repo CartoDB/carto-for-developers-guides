@@ -21,7 +21,7 @@
       rel="stylesheet"
     />
 
-    <link href="./src/style.css" rel="stylesheet" />
+    <link href="./static/style.css" rel="stylesheet" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CARTO Guide Private App</title>
@@ -31,7 +31,7 @@
     <div id="app" class="root">
       <div id="loggedOutContainer" class="login">
         <img
-          src="carto-logo.svg"
+          src="./static/carto-logo.svg"
           loading="lazy"
           height="48"
           alt="CARTO"
@@ -42,7 +42,12 @@
 
       <div id="loggedContainer" class="logged-in">
         <header class="header">
-          <img src="carto-logo.svg" loading="lazy" height="32" alt="CARTO" />
+          <img
+            src="./static/carto-logo.svg"
+            loading="lazy"
+            height="32"
+            alt="CARTO"
+          />
           <div class="header__info">
             <div id="profile" class="profile"></div>
             <button id="logout" class="button">Logout</button>
