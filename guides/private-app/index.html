@@ -20,10 +20,42 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+
+    <link href="./src/style.css" rel="stylesheet" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CARTO Guide Private App</title>
+  </head>
+
   <body>
-    <div id="app"></div>
+    <div id="app" class="root">
+      <div id="loggedOutContainer" class="login">
+        <img
+          src="carto-logo.svg"
+          loading="lazy"
+          height="48"
+          alt="CARTO"
+          class="login__logo"
+        />
+        <button id="login" class="button login__button">Login</button>
+      </div>
+
+      <div id="loggedContainer" class="logged-in">
+        <header class="header">
+          <img src="carto-logo.svg" loading="lazy" height="32" alt="CARTO" />
+          <div class="header__info">
+            <div id="profile" class="profile"></div>
+            <button id="logout" class="button">Logout</button>
+          </div>
+        </header>
+
+        <div class="content">
+          <div id="map"></div>
+          <canvas id="deck-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
