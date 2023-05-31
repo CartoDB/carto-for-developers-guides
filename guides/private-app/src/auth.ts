@@ -34,7 +34,7 @@ export async function initAuth() {
     if (userProfile) {
       const profileEl = document.getElementById('profile')!;
       profileEl.innerHTML = `
-            <p>${userProfile.name}</p>
+            <span>${userProfile.name}</span>
             <img width="50px" height="50px" src='${userProfile.picture}' />
           `;
     }
