@@ -8,8 +8,8 @@ import {
 } from '@deck.gl/carto/typed';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const accessToken = import.meta.env.VITE_API_ACCESS_TOKEN
-setDefaultCredentials({ apiBaseUrl, accessToken })
+const accessToken = import.meta.env.VITE_API_ACCESS_TOKEN;
+setDefaultCredentials({ apiBaseUrl, accessToken });
 
 export function createMap() {
   const INITIAL_VIEW_STATE = {

@@ -1,6 +1,6 @@
 # Private App Sample
 
-Sample Application to showcase how to build a private app in CARTO (using a login with email and password). It uses Vanilla Javascript and Vite.
+Sample Application to showcase how to build a private app in CARTO (using a login with email and password). It uses Vanilla Javascript and [Vite](https://vitejs.dev/guide/).
 
 For more info visit the [Build a private application](https://docs.carto.com/carto-for-developers/overview) guide. 
 
