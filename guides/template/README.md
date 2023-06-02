@@ -1,6 +1,6 @@
 # CARTO App Template
 
-Vanilla Javascript + Vite template to create a Web Application in CARTO.
+Vanilla Javascript + [Vite](https://vitejs.dev/guide/) template to create a Web Application in CARTO.
 
 ### Start instructions
 
