@@ -1,0 +1,45 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: fixed;
+  width: 100%;
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+input {
+  width: 250px;
+}
+
+#app {
+  flex: 1 1 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#map, canvas{
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.layout {
+  width: 1366px;
+  height: 768px;
+
+  display: grid;
+  grid:
+    "header" auto
+    "main" 1fr
+    / 1fr;
+  gap: 8px;
+}
+
+.header { grid-area: header; margin: 10px; }
+.main { grid-area: main; }
