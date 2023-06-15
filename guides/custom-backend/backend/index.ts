@@ -7,7 +7,7 @@ dotenv.config()
 
 const app: Express = express()
 const port = process.env.PORT || 8000
-const jwtSecret = process.env.CARTO_BASE_URL as string
+const jwtSecret = process.env.JWT_SECRET as string
 
 app.use(express.json())
 app.use(cors())
@@ -26,9 +26,8 @@ export interface CartoTokenResponseBody {
   city: string
 }
 
-// This endpoint simulate a login system. It checks the credentials and returns a valid token
-// to query the tables for the city of the user. In addition, in case the user is an admin,
-// the token will be created with permission for a sociodemographic tileset.
+// This endpoint simulate a login system. It checks the credentials and returns a JWT token
+// with the user group as a claim.
 app.post('/login', async (req: Request, res: Response) => {
   const login = req.body as LoginRequestBody
   if (notCheckCredentials(login)) {
@@ -42,6 +41,8 @@ app.post('/login', async (req: Request, res: Response) => {
   res.send(loginResponse)
 })
 
+// This endpoint returns a Carto token for the user group. The token will be used
+// to query the tables for the city of the user.
 app.post('/carto-token', async (req: Request, res: Response) => {
   try {
     // Get the token from the Authorization header with Bearer prefix
@@ -49,7 +50,6 @@ app.post('/carto-token', async (req: Request, res: Response) => {
     const loginToken = authHeader.replace('Bearer ', '')
 
     // Decode the token to get the group
-    const jwtSecret = process.env.CARTO_BASE_URL as string
     const tokenGroup = jwt.verify(loginToken, jwtSecret) as { group: string }
     const token = await getTokenForGroup(tokenGroup.group)
     const response = { token, city: tokenGroup.group } as LoginResponseBody
@@ -89,8 +89,6 @@ async function getTokenForGroup(city: string): Promise<string> {
   const clientSecret = process.env.CARTO_CLIENT_SECRET
 
   // First get the access token by using the clientId and clientSecret.
-  // NOTE: This token has a limit based on quota. For a production environment,
-  // you should implement a cache mechanism to reuse the token.
   const accessTokenResponse = await fetch('https://auth.carto.com/oauth/token', {
     method: 'POST',
     headers: {
@@ -114,8 +112,6 @@ async function getTokenForGroup(city: string): Promise<string> {
   ]
 
   // Finally, get the access API token by using the previous access token.
-  // NOTE: This token has a limit based on quota. For a production environment,
-  // you should implement a cache mechanism to reuse the token.
   const accessApiTokenResponse = await fetch(`${cartoBaseUrl}/v3/tokens`, {
     method: 'POST',
     headers: {
