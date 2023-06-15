@@ -1,7 +1,7 @@
 import "./style.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { createMap, initMap } from "./map";
-import logo from "../static/carto-logo.svg";
+import logo from "../static/acme-logo.svg";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div class="container">
@@ -10,7 +10,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
         src=${logo}
         loading="lazy"
         height="32"
-        alt="CARTO"
+        alt="ACME"
       />
       <div class="header__info" id="login-container"></div>
     </header>
@@ -41,6 +41,7 @@ async function login() {
   const password = (
     document.querySelector('input[name="password"]') as HTMLInputElement
   ).value;
+
   const loginResp = await fetch("http://localhost:8000/login", {
     method: "POST",
     headers: {
@@ -48,10 +49,23 @@ async function login() {
     },
     body: JSON.stringify({ username, password }),
   });
-  const { token, city, isAdmin, error } = await loginResp.json();
 
+  const { token, error } = await loginResp.json();
   if (error) {
     alert(error);
+    return;
+  }
+  const tokenResp = await fetch("http://localhost:8000/carto-token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token,
+    },
+  });
+
+  const { token: cartoToken, city, error: tokenError } = await tokenResp.json();
+  if (tokenError) {
+    alert(tokenError);
     return;
   }
 
@@ -63,7 +77,7 @@ async function login() {
   `;
   document.getElementById("logout")?.addEventListener("click", initLogin);
 
-  createMap(city, token, isAdmin);
+  createMap(city, cartoToken);
 }
 
 function initLogin() {

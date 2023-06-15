@@ -51,12 +51,11 @@ export function initMap() {
    setLayer([]);
 }
 
-export function createMap(city: string, token: string, isAdmin: boolean) {
+export function createMap(city: string, token: string) {
     setDefaultCredentials({
         apiBaseUrl: 'PUT_YOUR_API_BASE_URL_HERE',
         accessToken: token
     })
-    const layers = []
     const retailLayer = new CartoLayer({
         id: 'retails',
         connection: 'carto_dw',
@@ -65,24 +64,6 @@ export function createMap(city: string, token: string, isAdmin: boolean) {
         pointRadiusMinPixels: 4,
         getFillColor: [200, 0, 80],
     })
-    layers.push(retailLayer)
 
-    if (isAdmin) {
-        const sociodemoLayer = new CartoLayer({
-            id: 'sociodemo',
-            connection: 'carto_dw',
-            type: MAP_TYPES.TILESET,
-            data: `carto-demo-data.demo_tilesets.sociodemographics_usa_blockgroup`,
-            getFillColor: colorBins({
-                attr: "total_pop",
-                domain: [10, 1e2, 1e3, 1e4, 1e5, 1e6],
-                colors: "Temps"
-              }),
-            pointRadiusMinPixels: 2,
-            stroked: false
-        })
-        layers.unshift(sociodemoLayer)
-    }
-
-    setLayer(layers)
+    setLayer([retailLayer])
 }

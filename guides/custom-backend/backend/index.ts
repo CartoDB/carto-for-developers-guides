@@ -1,11 +1,13 @@
 import express, { Express, Request, Response } from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import jwt from 'jsonwebtoken'
 
 dotenv.config()
 
 const app: Express = express()
 const port = process.env.PORT || 8000
+const jwtSecret = process.env.CARTO_BASE_URL as string
 
 app.use(express.json())
 app.use(cors())
@@ -17,8 +19,11 @@ export interface LoginRequestBody {
 
 export interface LoginResponseBody {
   token: string
+}
+
+export interface CartoTokenResponseBody {
+  token: string
   city: string
-  isAdmin: boolean
 }
 
 // This endpoint simulate a login system. It checks the credentials and returns a valid token
@@ -31,15 +36,27 @@ app.post('/login', async (req: Request, res: Response) => {
     return
   }
 
-  const { city, isAdmin } = getPartsFromUsername(login.username)
-  
+  const group = getGroupFromUsername(login.username)
+  const loginToken = jwt.sign({ group }, jwtSecret, { expiresIn: '1h' })
+  const loginResponse = { token: loginToken } as LoginResponseBody
+  res.send(loginResponse)
+})
+
+app.post('/carto-token', async (req: Request, res: Response) => {
   try {
-    const token = await getTokenForCity(city, isAdmin)
-    const response = { token, city, isAdmin } as LoginResponseBody
+    // Get the token from the Authorization header with Bearer prefix
+    const authHeader = req.headers.authorization as string
+    const loginToken = authHeader.replace('Bearer ', '')
+
+    // Decode the token to get the group
+    const jwtSecret = process.env.CARTO_BASE_URL as string
+    const tokenGroup = jwt.verify(loginToken, jwtSecret) as { group: string }
+    const token = await getTokenForGroup(tokenGroup.group)
+    const response = { token, city: tokenGroup.group } as LoginResponseBody
     res.send(response)
   } catch (error) {
     console.log(error)
-    res.status(401).send({ 'error': 'Invalid credentials' })
+    res.status(401).send({ 'error': 'Invalid token' })
   }
 
 })
@@ -48,18 +65,17 @@ app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`)
 })
 
-function getPartsFromUsername(username: string) {
+function getGroupFromUsername(username: string) {
   const userPart = username.toLowerCase().split('@')[0]
   const city = userPart.split('.')[1].replace('-', ' ').toUpperCase() // new-york -> NEW YORK
-  const isAdmin = userPart.split('.')[2] === 'admin'
 
-  return { city, isAdmin }
+  return city
 }
 
 function notCheckCredentials(login: LoginRequestBody): boolean {
-  // username has the format 'user.city@domain.com' or 'user.city.admin@domain.com' 
+  // username has the format 'user.city@domain.com'
   // and password should be like 'user1234'
-  const usernameRegexp = /^[a-z]+\.[a-z]+[\W]?[a-z]*(\.admin)?@[a-z]+\.[a-z]+$/
+  const usernameRegexp = /^[a-z]+\.[a-z]+[\W]?[a-z]*@[a-z]+\.[a-z]+$/
   if (!usernameRegexp.test(login.username)) {
     return true
   }
@@ -67,7 +83,7 @@ function notCheckCredentials(login: LoginRequestBody): boolean {
   return login.password !== `${user}1234`
 }
 
-async function getTokenForCity(city: string, isAdmin: boolean): Promise<string> {
+async function getTokenForGroup(city: string): Promise<string> {
   const cartoBaseUrl = process.env.CARTO_BASE_URL
   const clientId = process.env.CARTO_CLIENT_ID
   const clientSecret = process.env.CARTO_CLIENT_SECRET
@@ -96,12 +112,6 @@ async function getTokenForCity(city: string, isAdmin: boolean): Promise<string> 
       'source': `SELECT * FROM \`carto-demo-data\`.demo_tables.retail_stores WHERE city = '${city}'`
     }
   ]
-  if (isAdmin) {
-    grants.push({
-      'connection_name': 'carto_dw',
-      'source': 'carto-demo-data.demo_tilesets.sociodemographics_usa_blockgroup'
-    })
-  }
 
   // Finally, get the access API token by using the previous access token.
   // NOTE: This token has a limit based on quota. For a production environment,
