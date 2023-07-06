@@ -56,7 +56,6 @@ app.post('/login', async (req: Request, res: Response) => {
 
   const loginToken = jwt.sign({ group: user.group }, jwtSecret, { expiresIn: '1h' })
   const loginResponse = { token: loginToken } as LoginResponseBody
-  console.log(loginResponse)
   res.send(loginResponse)
 })
 
