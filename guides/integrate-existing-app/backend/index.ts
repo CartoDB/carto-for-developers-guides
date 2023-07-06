@@ -24,7 +24,8 @@ interface LoginResponseBody {
 
 interface AccessApiTokenResponse {
   token: string
-  error: string,
+  group: string
+  error: string
   description: string
 }
 
@@ -55,7 +56,7 @@ app.post('/login', async (req: Request, res: Response) => {
 
   const loginToken = jwt.sign({ group: user.group }, jwtSecret, { expiresIn: '1h' })
   const loginResponse = { token: loginToken } as LoginResponseBody
-
+  console.log(loginResponse)
   res.send(loginResponse)
 })
 
@@ -71,7 +72,7 @@ app.post('/carto-token', async (req: Request, res: Response) => {
     // Decode the token to get the group
     const tokenGroup = jwt.verify(loginToken, jwtSecret) as { group: string }
     const token = await getAPIAccessTokenForGroup(tokenGroup.group)
-    const response = { token, city: tokenGroup.group } as LoginResponseBody
+    const response = { token, group: tokenGroup.group } as AccessApiTokenResponse
     res.send(response)
   } catch (error) {
     console.log(error)
@@ -84,7 +85,7 @@ app.listen(port, () => {
 })
 
 async function getAPIAccessTokenForGroup(group: string): Promise<string> {
-  const cartoBaseUrl = process.env.CARTO_BASE_URL
+  const cartoBaseUrl = process.env.CARTO_API_BASE_URL
   const clientId = process.env.CARTO_CLIENT_ID
   const clientSecret = process.env.CARTO_CLIENT_SECRET
 
@@ -129,7 +130,7 @@ async function getAPIAccessTokenForGroup(group: string): Promise<string> {
     })
   })
 
-  const { token, error: tokenError, description: tokenDescription } = await accessApiTokenResponse.json() as AccessApiTokenResponse
+  const { token, error: tokenError, description: tokenDescription } = await accessApiTokenResponse.json() as { token: string, error: string, description: string }
   if (tokenError) {
     console.log(error)
     throw new Error(tokenError)

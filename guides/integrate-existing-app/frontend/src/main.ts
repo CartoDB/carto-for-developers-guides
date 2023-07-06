@@ -1,6 +1,6 @@
 import "./style.css";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { createMap, initMap } from "./map";
+import { addLayer, initMap } from "./map";
 import logo from "../static/acme-logo.svg";
 
 const COMPANY_BASE_API_URL = import.meta.env.VITE_COMPANY_API_BASE_URL;
@@ -24,8 +24,8 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   </div>
 `;
 
-// init login form and empty map
-initLogin();
+// initialize the view with the login form and an empty map
+initView();
 
 function addLoginForm() {
   document.querySelector<HTMLDivElement>("#login-container")!.innerHTML = `
@@ -65,7 +65,7 @@ async function login() {
     },
   });
 
-  const { token: cartoToken, city, error: tokenError } = await tokenResp.json();
+  const { token: cartoToken, group, error: tokenError } = await tokenResp.json();
   if (tokenError) {
     alert(tokenError);
     return;
@@ -73,16 +73,16 @@ async function login() {
 
   document.querySelector<HTMLDivElement>("#login-container")!.innerHTML = `
     <div class="profile">
-      ${username} - <span>${city}</span>
+      ${username} - <span>${group}</span>
       <button type="submit" id="logout" class="button">Logout</button>
     </div>
   `;
-  document.getElementById("logout")?.addEventListener("click", initLogin);
+  document.getElementById("logout")?.addEventListener("click", initView);
 
-  createMap(city, cartoToken);
+  addLayer(group, cartoToken);
 }
 
-function initLogin() {
+function initView() {
   addLoginForm();
   initMap();
 }
