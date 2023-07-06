@@ -103,9 +103,7 @@ async function getAPIAccessTokenForGroup(group: string): Promise<string> {
     throw new Error(error)
   }
 
-  // Step 2: Call CARTO tokens API with an OAuth Access Token to generate an API Access Token with a user limited grant
-
-  // build the grants with the group of the user
+  // Step 2: Generate an API Access Token for the logged user (with limited grants).
   const grants = [
     {
       'connection_name': 'carto_dw',
@@ -113,7 +111,7 @@ async function getAPIAccessTokenForGroup(group: string): Promise<string> {
     }
   ]
 
-  // Call the tokens API
+  // Call the tokens API using the OAuth Access Token from step 1.
   const accessApiTokenResponse = await fetch(`${cartoBaseUrl}/v3/tokens`, {
     method: 'POST',
     headers: {
