@@ -28,7 +28,8 @@ interface AccessApiTokenResponse {
   description: string
 }
 
-// hard coded users. Don't use this in production! This should come from an IdP or a database.
+// Hard-coded users for development purposes.
+// Don't use this in production! This should come from an IdP or a database.
 const users = [{
     username: 'user.boston@acme.com',
     password: 'boston',
@@ -41,7 +42,7 @@ const users = [{
   } 
 ]
 
-// This endpoint simulate a login system. It checks the credentials and returns a JWT token
+// This endpoint simulates a login system. It checks the credentials and returns a JWT token
 // with the user group as a claim.
 app.post('/login', async (req: Request, res: Response) => {
   const { username, password } = req.body as LoginRequestBody
@@ -58,7 +59,7 @@ app.post('/login', async (req: Request, res: Response) => {
   res.send(loginResponse)
 })
 
-// This endpoint returns a Carto token for the user group. The token will be used
+// This endpoint returns a CARTO API Access Token for the user group. The token will be used
 // to query the tables for the city of the user.
 app.post('/carto-token', async (req: Request, res: Response) => {
   try {
@@ -83,11 +84,11 @@ app.listen(port, () => {
 })
 
 async function getAPIAccessTokenForGroup(group: string): Promise<string> {
-  const cartoApiBaseUrl = process.env.CARTO_API_BASE_URL
+  const cartoBaseUrl = process.env.CARTO_BASE_URL
   const clientId = process.env.CARTO_CLIENT_ID
   const clientSecret = process.env.CARTO_CLIENT_SECRET
 
-  // First get the access token by using the clientId and clientSecret.
+  // Step 1: Get an OAuth Access Token using the clientId and clientSecret of a Machine to Machine Application.
   const accessTokenResponse = await fetch('https://auth.carto.com/oauth/token', {
     method: 'POST',
     headers: {
@@ -102,7 +103,9 @@ async function getAPIAccessTokenForGroup(group: string): Promise<string> {
     throw new Error(error)
   }
 
-  // Generate the grants only for the specific permissions
+  // Step 2: Call CARTO tokens API with an OAuth Access Token to generate an API Access Token with a user limited grant
+
+  // build the grants with the group of the user
   const grants = [
     {
       'connection_name': 'carto_dw',
@@ -110,8 +113,8 @@ async function getAPIAccessTokenForGroup(group: string): Promise<string> {
     }
   ]
 
-  // Finally, get the access API token by using the previous access token.
-  const accessApiTokenResponse = await fetch(`${cartoApiBaseUrl}/v3/tokens`, {
+  // Call the tokens API
+  const accessApiTokenResponse = await fetch(`${cartoBaseUrl}/v3/tokens`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -119,9 +122,10 @@ async function getAPIAccessTokenForGroup(group: string): Promise<string> {
     },
     body: JSON.stringify({
       'grants': grants,
+      // Put here the referers of your frontend application in production
       'referers': [],
       'allowed_apis': [
-        'sql',
+        // 'sql', // Uncomment this line to allow SQL API calls
         'maps'
       ]
     })
