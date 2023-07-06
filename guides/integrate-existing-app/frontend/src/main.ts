@@ -3,6 +3,8 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { createMap, initMap } from "./map";
 import logo from "../static/acme-logo.svg";
 
+const COMPANY_BASE_API_URL = import.meta.env.VITE_COMPANY_API_BASE_URL;
+
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div class="container">
     <header class="header">
@@ -42,7 +44,7 @@ async function login() {
     document.querySelector('input[name="password"]') as HTMLInputElement
   ).value;
 
-  const loginResp = await fetch("http://localhost:8000/login", {
+  const loginResp = await fetch(`${COMPANY_BASE_API_URL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -55,7 +57,7 @@ async function login() {
     alert(error);
     return;
   }
-  const tokenResp = await fetch("http://localhost:8000/carto-token", {
+  const tokenResp = await fetch(`${COMPANY_BASE_API_URL}/carto-token`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

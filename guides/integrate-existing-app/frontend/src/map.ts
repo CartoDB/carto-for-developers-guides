@@ -4,11 +4,10 @@ import {
     BASEMAP,
     CartoLayer,
     setDefaultCredentials,
-    MAP_TYPES,
-    colorBins
+    MAP_TYPES
 } from '@deck.gl/carto/typed'
 
-let deckgl: Deck = null
+let deckgl: Deck | null = null
 let basemap: any = null
 
 const INITIAL_VIEW_STATE = {
@@ -51,11 +50,10 @@ export function initMap() {
    setLayer([]);
 }
 
-export function createMap(city: string, token: string) {
-    setDefaultCredentials({
-        apiBaseUrl: 'PUT_YOUR_API_BASE_URL_HERE',
-        accessToken: token
-    })
+export function createMap(city: string, accessToken: string) {
+    const apiBaseUrl = import.meta.env.VITE_CARTO_API_BASE_URL;
+    setDefaultCredentials({ apiBaseUrl, accessToken });
+    
     const retailLayer = new CartoLayer({
         id: 'retails',
         connection: 'carto_dw',

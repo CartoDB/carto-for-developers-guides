@@ -28,7 +28,7 @@ interface AccessApiTokenResponse {
   description: string
 }
 
-
+// hard coded users. Don't use this in production! This should come from an IdP or a database.
 const users = [{
     username: 'user.boston@acme.com',
     password: 'boston',
@@ -83,7 +83,7 @@ app.listen(port, () => {
 })
 
 async function getAPIAccessTokenForGroup(group: string): Promise<string> {
-  const cartoBaseUrl = process.env.CARTO_BASE_URL
+  const cartoApiBaseUrl = process.env.CARTO_API_BASE_URL
   const clientId = process.env.CARTO_CLIENT_ID
   const clientSecret = process.env.CARTO_CLIENT_SECRET
 
@@ -111,7 +111,7 @@ async function getAPIAccessTokenForGroup(group: string): Promise<string> {
   ]
 
   // Finally, get the access API token by using the previous access token.
-  const accessApiTokenResponse = await fetch(`${cartoBaseUrl}/v3/tokens`, {
+  const accessApiTokenResponse = await fetch(`${cartoApiBaseUrl}/v3/tokens`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
