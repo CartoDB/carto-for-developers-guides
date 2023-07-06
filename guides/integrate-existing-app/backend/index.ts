@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
+import fetch from 'node-fetch'
 
 dotenv.config()
 
@@ -12,32 +13,48 @@ const jwtSecret = process.env.JWT_SECRET as string
 app.use(express.json())
 app.use(cors())
 
-export interface LoginRequestBody {
+interface LoginRequestBody {
   username: string
   password: string
 }
 
-export interface LoginResponseBody {
+interface LoginResponseBody {
   token: string
 }
 
-export interface CartoTokenResponseBody {
+interface AccessApiTokenResponse {
   token: string
-  city: string
+  error: string,
+  description: string
 }
+
+
+const users = [{
+    username: 'user.boston@acme.com',
+    password: 'boston',
+    group: 'BOSTON'
+  },
+  {
+    username: 'user.ny@acme.com',
+    password: 'ny',
+    group: 'NEW YORK'
+  } 
+]
 
 // This endpoint simulate a login system. It checks the credentials and returns a JWT token
 // with the user group as a claim.
 app.post('/login', async (req: Request, res: Response) => {
-  const login = req.body as LoginRequestBody
-  if (notCheckCredentials(login)) {
+  const { username, password } = req.body as LoginRequestBody
+  const user = users.find((u) => u.username === username)
+
+  if (!user || user.password !== password) {
     res.status(401).send({ 'error': 'Invalid credentials' })
     return
   }
 
-  const group = getGroupFromUsername(login.username)
-  const loginToken = jwt.sign({ group }, jwtSecret, { expiresIn: '1h' })
+  const loginToken = jwt.sign({ group: user.group }, jwtSecret, { expiresIn: '1h' })
   const loginResponse = { token: loginToken } as LoginResponseBody
+
   res.send(loginResponse)
 })
 
@@ -45,45 +62,27 @@ app.post('/login', async (req: Request, res: Response) => {
 // to query the tables for the city of the user.
 app.post('/carto-token', async (req: Request, res: Response) => {
   try {
+
     // Get the token from the Authorization header with Bearer prefix
     const authHeader = req.headers.authorization as string
     const loginToken = authHeader.replace('Bearer ', '')
 
     // Decode the token to get the group
     const tokenGroup = jwt.verify(loginToken, jwtSecret) as { group: string }
-    const token = await getTokenForGroup(tokenGroup.group)
+    const token = await getAPIAccessTokenForGroup(tokenGroup.group)
     const response = { token, city: tokenGroup.group } as LoginResponseBody
     res.send(response)
   } catch (error) {
     console.log(error)
     res.status(401).send({ 'error': 'Invalid token' })
   }
-
 })
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`)
 })
 
-function getGroupFromUsername(username: string) {
-  const userPart = username.toLowerCase().split('@')[0]
-  const city = userPart.split('.')[1].replace('-', ' ').toUpperCase() // new-york -> NEW YORK
-
-  return city
-}
-
-function notCheckCredentials(login: LoginRequestBody): boolean {
-  // username has the format 'user.city@domain.com'
-  // and password should be like 'user1234'
-  const usernameRegexp = /^[a-z]+\.[a-z]+[\W]?[a-z]*@[a-z]+\.[a-z]+$/
-  if (!usernameRegexp.test(login.username)) {
-    return true
-  }
-  const user = login.username.split('.')[0]
-  return login.password !== `${user}1234`
-}
-
-async function getTokenForGroup(city: string): Promise<string> {
+async function getAPIAccessTokenForGroup(group: string): Promise<string> {
   const cartoBaseUrl = process.env.CARTO_BASE_URL
   const clientId = process.env.CARTO_CLIENT_ID
   const clientSecret = process.env.CARTO_CLIENT_SECRET
@@ -97,7 +96,7 @@ async function getTokenForGroup(city: string): Promise<string> {
     body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}&audience=carto-cloud-native-api`
   })
 
-  const { access_token, error } = await accessTokenResponse.json()
+  const { access_token, error } = await accessTokenResponse.json() as { access_token: string, error: string }
   if (error) {
     console.log(error)
     throw new Error(error)
@@ -107,7 +106,7 @@ async function getTokenForGroup(city: string): Promise<string> {
   const grants = [
     {
       'connection_name': 'carto_dw',
-      'source': `SELECT * FROM \`carto-demo-data\`.demo_tables.retail_stores WHERE city = '${city}'`
+      'source': `SELECT * FROM \`carto-demo-data\`.demo_tables.retail_stores WHERE city = '${group}'`
     }
   ]
 
@@ -128,7 +127,7 @@ async function getTokenForGroup(city: string): Promise<string> {
     })
   })
 
-  const { token, error: tokenError, description: tokenDescription } = await accessApiTokenResponse.json()
+  const { token, error: tokenError, description: tokenDescription } = await accessApiTokenResponse.json() as AccessApiTokenResponse
   if (tokenError) {
     console.log(error)
     throw new Error(tokenError)

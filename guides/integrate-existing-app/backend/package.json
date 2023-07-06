@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
     "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+    "dev": "NODE_ENV=development nodemon -L --exec 'ts-node' index.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +15,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.1.4",
     "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.0"
+    "jsonwebtoken": "^9.0.0",
+    "node-fetch": "^2.6.12"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
@@ -25,6 +25,7 @@
     "@types/node": "^20.3.1",
     "concurrently": "^8.0.1",
     "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
     "typescript": "^5.1.3"
   }
 }
