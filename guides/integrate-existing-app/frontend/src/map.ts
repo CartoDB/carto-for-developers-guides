@@ -38,7 +38,7 @@ export function initMap() {
   })
 }
 
-export function addLayer(group: string, accessToken: string) {
+export function setLayer(group: string, accessToken: string) {
   const apiBaseUrl = import.meta.env.VITE_CARTO_API_BASE_URL;
   // Set the credentials for the specified access token
   setDefaultCredentials({ apiBaseUrl, accessToken });

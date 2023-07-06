@@ -1,6 +1,6 @@
 import "./style.css";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { addLayer, initMap } from "./map";
+import { setLayer, initMap } from "./map";
 import logo from "../static/acme-logo.svg";
 
 const COMPANY_BASE_API_URL = import.meta.env.VITE_COMPANY_API_BASE_URL;
@@ -79,7 +79,7 @@ async function login() {
   `;
   document.getElementById("logout")?.addEventListener("click", initView);
 
-  addLayer(group, cartoToken);
+  setLayer(group, cartoToken);
 }
 
 function initView() {
