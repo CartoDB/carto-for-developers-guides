@@ -9,7 +9,7 @@ For more info visit the [Integrate CARTO in your existing app](https://docs.cart
 Create a new SPA application from https://app.carto.com (Developers -> Create new application).
 
 Set the Base API URL, Client ID and Client Secret at `backend/.env`.
-Set the Base API URL at `frontend/src/map.ts`.
+Set the Base API URL at `frontend/.env`.
 
 1. Run the backend:
 
