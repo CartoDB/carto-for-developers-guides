@@ -1,8 +1,6 @@
-## Viz doc
+## CARTO for Developers guides
 
-CARTO platform can be used from different mapping libraries. This repo contains several guides and examples to show how it works:
+This repository contains the code of the guides available at https://docs.carto.com/carto-for-developers/guides.
 
-- [Amazon Location Service](amazon-location/docs/guides/01-using-mapbox-gl.md)
-- [deck.gl](deck.gl/docs/guides/01-getting-started.md)
-- [Google Maps](google/docs/guides/01-getting-started.md)
-- [Mapbox](mapbox/docs/guides/01-getting-started.md)
+CARTO has created these [guides](https://docs.carto.com/carto-for-developers/guides), based on real use cases, to help you design your solution and understand how the different pieces of CARTO platform work together.
+
