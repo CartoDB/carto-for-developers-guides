@@ -1,11 +1,10 @@
 import maplibregl from 'maplibre-gl'
-import { Deck } from '@deck.gl/core/typed'
+import { Deck } from '@deck.gl/core'
 import {
   BASEMAP,
-  CartoLayer,
-  setDefaultCredentials,
-  MAP_TYPES
-} from '@deck.gl/carto/typed'
+  vectorQuerySource,
+  VectorTileLayer
+} from '@deck.gl/carto'
 
 let deckgl: Deck = null
 let basemap: any = null
@@ -40,15 +39,21 @@ export function initMap() {
 
 export function setLayer(group: string, accessToken: string) {
   const apiBaseUrl = import.meta.env.VITE_CARTO_API_BASE_URL;
-  // Set the credentials for the specified access token
-  setDefaultCredentials({ apiBaseUrl, accessToken });
+  const connectionName = 'carto_dw'
+  // Group all authentication properties
+  const cartoConfig = {apiBaseUrl, accessToken, connectionName};
+
+  // Create a new CARTO source for the specified group
+  const retailStores = vectorQuerySource({
+    ...cartoConfig,
+    sqlQuery: `SELECT * FROM \`carto-demo-data\`.demo_tables.retail_stores WHERE city = @groupcity`,
+    queryParameters: { groupcity: group }
+  })
 
   // Create a new CARTO layer for the specified group
-  const retailLayer = new CartoLayer({
+  const retailLayer = new VectorTileLayer({
     id: 'retails',
-    connection: 'carto_dw',
-    type: MAP_TYPES.QUERY,
-    data: `SELECT * FROM \`carto-demo-data\`.demo_tables.retail_stores WHERE city = '${group}'`,
+    data: retailStores,
     pointRadiusMinPixels: 4,
     getFillColor: [200, 0, 80],
   })

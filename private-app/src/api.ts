@@ -22,7 +22,7 @@ interface GetAirportsProps {
   accessToken: string
 }
 export function getAirports ({apiBaseUrl, accessToken}: GetAirportsProps) {
-  const query = `select * from carto-demo-data.demo_tables.airports`
+  const query = `select * from carto-demo-data.demo_tables.world_airports`
   const connection = 'carto_dw'
   return executeQuery({apiBaseUrl, connection, query, accessToken})
 }

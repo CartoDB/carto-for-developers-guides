@@ -6,7 +6,7 @@ For more info visit the [Build a private application](https://docs.carto.com/car
 
 ### Start instructions
 
-Create a new SPA application from https://app.carto.com (Developers -> Create new application).
+Create a new SPA OAuth Client from https://app.carto.com (Developers -> Credentials -> New SPA OAuth Client).
 
 Set the ClientId at `.env`.
 

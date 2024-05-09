@@ -88,7 +88,7 @@ async function getAPIAccessTokenForGroup(group: string): Promise<string> {
   const clientId = process.env.CARTO_CLIENT_ID
   const clientSecret = process.env.CARTO_CLIENT_SECRET
 
-  // Step 1: Get an OAuth Access Token using the clientId and clientSecret of a Machine to Machine Application.
+  // Step 1: Get an OAuth Access Token using the clientId and clientSecret of a M2M OAuth Client.
   const accessTokenResponse = await fetch('https://auth.carto.com/oauth/token', {
     method: 'POST',
     headers: {
@@ -107,7 +107,7 @@ async function getAPIAccessTokenForGroup(group: string): Promise<string> {
   const grants = [
     {
       'connection_name': 'carto_dw',
-      'source': `SELECT * FROM \`carto-demo-data\`.demo_tables.retail_stores WHERE city = '${group}'`
+      'source': `SELECT * FROM \`carto-demo-data\`.demo_tables.retail_stores WHERE city = @groupcity`
     }
   ]
 

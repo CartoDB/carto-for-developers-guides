@@ -6,7 +6,7 @@ For more info visit the [Integrate CARTO in your existing app](https://docs.cart
 
 ### Start instructions
 
-Create a new SPA application from https://app.carto.com (Developers -> Create new application).
+Create a new M2M OAuth Client from https://app.carto.com (Developers -> Credentials -> New M2M OAuth Client).
 
 Set the Base API URL, Client ID and Client Secret at `backend/.env`.
 Set the Base API URL at `frontend/.env`.
