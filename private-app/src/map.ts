@@ -7,7 +7,7 @@ interface createMapProps {
   accessToken: string
 }
 export function createMap({apiBaseUrl, accessToken}:createMapProps) {
-  const connectionName = "carto_dw";
+  const connectionName = 'carto_dw';
   const cartoConfig = {apiBaseUrl, accessToken, connectionName};
 
 
