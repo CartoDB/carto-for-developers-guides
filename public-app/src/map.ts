@@ -1,15 +1,15 @@
 import maplibregl from 'maplibre-gl';
-import { Deck } from '@deck.gl/core/typed';
+import { Deck } from '@deck.gl/core';
 import {
   BASEMAP,
-  CartoLayer,
-  setDefaultCredentials,
-  MAP_TYPES
-} from '@deck.gl/carto/typed';
+  vectorTableSource,
+  VectorTileLayer,
+} from '@deck.gl/carto';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const accessToken = import.meta.env.VITE_API_ACCESS_TOKEN;
-setDefaultCredentials({ apiBaseUrl, accessToken });
+const connectionName = "carto_dw";
+const cartoConfig = {apiBaseUrl, accessToken, connectionName};
 
 export function createMap() {
   const INITIAL_VIEW_STATE = {
@@ -20,16 +20,19 @@ export function createMap() {
     pitch: 30
   };
 
+  const demoTableSource = vectorTableSource({
+    ...cartoConfig,
+    tableName: 'carto-demo-data.demo_tables.populated_places'
+  });
+
   const deck = new Deck({
     canvas: 'deck-canvas',
     initialViewState: INITIAL_VIEW_STATE,
     controller: true,
     layers: [
-      new CartoLayer({
+      new VectorTileLayer({
         id: 'places',
-        connection: 'carto_dw',
-        type: MAP_TYPES.TABLE,
-        data: 'carto-demo-data.demo_tables.populated_places',
+        data: demoTableSource,
         pointRadiusMinPixels: 3,
         getFillColor: [200, 0, 80],
       })
