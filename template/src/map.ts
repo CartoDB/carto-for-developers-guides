@@ -1,6 +1,6 @@
 import maplibregl from 'maplibre-gl';
-import { Deck } from '@deck.gl/core/typed';
-import { BASEMAP } from '@deck.gl/carto/typed';
+import { Deck } from '@deck.gl/core';
+import { BASEMAP } from '@deck.gl/carto';
 
 export function createMap() {
   const INITIAL_VIEW_STATE = {
