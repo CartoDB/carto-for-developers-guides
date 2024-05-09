@@ -107,7 +107,7 @@ async function getAPIAccessTokenForGroup(group: string): Promise<string> {
   const grants = [
     {
       'connection_name': 'carto_dw',
-      'source': `SELECT * FROM \`carto-demo-data\`.demo_tables.retail_stores WHERE city = '${group}'`
+      'source': `SELECT * FROM \`carto-demo-data\`.demo_tables.retail_stores WHERE city = @groupcity`
     }
   ]
 
